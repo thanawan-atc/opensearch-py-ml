@@ -1,0 +1,33 @@
+name: auto-tracing and uploading huggingface model
+on:
+  workflow_dispatch:
+    inputs:
+      model_name:
+        description: "Name of the model to auto-trace and upload"
+        required: true
+        type: string
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:        
+        cluster: ["opensearch"]        
+        secured: ["true"]        
+        entry:          
+          - { opensearch_version: 2.7.0 }
+
+  automated-process:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'     
+      - name: Install dependencies       
+        run: python3 -m pip install opensearch-py-ml   
+      - name: Autotrace and Upload           
+        run: python3 auto_script.py
