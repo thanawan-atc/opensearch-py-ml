@@ -34,7 +34,7 @@ jobs:
       - name: Autotrace and Upload           
         run: |
           echo "Model Name: ${{ github.event.inputs.model_name }}"
-          python3 automate_actions/auto_script.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.embedding_dimensions }}
+          python3 automated_actions/auto_script.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.embedding_dimensions }}
       - name: commit files
         run: |
           git config --local user.email "action@github.com"
