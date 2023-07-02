@@ -2,10 +2,14 @@ name: Model Auto-tracing & Uploading
 on:
   workflow_dispatch:
     inputs:
-      model_name:
-        description: "Name of the model to auto-trace and upload"
+      model_id:
+        description: "Model ID for auto-tracing and uploading (e.g. sentence-transformers/msmarco-distilbert-base-tas-b)"
         required: true
         type: string
+      embedding_dimension:
+        description: "(Optional) You can add the embedding dimension of the model here if it does not exist in original  config.json file"
+        type: string
+        default: ""
 
 jobs:
   verify:
@@ -28,7 +32,9 @@ jobs:
       - name: Install dependencies       
         run: python3 -m pip install opensearch-py-ml   
       - name: Autotrace and Upload           
-        run: python3 auto_script.py
+        run: |
+          echo "Model Name: ${{ github.event.inputs.model_name }}"
+          python3 automate_actions/auto_script.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.embedding_dimensions }}
       - name: commit files
         run: |
           git config --local user.email "action@github.com"

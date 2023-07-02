@@ -978,6 +978,7 @@ class SentenceTransformerModel:
         self,
         model_name: str = None,
         version_number: str = 1,
+        model_format: str = "TORCH_SCRIPT",
         embedding_dimension: int = None,
         all_config: str = None,
         model_type: str = None,
@@ -1077,7 +1078,7 @@ class SentenceTransformerModel:
         model_config_content = {
             "name": model_name,
             "version": version_number,
-            "model_format": "TORCH_SCRIPT",
+            "model_format": model_format,
             "model_task_type": "TEXT_EMBEDDING",
             "model_config": {
                 "model_type": model_type,
