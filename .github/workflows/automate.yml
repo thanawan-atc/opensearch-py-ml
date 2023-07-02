@@ -1,4 +1,4 @@
-name: auto-tracing and uploading huggingface model
+name: Model Auto-tracing & Uploading
 on:
   workflow_dispatch:
     inputs:
@@ -29,3 +29,14 @@ jobs:
         run: python3 -m pip install opensearch-py-ml   
       - name: Autotrace and Upload           
         run: python3 auto_script.py
+      - name: commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff-index --quiet HEAD || (git commit -a -m "updated models" --allow-empty)
+      - name: push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: git-action
