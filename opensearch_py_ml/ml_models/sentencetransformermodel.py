@@ -980,6 +980,7 @@ class SentenceTransformerModel:
         version_number: str = 1,
         model_format: str = "TORCH_SCRIPT",
         embedding_dimension: int = None,
+        pooling_mode: str = None,
         all_config: str = None,
         model_type: str = None,
         verbose: bool = False,
@@ -997,6 +998,9 @@ class SentenceTransformerModel:
         :type version_number: string
         :param embedding_dimension: Optional, the embedding_dimension of the model. If None, parse embedding_dimension
             from the config file of pre-trained hugging-face model, if not found, default to be 768
+        :type embedding_dimension: int
+        :param pooling_mode: Optional, the pooling_mode of the model. If None, parse pooling_mode
+            from the config file of pre-trained hugging-face model, if not found, do not include it.
         :type embedding_dimension: int
         :param all_config:
             Optional, the all_config of the model. If None, parse all contents from the config file of pre-trained
@@ -1058,20 +1062,21 @@ class SentenceTransformerModel:
                             if mapping_item in config_content.keys():
                                 embedding_dimension = config_content[mapping_item]
                                 break
-                            else:
-                                print(
-                                    'Cannot find "dim" or "hidden_size" or "d_model" in config.json file at ',
-                                    config_json_file_path,
-                                )
-                                print(
-                                    "Please add in the config file or input in the argument for embedding_dimension "
-                                )
-                                embedding_dimension = 768
+                        else:
+                            print(
+                                'Cannot find "dim" or "hidden_size" or "d_model" in config.json file at ',
+                                config_json_file_path,
+                            )
+                            print(
+                                "Please add in the config file or input in the argument for embedding_dimension "
+                            )
+                            embedding_dimension = 768
+                        
             except IOError:
                 print(
                     "Cannot open in config.json file at ",
                     config_json_file_path,
-                    ". Please check the config.son ",
+                    ". Please check the config.json ",
                     "file in the path.",
                 )
 
@@ -1087,6 +1092,45 @@ class SentenceTransformerModel:
                 "all_config": json.dumps(all_config),
             },
         }
+        if pooling_mode is not None:
+            model_config_content['model_config']['pooling_mode'] = pooling_mode
+        else:
+            pooling_config_json_file_path = os.path.join(folder_path, "1_Pooling", "config.json")
+            if os.path.exists(config_json_file_path):
+                try:
+                    with open(pooling_config_json_file_path) as f:
+                        if verbose:
+                            print("reading pooling config file from: " + pooling_config_json_file_path)
+                        pooling_config_content = json.load(f)
+                        if pooling_mode is None:
+                            pooling_mode_mapping_dict = {
+                                "pooling_mode_cls_token": "cls",
+                                "pooling_mode_mean_tokens": "mean",
+                                "pooling_mode_max_tokens": "max",
+                                "pooling_mode_mean_sqrt_len_tokens": "mean_sqrt_len"
+                            }
+                            for mapping_item in pooling_mode_mapping_dict:
+                                if mapping_item in pooling_config_content.keys() and pooling_config_content[mapping_item]:
+                                    pooling_mode = pooling_mode_mapping_dict[mapping_item]
+                                    model_config_content['model_config']['pooling_mode'] = pooling_mode
+                                    break
+                            else:
+                                print(
+                                    'Cannot find "pooling_mode_[mode]_token(s)" with value true in config.json file at ',
+                                    pooling_config_json_file_path,
+                                )
+                                print(
+                                    "Please add in the pooling config file or input in the argument for pooling_mode "
+                                )
+                        
+                except IOError:
+                    print(
+                        "Cannot open in config.json file at ",
+                        pooling_config_json_file_path,
+                        ". Please check the config.json ",
+                        "file in the path.",
+                    ) 
+            
         if verbose:
             print("generating ml-commons_model_config.json file...\n")
             print(model_config_content)

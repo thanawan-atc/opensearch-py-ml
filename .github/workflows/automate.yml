@@ -7,9 +7,13 @@ on:
         required: true
         type: string
       embedding_dimension:
-        description: "(Optional) You can add the embedding dimension of the model here if it does not exist in original  config.json file"
+        description: "(Optional) You can add the embedding dimension of the model here if it does not exist in original config.json file. Else, it will use 768."
+        required: false
+        type: int
+      pooling_mode:
+        description: "(Optional) You can specify the pooling mode of the model here if it does not exist in original config.json file."
+        required: false
         type: string
-        default: ""
 
 jobs:
   verify:
@@ -34,7 +38,7 @@ jobs:
       - name: Autotrace and Upload           
         run: |
           echo "Model Name: ${{ github.event.inputs.model_name }}"
-          python3 automated_actions/auto_script.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.embedding_dimensions }}
+          python3 automated_actions/auto_script.py ${{ github.event.inputs.model_id }} -ed ${{ github.event.inputs.embedding_dimensions }} -pm ${{ github.event.inputs.pooling_mode }}
       - name: commit files
         run: |
           git config --local user.email "action@github.com"
