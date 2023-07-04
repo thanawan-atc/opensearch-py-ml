@@ -1,4 +1,4 @@
-name: Model Auto-tracing & Uploading
+name: Test uploading outputs to JSON
 on:
   workflow_dispatch:
     inputs:
