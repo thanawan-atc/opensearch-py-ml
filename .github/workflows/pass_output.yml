@@ -16,20 +16,20 @@ jobs:
         secured: ["true"]
         entry:
           - { opensearch_version: 2.7.0 }
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Set up Python 3
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-    - name: Install dependencies
-      run: python3 -m pip install opensearch-py-ml
-    - name: Autotrace and Upload
-      run: |
-        echo "Model Name: ${{ github.event.inputs.model_name }}"
-        python3 automated_actions/pass_outputs.py ${{ github.event.inputs.model_id }}
-    - name: Echo folder path
-      run: |
-        echo "FOLDER_PATH= $(jq '.folder_path' automated_actions/output_dict.json)" >> $GITHUB_ENV
-        run: echo "${{ env.FOLDER_PATH }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: python3 -m pip install opensearch-py-ml
+      - name: Autotrace and Upload
+        run: |
+          echo "Model Name: ${{ github.event.inputs.model_name }}"
+          python3 automated_actions/pass_outputs.py ${{ github.event.inputs.model_id }}
+      - name: Echo folder path
+        run: |
+          echo "FOLDER_PATH= $(jq '.folder_path' automated_actions/output_dict.json)" >> $GITHUB_ENV
+          run: echo "${{ env.FOLDER_PATH }}"
