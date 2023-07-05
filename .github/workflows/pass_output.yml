@@ -36,21 +36,20 @@ jobs:
         run: |
           echo "${{ env.FOLDER_PATH }}"
           mkdir "upload"
-          echo "${{ env.FOLDER_PATH }}" >> "upload/output.txt"
+          echo "${{ env.FOLDER_PATH }}" >> "output.txt"
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          path: "upload/output.txt"
+          path: "output.txt"
       - name: Upload JSON
         uses: actions/upload-artifact@v3
         with:
           path: "automated_actions/output_dict.json"
       - name: Upload to Bucket
-        uses: shallwefootball/s3-upload-action@master
-        id: S3
+        uses: hkusu/s3-upload-action@v2
         with:
-          aws_key_id: ${{ secrets.AWS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ secrets.AWS_BUCKET }}
-          source_dir: "upload"
-          destination_dir: "upload_test_folder"
+          aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'output.txt'     
