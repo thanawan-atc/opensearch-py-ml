@@ -28,7 +28,7 @@ jobs:
       - name: Autotrace and Upload
         run: |
           echo "Model ID:" ${{ github.event.inputs.model_id }}
-          python3 automated_actions/pass_outputs.py ${{ github.event.inputs.model_id }}
+          python3 automated_actions/pass_outputs.py automated_actions/output_dict.json ${{ github.event.inputs.model_id }}
       - name: Save folder path
         run: |
           echo "FOLDER_PATH=$(jq '.folder_path' automated_actions/output_dict.json)" >> $GITHUB_ENV
