@@ -35,11 +35,11 @@ jobs:
       - name: Echo folder path
         run: |
           echo "${{ env.FOLDER_PATH }}"
-          echo "${{ env.FOLDER_PATH }}" >> "output.txt"
+          echo "${{ env.FOLDER_PATH }}" >> "upload/output.txt"
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          path: "output.txt"
+          path: "upload/output.txt"
       - name: Upload JSON
         uses: actions/upload-artifact@v3
         with:
@@ -51,5 +51,5 @@ jobs:
           aws_key_id: ${{secrets.AWS_KEY_ID}}
           aws_secret_access_key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           aws_bucket: "aws-opensearch-exp"
-          source_dir: "output.txt"
-          destination_dir: "test_folder/output-test.txt"
+          source_dir: "upload"
+          destination_dir: "upload_test_folder"
