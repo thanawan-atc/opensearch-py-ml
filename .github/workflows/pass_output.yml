@@ -32,7 +32,7 @@ jobs:
       - name: Save folder path
         run: |
           echo "FOLDER_PATH=$(jq '.folder_path' automated_actions/output_dict.json)" >> $GITHUB_ENV
-      - name: Echo folder pathi
+      - name: Echo folder path
         run: |
           echo "${{ env.FOLDER_PATH }}"
           echo "${{ env.FOLDER_PATH }}" >> "output.txt"
@@ -44,3 +44,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: "automated_actions/output_dict.json"
+      - name: Upload to Bucket
+        uses: shallwefootball/s3-upload-action@master
+        id: S3
+        with:
+          aws_key_id: ${{secrets.AWS_KEY_ID}}
+          aws_secret_access_key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: "aws-opensearch-exp"
+          source_dir: "output.txt"
+          destination_dir: "test_folder/output-test.txt"
