@@ -35,6 +35,7 @@ jobs:
       - name: Echo folder path
         run: |
           echo "${{ env.FOLDER_PATH }}"
+          mkdir "upload"
           echo "${{ env.FOLDER_PATH }}" >> "upload/output.txt"
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
