@@ -67,7 +67,7 @@ else
   echo -e "\033[34;1mINFO:\033[0m MODEL_ID: ${MODEL_ID}\033[0m"
   echo -e "\033[34;1mINFO:\033[0m MODEL_VERSION: ${MODEL_VERSION}\033[0m"
   echo -e "\033[34;1mINFO:\033[0m TRACING_FORMAT: ${TRACING_FORMAT}\033[0m"
-  echo -e "\033[34;1mINFO:\033[0m EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-N/A}\033[0m"
+  echo -e "\033[34;1mINFO:\033[0m EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-N/A}\033[0m"
   echo -e "\033[34;1mINFO:\033[0m POOLING_MODE ${POOLING_MODE:-N/A}\033[0m"
 
   docker run \
@@ -82,7 +82,7 @@ else
   opensearch-project/opensearch-py-ml \
   /bin/bash -c "python -m pip install -r requirements-dev.txt --timeout 1500; 
     python -m pip install pandas~=${PANDAS_VERSION}; 
-    python utils/model_uploader/model_autotracing.py ${MODEL_ID} ${MODEL_VERSION} ${TRACING_FORMAT} -ed ${EMBEDDING_DIMENSIONS} -pm ${POOLING_MODE}"
+    python utils/model_uploader/model_autotracing.py ${MODEL_ID} ${MODEL_VERSION} ${TRACING_FORMAT} -ed ${EMBEDDING_DIMENSION} -pm ${POOLING_MODE}"
   
   #docker cp opensearch-py-ml-doc-runner:/code/opensearch-py-ml/docs/build/ ./docs/
 

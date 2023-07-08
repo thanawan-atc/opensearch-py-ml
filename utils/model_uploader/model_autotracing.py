@@ -6,10 +6,16 @@
 # GitHub history for details.
 
 import argparse
+import os
+import sys
 import warnings
 
+import opensearchpy
 from opensearchpy import OpenSearch
 
+sys.path.append(os.path.abspath(os.path.join("../opensearch-py-ml")))
+
+import opensearch_py_ml
 from opensearch_py_ml.ml_commons import MLCommonClient
 from opensearch_py_ml.ml_commons.model_uploader import ModelUploader
 from opensearch_py_ml.ml_models.sentencetransformermodel import SentenceTransformerModel
@@ -36,6 +42,7 @@ def main(args):
         args.pooling_mode,
     )
     ml_client = MLCommonClient(OPENSEARCH_TEST_CLIENT)
+    print("DONE")
 
 
 if __name__ == "__main__":
