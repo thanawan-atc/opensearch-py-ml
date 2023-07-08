@@ -80,7 +80,9 @@ else
   --env "TEST_TYPE=server" \
   --name opensearch-py-ml-doc-runner \
   opensearch-project/opensearch-py-ml \
-  python utils/model_uploader/model_autotracing.py ${MODEL_ID} ${MODEL_VERSION} ${TRACING_FORMAT} -ed ${EMBEDDING_DIMENSIONS} -pm ${POOLING_MODE}
+  /bin/bash -c "python -m pip install -r requirements-dev.txt --timeout 1500; 
+    python -m pip install pandas~=${PANDAS_VERSION}; 
+    python utils/model_uploader/model_autotracing.py ${MODEL_ID} ${MODEL_VERSION} ${TRACING_FORMAT} -ed ${EMBEDDING_DIMENSIONS} -pm ${POOLING_MODE}"
   
   #docker cp opensearch-py-ml-doc-runner:/code/opensearch-py-ml/docs/build/ ./docs/
 
