@@ -11,11 +11,11 @@ on:
         required: true
         type: string
       tracing_format:
-        description: "Model format for auto-tracing"
+        description: "Model format for auto-tracing (torch_script/onnx)"
         required: true
         type: choice
         options:
-        - "Both"
+        - "BOTH"
         - "TORCH_SCRIPT"
         - "ONNX"
       embedding_dimension:
