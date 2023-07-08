@@ -57,4 +57,4 @@ jobs:
           echo "EMBEDDING_DIMENSIONS=${{ github.event.inputs.embedding_dimensions }}" >> $GITHUB_ENV
           echo "POOLING_MODE=${{ github.event.inputs.pooling_mode }}" >> $GITHUB_ENV     
       - name: Autotracing ${v{ matrix.cluster }} secured=${{ matrix.secured }} version=${{matrix.entry.opensearch_version}}
-        run: "./.ci/run-tests ${{ matrix.cluster }} ${{ matrix.secured }} ${{ matrix.entry.opensearch_version }}"
+        run: "./.ci/run-tests ${{ matrix.cluster }} ${{ matrix.secured }} ${{ matrix.entry.opensearch_version }} trace"
