@@ -80,7 +80,7 @@ else
   --env "TEST_TYPE=server" \
   --name opensearch-py-ml-doc-runner \
   opensearch-project/opensearch-py-ml \
-  python utils/model_autotracing.py ${MODEL_ID} ${MODEL_VERSION} ${TRACING_FORMAT} -ed ${EMBEDDING_DIMENSIONS} -pm ${POOLING_MODE}
+  python utils/model_uploader/model_autotracing.py ${MODEL_ID} ${MODEL_VERSION} ${TRACING_FORMAT} -ed ${EMBEDDING_DIMENSIONS} -pm ${POOLING_MODE}
   
   #docker cp opensearch-py-ml-doc-runner:/code/opensearch-py-ml/docs/build/ ./docs/
 
