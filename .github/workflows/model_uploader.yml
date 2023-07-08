@@ -32,7 +32,6 @@ on:
         - "MEAN"
         - "MAX"
         - "MEAN_SQRT_LEN"
-        
 
 jobs:
   model-tracing:
