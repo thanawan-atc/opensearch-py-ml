@@ -75,4 +75,4 @@ jobs:
           role-session-name: GitHubActions
       - name: Copy files to the bucket
         run: |
-          aws s3 sync ./upload/ s3://opensearch-exp-model-bucket/
+          aws s3 sync ./upload/ s3://opensearch-exp/
