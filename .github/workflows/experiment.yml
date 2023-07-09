@@ -28,7 +28,8 @@ jobs:
       - name: Create Files
         run: |
           mkdir -p ./upload/test_folder_1/test_folder_2
-          echo "Test Input=${{ github.event.inputs.test_input }}" >> upload/test_folder_1/test_folder_2/test_file.txt
+          echo "Test Input 2=${{ github.event.inputs.test_input }}" >> upload/test_folder_1/test_folder_2/test_file_2.txt
+          echo "Test Input 2=${{ github.event.inputs.test_input }}" >> upload/test_folder_1/test_file_3.txt
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with: 
