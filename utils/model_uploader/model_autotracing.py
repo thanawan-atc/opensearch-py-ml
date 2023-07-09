@@ -15,6 +15,10 @@ from zipfile import ZipFile
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
+ROOT_DIR = os.path.abspath(os.path.join("../opensearch-py-ml"))
+LICENSE_PATH = os.path.join(ROOT_DIR, "LICENSE")
+sys.path.append(ROOT_DIR)
+
 from opensearch_py_ml.ml_commons import MLCommonClient
 from opensearch_py_ml.ml_models.sentencetransformermodel import SentenceTransformerModel
 from tests import OPENSEARCH_TEST_CLIENT
@@ -30,10 +34,6 @@ TEST_SENTENCES = ["First test sentence", "Second test sentence"]
 RTOL_TEST = 1e-03
 ATOL_TEST = 1e-05
 ML_BASE_URI = "/_plugins/_ml"
-
-ROOT_DIR = os.path.abspath(os.path.join("../opensearch-py-ml"))
-LICENSE_PATH = os.path.join(ROOT_DIR, "LICENSE")
-sys.path.append(ROOT_DIR)
 
 
 def trace_sentence_transformer_model(
