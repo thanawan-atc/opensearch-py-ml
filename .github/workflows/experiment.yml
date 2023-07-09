@@ -8,7 +8,7 @@ on:
         type: string
 
 jobs:
-  model-tracing:
+  model-autotracing:
     name: model-tracing
     runs-on: ubuntu-latest
     strategy:
@@ -36,6 +36,7 @@ jobs:
           path: ./upload/
 
   manual-approval:
+    needs: model-autotracing
     runs-on: 'ubuntu-latest'
     permissions:
       issues: write
@@ -55,6 +56,7 @@ jobs:
           exclude-workflow-initiator-as-approver: false
       
   model-uploading:
+    needs: manual-approval
     runs-on: 'ubuntu-latest'
     permissions:
       id-token: write
