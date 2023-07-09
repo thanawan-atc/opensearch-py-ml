@@ -62,6 +62,7 @@ jobs:
         with: 
           name: upload
           path: ./upload/
+          retention-days: 5
 
   manual-approval:
     needs: model-auto-tracing
@@ -79,8 +80,14 @@ jobs:
           secret: ${{ github.TOKEN }}
           approvers: ${{ steps.get_approvers.outputs.approvers }}
           minimum-approvals: 1
-          issue-title: 'Upload opensearch-py-ml model to Amazon S3 Bucket'
-          issue-body: "Please approve or deny opensearch-py-ml model uploading: ${{ github.event.inputs.test_input }}"
+          issue-title: "Upload opensearch-py-ml model to Amazon S3 Bucket (${{ github.event.inputs.model_id }})"
+          issue-body: >
+            Please approve or deny opensearch-py-ml model uploading
+            - Model ID: ${{ github.event.inputs.model_id }}
+            - Model Version: ${{ github.event.inputs.model_version }}
+            - Tracing Format: ${{ github.event.inputs.tracing_format }}
+            - Embedding Dimension: ${{ github.event.inputs.embedding_dimension }}
+            - Pooling Mode: ${{ github.event.inputs.pooling_mode }}
           exclude-workflow-initiator-as-approver: false
           
   model-uploading:
