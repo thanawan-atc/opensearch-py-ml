@@ -35,13 +35,10 @@ jobs:
           name: upload
           path: ./upload/
 
-  model-uploading:
+  manual-approval:
     runs-on: 'ubuntu-latest'
     permissions:
-      id-token: write
-      contents: read
       issues: write
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -56,6 +53,13 @@ jobs:
           issue-title: 'Upload opensearch-py-ml model to Amazon S3 Bucket'
           issue-body: "Please approve or deny opensearch-py-ml model uploading: ${{ github.event.inputs.test_input }}"
           exclude-workflow-initiator-as-approver: false
+      
+  model-uploading:
+    runs-on: 'ubuntu-latest'
+    permissions:
+      id-token: write
+      contents: read
+    steps:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
@@ -69,4 +73,4 @@ jobs:
           role-session-name: GitHubActions
       - name: Copy files to the bucket
         run: |
-          aws s3 sync ./upload/ s3://test/
+          aws s3 sync ./upload/ s3://opensearch-exp-model-bucket/
