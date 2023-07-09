@@ -115,4 +115,4 @@ jobs:
           aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
       - name: Copy files to the bucket
         run: |
-          aws s3 sync ./upload/ s3://ml-models/huggingface/sentence-transformers/
+          aws s3 sync ./upload/ s3://opensearch-exp/sentence-transformers/
