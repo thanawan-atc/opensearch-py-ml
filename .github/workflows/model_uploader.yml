@@ -34,8 +34,8 @@ on:
         - "MEAN_SQRT_LEN"
 
 jobs:
-  model-tracing:
-    name: model-tracing
+  model-auto-tracing:
+    name: model-auto-tracing
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -62,10 +62,12 @@ jobs:
         with: 
           name: upload
           path: ./upload/
-  
-  model-uploading:
-    runs-on: 'ubuntu-latest'
 
+  manual-approval:
+    needs: model-auto-tracing
+    runs-on: 'ubuntu-latest'
+    permissions:
+      issues: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -76,15 +78,29 @@ jobs:
         with:
           secret: ${{ github.TOKEN }}
           approvers: ${{ steps.get_approvers.outputs.approvers }}
-          minimum-approvals: 2
+          minimum-approvals: 1
           issue-title: 'Upload opensearch-py-ml model to Amazon S3 Bucket'
-          issue-body: "Please approve or deny opensearch-py-ml model uploading. **Tag**: ${{ github.ref_name }}  **Commit**: ${{ github.sha }}"
-          exclude-workflow-initiator-as-approver: true
+          issue-body: "Please approve or deny opensearch-py-ml model uploading: ${{ github.event.inputs.test_input }}"
+          exclude-workflow-initiator-as-approver: false
+          
+  model-uploading:
+    needs: manual-approval
+    runs-on: 'ubuntu-latest'
+    permissions:
+      id-token: write
+      contents: read
+    steps:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
           name: upload
           path: ./upload/
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
+          role-to-assume: ${{ secrets.MODEL_UPLOADER_ROLE }}
+          role-session-name: GitHubActions
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
