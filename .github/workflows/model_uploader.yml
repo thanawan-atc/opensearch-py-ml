@@ -62,3 +62,34 @@ jobs:
         with: 
           name: upload
           path: ./upload/
+  
+  model-uploading:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - id: get_approvers
+        run: |
+          echo "approvers=$(cat .github/CODEOWNERS | grep @ | tr -d '* ' | sed 's/@/,/g' | sed 's/,//1')" >> $GITHUB_OUTPUT
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: ${{ steps.get_approvers.outputs.approvers }}
+          minimum-approvals: 2
+          issue-title: 'Upload opensearch-py-ml model to Amazon S3 Bucket'
+          issue-body: "Please approve or deny opensearch-py-ml model uploading. **Tag**: ${{ github.ref_name }}  **Commit**: ${{ github.sha }}"
+          exclude-workflow-initiator-as-approver: true
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: upload
+          path: ./upload/
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.MODEL_UPLOADER_ROLE }}
+          aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
+      - name: Copy files to the bucket
+        run: |
+          aws s3 sync ./upload/ s3://ml-models/huggingface/sentence-transformers/
