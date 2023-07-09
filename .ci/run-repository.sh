@@ -84,7 +84,8 @@ else
     python -m pip install pandas~=${PANDAS_VERSION}; 
     python utils/model_uploader/model_autotracing.py ${MODEL_ID} ${MODEL_VERSION} ${TRACING_FORMAT} -ed ${EMBEDDING_DIMENSION} -pm ${POOLING_MODE}"
   
-  #docker cp opensearch-py-ml-trace-runner:/code/opensearch-py-ml/docs/build/ ./docs/
+  mkdir ./upload/
+  docker cp opensearch-py-ml-trace-runner:/code/opensearch-py-ml/upload/ ./upload/
 
   docker rm opensearch-py-ml-trace-runner
 fi

@@ -57,3 +57,8 @@ jobs:
           echo "POOLING_MODE=${{ github.event.inputs.pooling_mode }}" >> $GITHUB_ENV     
       - name: Autotracing ${{ matrix.cluster }} secured=${{ matrix.secured }} version=${{matrix.entry.opensearch_version}}
         run: "./.ci/run-tests ${{ matrix.cluster }} ${{ matrix.secured }} ${{ matrix.entry.opensearch_version }} trace"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with: 
+          name: upload
+          path: ./upload/
