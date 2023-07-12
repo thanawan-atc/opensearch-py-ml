@@ -46,7 +46,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-      - name: Configure AWS credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
@@ -56,8 +56,8 @@ jobs:
         if: github.event.inputs.tracing_format == 'TORCH_SCRIPT' || github.event.inputs.tracing_format == 'BOTH'
         run: |
           TORCH_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} TORCH_SCRIPT)
-          aws s3api head-object --bucket opensearch-exp --key $TORCH_FILE_PATH || TORCH_MODEL_NOT_EXIST=true
-          if [[ !$TORCH_MODEL_NOT_EXIST ]];
+          aws s3api head-object --bucket opensearch-exp --key $TORCH_FILE_PATH > /dev/null 2>&1 || TORCH_MODEL_NOT_EXIST=true
+          if [[ -z $TORCH_MODEL_NOT_EXIST ]];
           then
             echo "TORCH_SCRIPT Model already exists on model hub."
             exit 1
@@ -66,8 +66,8 @@ jobs:
         if: github.event.inputs.tracing_format == 'ONNX' || github.event.inputs.tracing_format == 'BOTH'
         run: |
           ONNX_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} ONNX)
-          aws s3api head-object --bucket opensearch-exp --key $ONNX_FILE_PATH || ONNX_MODEL_NOT_EXIST=true
-          if [[ !$ONNX_MODEL_NOT_EXIST ]];
+          aws s3api head-object --bucket opensearch-exp --key $ONNX_FILE_PATH > /dev/null 2>&1 || ONNX_MODEL_NOT_EXIST=true
+          if [[ -z $ONNX_MODEL_NOT_EXIST ]];
           then
             echo "TORCH_SCRIPT Model already exists on model hub."
             exit 1;
@@ -137,17 +137,17 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - name: Download artifact
+      - name: Download Artifact
         uses: actions/download-artifact@v2
         with:
           name: upload
           path: ./upload/
-      - name: Configure AWS credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
           role-to-assume: ${{ secrets.MODEL_UPLOADER_ROLE }}
           role-session-name: GitHubActions
-      - name: Copy files to the bucket
+      - name: Copy Files to the Bucket
         run: |
           aws s3 sync ./upload/ s3://opensearch-exp/sentence-transformers/
