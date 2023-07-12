@@ -67,6 +67,7 @@ jobs:
   manual-approval:
     needs: model-auto-tracing
     runs-on: 'ubuntu-latest'
+    timeout-minutes: 1
     permissions:
       issues: write
     steps:
