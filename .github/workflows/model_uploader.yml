@@ -42,7 +42,47 @@ on:
         - "MEAN_SQRT_LEN"
 
 jobs:
+  checking-out-model-hub:
+    needs: model-auto-tracing
+    runs-on: 'ubuntu-latest'
+    outputs:
+      overwritting: ${{ steps.checking-out-model-hub.outputs.overwritting }}
+    steps:
+      - name: Set Up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
+          role-to-assume: ${{ secrets.MODEL_UPLOADER_ROLE }}
+          role-session-name: GitHubActions
+      - name: Initiate Overwriting Variable
+        run: echo "OVERWRITING=false" >> $GITHUB_OUTPUT
+      - name: Check if TORCH_SCRIPT Model Exists
+        if: ${{ github.event.inputs.model_version == 'TORCH_SCRIPT'}} || ${{ github.event.inputs.model_version == 'BOTH'}}
+        run: |
+          python save_folder_name_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} TORCH_SCRIPT
+          aws s3 sync ./upload/ s3://opensearch-exp/sentence-transformers/
+          aws s3api head-object --bucket opensearch-exp --key TORCH_FOLDER_NAME || TORCH_MODEL_NOT_EXIST=true
+          if [ !$TORCH_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'False' }} ]; then
+            exit 1
+          else if [ !$TORCH_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'True' }} ]; then
+            echo "OVERWRITING=true" >> $GITHUB_OUTPUT
+      - name: Check if ONNX Model Exists
+        if: ${{ github.event.inputs.model_version == 'ONNX'}} || ${{ github.event.inputs.model_version == 'BOTH'}}
+        run: |
+          python save_folder_name_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} ONNX
+          aws s3 sync ./upload/ s3://opensearch-exp/sentence-transformers/
+          aws s3api head-object --bucket opensearch-exp --key ONNX_FOLDER_NAME || ONNX_MODEL_NOT_EXIST=true
+          if [ !$ONNX_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'False' }} ]; then
+            exit 1
+          else if [ !$ONNX_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'True' }} ]; then
+            echo "OVERWRITING=true" >> $GITHUB_OUTPUT
+    
   model-auto-tracing:
+    needs: checking-out-model-hub
     name: model-auto-tracing
     runs-on: ubuntu-latest
     strategy:
@@ -74,7 +114,7 @@ jobs:
           retention-days: 5
 
   manual-approval:
-    needs: model-auto-tracing
+    needs: [checking-out-model-hub, model-auto-tracing]
     runs-on: 'ubuntu-latest'
     permissions:
       issues: write
@@ -95,6 +135,8 @@ jobs:
             - Model ID: ${{ github.event.inputs.model_id }}
             - Model Version: ${{ github.event.inputs.model_version }}
             - Tracing Format: ${{ github.event.inputs.tracing_format }}
+            - Allow Overwrite: ${{ github.event.inputs.allow_overwrite }}
+            - Overwriting: {{ needs.checking-out-model-hub.outputs.overwritting }}"
             - Embedding Dimension: ${{ github.event.inputs.embedding_dimension }}
             - Pooling Mode: ${{ github.event.inputs.pooling_mode }}
           exclude-workflow-initiator-as-approver: false
