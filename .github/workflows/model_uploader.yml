@@ -43,7 +43,6 @@ on:
 
 jobs:
   checking-out-model-hub:
-    needs: model-auto-tracing
     runs-on: 'ubuntu-latest'
     outputs:
       overwritting: ${{ steps.checking-out-model-hub.outputs.overwritting }}
