@@ -19,7 +19,7 @@ on:
         - "TORCH_SCRIPT"
         - "ONNX"
       allow_overwrite:
-        description: "Allow the workflow to overwrite the existing model files on our model hub if it already exists"
+        description: "Allow overwrites on model hub"
         required: true
         type: choice
         default: "False"
@@ -27,11 +27,11 @@ on:
         - "False"
         - "True"
       embedding_dimension:
-        description: "(Optional) You can add the embedding dimension of the model here if it does not exist in original config.json file. Else, it will use 768."
+        description: "(Optional) Embedding Dimension (Specify here if it does not exist in original config.json file. Else, it will use 768)"
         required: false
         type: int
       pooling_mode:
-        description: "(Optional) You can specify the pooling mode of the model here if it does not exist in original config.json file."
+        description: "(Optional) Pooling Mode (Specify here if it does not exist in original config.json file)"
         required: false
         type: choice
         options:
