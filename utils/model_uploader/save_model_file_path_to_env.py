@@ -10,9 +10,9 @@ import argparse
 def get_model_file_path(model_id, model_version, model_format):
     model_name = str(model_id.split("/")[-1])
     model_format = model_format.lower()
-    model_dirname = f"{model_name}/{model_version}/{model_format}"
+    model_dirname = f"sentence-transformers/upload/{model_name}/{model_version}/{model_format}"
     model_filename = (
-        f"sentence-transformers/upload/sentence-transformers_{model_name}-{model_version}-{model_format}.zip"
+        f"sentence-transformers_{model_name}-{model_version}-{model_format}.zip"
     )
     model_file_path = model_dirname + "/" + model_filename
     return model_file_path
