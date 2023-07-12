@@ -63,35 +63,10 @@ jobs:
           name: upload
           path: ./upload/
           retention-days: 5
-
-  manual-approval:
-    needs: model-auto-tracing
-    runs-on: 'ubuntu-latest'
-    permissions:
-      issues: write
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - id: get_approvers
-        run: |
-          echo "approvers=$(cat .github/CODEOWNERS | grep @ | tr -d '* ' | sed 's/@/,/g' | sed 's/,//1')" >> $GITHUB_OUTPUT
-      - uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: ${{ steps.get_approvers.outputs.approvers }}
-          minimum-approvals: 1
-          issue-title: "Upload opensearch-py-ml model to Amazon S3 Bucket (${{ github.event.inputs.model_id }})"
-          issue-body: >
-            Please approve or deny opensearch-py-ml model uploading
-            - Model ID: ${{ github.event.inputs.model_id }}
-            - Model Version: ${{ github.event.inputs.model_version }}
-            - Tracing Format: ${{ github.event.inputs.tracing_format }}
-            - Embedding Dimension: ${{ github.event.inputs.embedding_dimension }}
-            - Pooling Mode: ${{ github.event.inputs.pooling_mode }}
-          exclude-workflow-initiator-as-approver: false
           
   model-uploading:
-    needs: manual-approval
+    needs: model-auto-tracing
+    environment: manual-approval-env
     runs-on: 'ubuntu-latest'
     permissions:
       id-token: write
@@ -105,14 +80,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
-          role-to-assume: ${{ secrets.MODEL_UPLOADER_ROLE }}
+          aws-region: ${{ secrets.ENV_MODEL_UPLOADER_AWS_REGION }}
+          role-to-assume: ${{ secrets.ENV_MODEL_UPLOADER_ROLE }}
           role-session-name: GitHubActions
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: ${{ secrets.MODEL_UPLOADER_ROLE }}
-          aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
       - name: Copy files to the bucket
         run: |
           aws s3 sync ./upload/ s3://opensearch-exp/sentence-transformers/
