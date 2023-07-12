@@ -84,7 +84,7 @@ def trace_sentence_transformer_model(
     return model_path, model_config_path
 
 
-def upload_sentence_transformer_model(
+def register_and_deploy_sentence_transformer_model(
     ml_client, model_path, model_config_path, model_format
 ):
     embedding_data = None
@@ -257,7 +257,7 @@ def main(args):
             args.pooling_mode,
             TORCH_SCRIPT_FORMAT,
         )
-        torch_embedding_data = upload_sentence_transformer_model(
+        torch_embedding_data = register_and_deploy_sentence_transformer_model(
             ml_client,
             torchscript_model_path,
             torchscript_model_config_path,
@@ -284,7 +284,7 @@ def main(args):
             args.pooling_mode,
             ONNX_FORMAT,
         )
-        onnx_embedding_data = upload_sentence_transformer_model(
+        onnx_embedding_data = register_and_deploy_sentence_transformer_model(
             ml_client, onnx_model_path, onnx_model_config_path, ONNX_FORMAT
         )
 
