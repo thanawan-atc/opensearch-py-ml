@@ -18,6 +18,14 @@ on:
         - "BOTH"
         - "TORCH_SCRIPT"
         - "ONNX"
+      allow_overwrite:
+        description: "Allow the workflow to overwrite the existing model files on our model hub if it already exists"
+        required: true
+        type: choice
+        default: "False"
+        options:
+        - "False"
+        - "True"
       embedding_dimension:
         description: "(Optional) You can add the embedding dimension of the model here if it does not exist in original config.json file. Else, it will use 768."
         required: false
@@ -53,6 +61,7 @@ jobs:
           echo "MODEL_ID=${{ github.event.inputs.model_id }}" >> $GITHUB_ENV
           echo "MODEL_VERSION=${{ github.event.inputs.model_version }}" >> $GITHUB_ENV
           echo "TRACING_FORMAT=${{ github.event.inputs.tracing_format }}" >> $GITHUB_ENV
+          echo "ALLOW_OVERWRITE=${{ github.event.inputs.allow_overwrite }}" >> $GITHUB_ENV
           echo "EMBEDDING_DIMENSION=${{ github.event.inputs.embedding_dimension }}" >> $GITHUB_ENV
           echo "POOLING_MODE=${{ github.event.inputs.pooling_mode }}" >> $GITHUB_ENV     
       - name: Autotracing ${{ matrix.cluster }} secured=${{ matrix.secured }} version=${{matrix.entry.opensearch_version}}
