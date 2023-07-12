@@ -18,14 +18,6 @@ on:
         - "BOTH"
         - "TORCH_SCRIPT"
         - "ONNX"
-      allow_overwrite:
-        description: "Allow overwrites on model hub"
-        required: true
-        type: choice
-        default: "False"
-        options:
-        - "False"
-        - "True"
       embedding_dimension:
         description: "(Optional) Embedding Dimension (Specify here if it does not exist in original config.json file. Else, it will use 768)"
         required: false
@@ -47,8 +39,6 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    outputs:
-      overwritting: ${{ steps.checking-out-model-hub.outputs.overwritting }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -62,33 +52,25 @@ jobs:
           aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
           role-to-assume: ${{ secrets.MODEL_UPLOADER_ROLE }}
           role-session-name: GitHubActions
-      - name: Initiate Overwriting Variable
-        run: echo "OVERWRITING=false" >> $GITHUB_OUTPUT
       - name: Check if TORCH_SCRIPT Model Exists
         if: ${{ github.event.inputs.model_version == 'TORCH_SCRIPT'}} || ${{ github.event.inputs.model_version == 'BOTH'}}
         run: |
           TORCH_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} TORCH_SCRIPT)
           aws s3api head-object --bucket opensearch-exp --key $TORCH_FILE_PATH || TORCH_MODEL_NOT_EXIST=true
-          if [[ !$TORCH_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'False' }} ]];
+          if [[ !$TORCH_MODEL_NOT_EXIST }} ]];
           then
-            echo "TORCH_SCRIPT Model already exists on model hub. (allow_overwrite=false)"
+            echo "TORCH_SCRIPT Model already exists on model hub."
             exit 1
-          elif [[ !$TORCH_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'True' }} ]];
-          then
-            echo "OVERWRITING=true" >> $GITHUB_OUTPUT
           fi
       - name: Check if ONNX Model Exists
         if: ${{ github.event.inputs.model_version == 'ONNX'}} || ${{ github.event.inputs.model_version == 'BOTH'}}
         run: |
           ONNX_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} ONNX)
           aws s3api head-object --bucket opensearch-exp --key $ONNX_FILE_PATH || ONNX_MODEL_NOT_EXIST=true
-          if [[ !$ONNX_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'False' }} ]];
+          if [[ !$ONNX_MODEL_NOT_EXIST }} ]];
           then
-            echo "TORCH_SCRIPT Model already exists on model hub. (allow_overwrite=false)"
+            echo "TORCH_SCRIPT Model already exists on model hub."
             exit 1;
-          elif [[ !$ONNX_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'True' }} ]];
-          then
-            echo "OVERWRITING=true" >> $GITHUB_OUTPUT
           fi
   
   model-auto-tracing:
@@ -111,7 +93,6 @@ jobs:
           echo "MODEL_ID=${{ github.event.inputs.model_id }}" >> $GITHUB_ENV
           echo "MODEL_VERSION=${{ github.event.inputs.model_version }}" >> $GITHUB_ENV
           echo "TRACING_FORMAT=${{ github.event.inputs.tracing_format }}" >> $GITHUB_ENV
-          echo "ALLOW_OVERWRITE=${{ github.event.inputs.allow_overwrite }}" >> $GITHUB_ENV
           echo "EMBEDDING_DIMENSION=${{ github.event.inputs.embedding_dimension }}" >> $GITHUB_ENV
           echo "POOLING_MODE=${{ github.event.inputs.pooling_mode }}" >> $GITHUB_ENV     
       - name: Autotracing ${{ matrix.cluster }} secured=${{ matrix.secured }} version=${{matrix.entry.opensearch_version}}
@@ -124,7 +105,7 @@ jobs:
           retention-days: 5
 
   manual-approval:
-    needs: [checking-out-model-hub, model-auto-tracing]
+    needs: model-auto-tracing
     runs-on: 'ubuntu-latest'
     permissions:
       issues: write
@@ -145,8 +126,6 @@ jobs:
             - Model ID: ${{ github.event.inputs.model_id }}
             - Model Version: ${{ github.event.inputs.model_version }}
             - Tracing Format: ${{ github.event.inputs.tracing_format }}
-            - Allow Overwrite: ${{ github.event.inputs.allow_overwrite }}
-            - Overwriting: {{ needs.checking-out-model-hub.outputs.overwritting }}
             - Embedding Dimension: ${{ github.event.inputs.embedding_dimension }}
             - Pooling Mode: ${{ github.event.inputs.pooling_mode }}
           exclude-workflow-initiator-as-approver: false
