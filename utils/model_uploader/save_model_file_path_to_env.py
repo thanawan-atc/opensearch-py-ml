@@ -7,10 +7,13 @@
 
 import argparse
 
+
 def get_model_file_path(model_id, model_version, model_format):
     model_name = str(model_id.split("/")[-1])
     model_format = model_format.lower()
-    model_dirname = f"sentence-transformers/upload/{model_name}/{model_version}/{model_format}"
+    model_dirname = (
+        f"sentence-transformers/upload/{model_name}/{model_version}/{model_format}"
+    )
     model_filename = (
         f"sentence-transformers_{model_name}-{model_version}-{model_format}.zip"
     )
