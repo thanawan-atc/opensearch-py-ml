@@ -43,6 +43,6 @@ if __name__ == "__main__":
     )
 
     env_file = os.getenv('GITHUB_ENV')
-    var_name = "TORCH_FILE_PATH" if model_format == "TORCH_SCRIPT" else "ONNX_FILE_PATH"
+    var_name = "TORCH_FILE_PATH" if args.model_format == "TORCH_SCRIPT" else "ONNX_FILE_PATH"
     with open(env_file, "a") as f:
         f.write(f"{var_name}={model_file_path}")
