@@ -57,7 +57,7 @@ jobs:
         run: |
           TORCH_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} TORCH_SCRIPT)
           aws s3api head-object --bucket opensearch-exp --key $TORCH_FILE_PATH || TORCH_MODEL_NOT_EXIST=true
-          if [[ !$TORCH_MODEL_NOT_EXIST }} ]];
+          if [[ !$TORCH_MODEL_NOT_EXIST ]];
           then
             echo "TORCH_SCRIPT Model already exists on model hub."
             exit 1
@@ -67,7 +67,7 @@ jobs:
         run: |
           ONNX_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} ONNX)
           aws s3api head-object --bucket opensearch-exp --key $ONNX_FILE_PATH || ONNX_MODEL_NOT_EXIST=true
-          if [[ !$ONNX_MODEL_NOT_EXIST }} ]];
+          if [[ !$ONNX_MODEL_NOT_EXIST ]];
           then
             echo "TORCH_SCRIPT Model already exists on model hub."
             exit 1;
