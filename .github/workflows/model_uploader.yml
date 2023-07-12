@@ -70,6 +70,7 @@ jobs:
           python utils/model_uploader/save_model_file_path_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} TORCH_SCRIPT
           aws s3api head-object --bucket opensearch-exp --key env.TORCH_FILE_PATH || TORCH_MODEL_NOT_EXIST=true
           if [ !$TORCH_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'False' }} ]; then
+            echo "TORCH_SCRIPT Model already exists on model hub. (allow_overwrite=false)"
             exit 1
           else if [ !$TORCH_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'True' }} ]; then
             echo "OVERWRITING=true" >> $GITHUB_OUTPUT
@@ -79,6 +80,7 @@ jobs:
           python utils/model_uploader/save_model_file_path_to_env.py ${{ github.event.inputs.model_id }} ${{ github.event.inputs.model_version }} ONNX 
           aws s3api head-object --bucket opensearch-exp --key env.ONNX_FILE_PATH || ONNX_MODEL_NOT_EXIST=true
           if [ !$ONNX_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'False' }} ]; then
+            echo "TORCH_SCRIPT Model already exists on model hub. (allow_overwrite=false)"
             exit 1
           else if [ !$ONNX_MODEL_NOT_EXIST && ${{ github.event.inputs.allow_overwrite == 'True' }} ]; then
             echo "OVERWRITING=true" >> $GITHUB_OUTPUT
