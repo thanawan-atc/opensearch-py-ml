@@ -6,8 +6,6 @@
 # GitHub history for details.
 
 import argparse
-import os
-
 
 def get_model_file_path(model_id, model_version, model_format):
     model_name = str(model_id.split("/")[-1])
@@ -42,7 +40,4 @@ if __name__ == "__main__":
         args.model_id, args.model_version, args.model_format
     )
 
-    env_file = os.getenv('GITHUB_ENV')
-    var_name = "TORCH_FILE_PATH" if args.model_format == "TORCH_SCRIPT" else "ONNX_FILE_PATH"
-    with open(env_file, "a") as f:
-        f.write(f"{var_name}={model_file_path}")
+    print(model_file_path)
