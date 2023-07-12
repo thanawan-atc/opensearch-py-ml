@@ -44,6 +44,9 @@ on:
 jobs:
   checking-out-model-hub:
     runs-on: 'ubuntu-latest'
+    permissions:
+      id-token: write
+      contents: read
     outputs:
       overwritting: ${{ steps.checking-out-model-hub.outputs.overwritting }}
     steps:
