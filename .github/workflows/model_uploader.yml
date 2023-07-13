@@ -48,7 +48,7 @@ jobs:
       - name: Create Issue Body
         id: create_issue_body
         run: |
-          ISSUE_BODY="Please approve or deny opensearch-py-ml model uploading:\n
+          issue_body="Please approve or deny opensearch-py-ml model uploading:\n
                       - Workflow Initiator: @${{ github.actor }}\n
                       - Model ID: ${{ github.event.inputs.model_id }}\n
                       - Model Version: ${{ github.event.inputs.model_version }}\n
