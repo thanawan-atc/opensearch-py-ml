@@ -58,7 +58,7 @@ jobs:
           issue_body="${issue_body//'%'/'%25'}"
           issue_body="${issue_body//$'\n'/'%0A'}"
           issue_body="${issue_body//$'\r'/'%0D'}"
-          echo "issue_body=$issue_body" >> $GITHUB_OUTPUT
+          echo "issue_body=${issue_body}" >> $GITHUB_OUTPUT
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
