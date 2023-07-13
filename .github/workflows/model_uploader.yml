@@ -52,12 +52,12 @@ jobs:
           issue-title: "Upload opensearch-py-ml model to Amazon S3 Bucket (${{ github.event.inputs.model_id }})"
           issue-body: >
             Please approve or deny opensearch-py-ml model uploading:\n
-            - Workflow Initiator: @${ github.actor }\n
-            - Model ID: ${ github.event.inputs.model_id }\n
-            - Model Version: ${ github.event.inputs.model_version }\n
-            - Tracing Format: ${ github.event.inputs.tracing_format }\n
-            - Embedding Dimension: ${ github.event.inputs.embedding_dimension:-N/A }\n
-            - Pooling Mode: ${ github.event.inputs.pooling_mode:-N/A }\n
+            - Workflow Initiator: @${github.actor}\n
+            - Model ID: ${github.event.inputs.model_id}\n
+            - Model Version: ${github.event.inputs.model_version}\n
+            - Tracing Format: ${github.event.inputs.tracing_format}\n
+            - Embedding Dimension: ${github.event.inputs.embedding_dimension:-N/A}\n
+            - Pooling Mode: ${github.event.inputs.pooling_mode:-N/A}\n
           exclude-workflow-initiator-as-approver: false
           
 
