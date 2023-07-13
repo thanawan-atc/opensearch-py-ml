@@ -44,20 +44,24 @@ jobs:
       - id: get_approvers
         run: |
           echo "approvers=$(cat .github/CODEOWNERS | grep @ | tr -d '* ' | sed 's/@/,/g' | sed 's/,//1')" >> $GITHUB_OUTPUT
+      - name: Create Issue Body
+        run: |
+          issue_body="Please approve or deny opensearch-py-ml model uploading:
+            - Workflow Initiator: @${github.actor}
+            - Model ID: ${github.event.inputs.model_id}
+            - Model Version: ${github.event.inputs.model_version}
+            - Tracing Format: ${github.event.inputs.tracing_format}
+            - Embedding Dimension: ${github.event.inputs.embedding_dimension:-N/A}
+            - Pooling Mode: ${github.event.inputs.pooling_mode:-N/A}"
+          echo "${issue_body}"
+          echo "ISSUE_BODY=${{ issue_body}}" >> $GITHUB_ENV
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
           approvers: ${{ steps.get_approvers.outputs.approvers }}
           minimum-approvals: 1
           issue-title: "Upload opensearch-py-ml model to Amazon S3 Bucket (${{ github.event.inputs.model_id }})"
-          issue-body: >
-            Please approve or deny opensearch-py-ml model uploading:\n
-            - Workflow Initiator: @${github.actor}\n
-            - Model ID: ${github.event.inputs.model_id}\n
-            - Model Version: ${github.event.inputs.model_version}\n
-            - Tracing Format: ${github.event.inputs.tracing_format}\n
-            - Embedding Dimension: ${github.event.inputs.embedding_dimension:-N/A}\n
-            - Pooling Mode: ${github.event.inputs.pooling_mode:-N/A}\n
+          issue-body: ${{ env.ISSUE_BODY }}
           exclude-workflow-initiator-as-approver: false
           
 
