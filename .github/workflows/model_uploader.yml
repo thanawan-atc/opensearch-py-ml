@@ -37,29 +37,35 @@ jobs:
  manual-approval:
     runs-on: 'ubuntu-latest'
     permissions:
-      issues: write
-    env: 
-      ISSUE_BODY: |
-        Please approve or deny opensearch-py-ml model uploading:
-        - Workflow Initiator: @${{ github.actor}}
-        - Model ID: ${{ github.event.inputs.model_id }}
-        - Model Version: ${github.event.inputs.model_version}
-        - Tracing Format: ${{ github.event.inputs.tracing_format }}
-        - Embedding Dimension: ${{ github.event.inputs.embedding_dimension }}
-        - Pooling Mode: ${{ github.event.inputs.pooling_mode }}
+      issues: write 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-      - id: get_approvers
+      - name: Get Approvers
+        id: get_approvers
         run: |
           echo "approvers=$(cat .github/CODEOWNERS | grep @ | tr -d '* ' | sed 's/@/,/g' | sed 's/,//1')" >> $GITHUB_OUTPUT
+      - name: Create Issue Body
+        id: create_issue_body
+        run: |
+          issue_body="Please approve or deny opensearch-py-ml model uploading:
+                      - Workflow Initiator: @${{ github.actor}}
+                      - Model ID: ${{ github.event.inputs.model_id }}
+                      - Model Version: ${github.event.inputs.model_version}
+                      - Tracing Format: ${{ github.event.inputs.tracing_format }}
+                      - Embedding Dimension: ${{ github.event.inputs.embedding_dimension }}
+                      - Pooling Mode: ${{ github.event.inputs.pooling_mode }}"
+          issue_body="${issue_body//'%'/'%25'}"
+          issue_body="${issue_body//$'\n'/'%0A'}"
+          issue_body="${issue_body//$'\r'/'%0D'}"
+          echo "issue_body=$issue_body" >> $GITHUB_OUTPUT
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
           approvers: ${{ steps.get_approvers.outputs.approvers }}
           minimum-approvals: 1
           issue-title: "Upload opensearch-py-ml model to Amazon S3 Bucket (${{ github.event.inputs.model_id }})"
-          issue-body: ${{ ISSUE_BODY }}
+          issue-body: ${{ steps.create_issue_body.issue_body }}
           exclude-workflow-initiator-as-approver: false
           
 
