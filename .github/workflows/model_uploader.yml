@@ -59,7 +59,7 @@ jobs:
           approvers: ${{ steps.get_approvers.outputs.approvers }}
           minimum-approvals: 1
           issue-title: "Upload opensearch-py-ml model to Amazon S3 Bucket (${{ github.event.inputs.model_id }})"
-          issue-body: $ISSUE_BODY
+          issue-body: ${{ ISSUE_BODY }}
           exclude-workflow-initiator-as-approver: false
           
 
