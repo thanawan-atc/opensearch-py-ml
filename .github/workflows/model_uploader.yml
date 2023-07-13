@@ -35,7 +35,6 @@ on:
 
 jobs:
  manual-approval:
-    needs: model-auto-tracing
     runs-on: 'ubuntu-latest'
     permissions:
       issues: write
