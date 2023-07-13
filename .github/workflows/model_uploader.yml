@@ -52,8 +52,8 @@ jobs:
             - Model ID: ${{ github.event.inputs.model_id }}
             - Model Version: ${github.event.inputs.model_version}
             - Tracing Format: ${{ github.event.inputs.tracing_format }}
-            - Embedding Dimension: ${{ github.event.inputs.embedding_dimension:-N/A }}
-            - Pooling Mode: ${{ github.event.inputs.pooling_mode:-N/A }}
+            - Embedding Dimension: ${{ github.event.inputs.embedding_dimension }}
+            - Pooling Mode: ${{ github.event.inputs.pooling_mode }}
           EOIB
           echo "$ISSUE_BODY"
           echo "ISSUE_BODY=${{ ISSUE_BODY }}" >> $GITHUB_ENV
