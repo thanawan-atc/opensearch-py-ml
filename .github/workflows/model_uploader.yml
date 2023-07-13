@@ -48,13 +48,15 @@ jobs:
       - name: Create Issue Body
         id: create_issue_body
         run: |
-          issue_body="Please approve or deny opensearch-py-ml model uploading:
+          embedding_dimension=${{ github.event.inputs.embedding_dimension }}
+          pooling_mode=${{ github.event.inputs.pooling_mode }}
+          issue_body="Please approve or deny `opensearch-py-ml` model uploading:
           - Workflow Initiator: @${{ github.actor }}
-          - Model ID: ${{ github.event.inputs.model_id }}
-          - Model Version: ${{ github.event.inputs.model_version }}
-          - Tracing Format: ${{ github.event.inputs.tracing_format }}
-          - Embedding Dimension: ${{ github.event.inputs.embedding_dimension }}
-          - Pooling Mode: ${{ github.event.inputs.pooling_mode }}"
+          - Model ID: `${{ github.event.inputs.model_id }}`
+          - Model Version: `${{ github.event.inputs.model_version }}`
+          - Tracing Format: `${{ github.event.inputs.tracing_format }}`
+          - Embedding Dimension: `${embedding_dimension:-N/A}`
+          - Pooling Mode: `${pooling_mode:-N/A}`"
           echo "issue_body<<EOF" >> $GITHUB_OUTPUT
           echo "${issue_body@E}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
