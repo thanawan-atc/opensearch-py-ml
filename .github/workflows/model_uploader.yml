@@ -59,13 +59,14 @@ jobs:
           issue_body="${issue_body//$'\n'/'%0A'}"
           issue_body="${issue_body//$'\r'/'%0D'}"
           echo "issue_body=${issue_body}" >> $GITHUB_OUTPUT
+          echo "${issue_body}"
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
           approvers: ${{ steps.get_approvers.outputs.approvers }}
           minimum-approvals: 1
           issue-title: "Upload opensearch-py-ml model to Amazon S3 Bucket (${{ github.event.inputs.model_id }})"
-          issue-body: ${{ steps.create_issue_body.issue_body }}
+          issue-body: ${{ steps.create_issue_body.outputs.issue_body }}
           exclude-workflow-initiator-as-approver: false
           
 
