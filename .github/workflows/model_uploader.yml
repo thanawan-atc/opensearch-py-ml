@@ -46,15 +46,17 @@ jobs:
           echo "approvers=$(cat .github/CODEOWNERS | grep @ | tr -d '* ' | sed 's/@/,/g' | sed 's/,//1')" >> $GITHUB_OUTPUT
       - name: Create Issue Body
         run: |
-          issue_body="Please approve or deny opensearch-py-ml model uploading:
+          read -r -d '' ISSUE_BODY << EOIB
+          Please approve or deny opensearch-py-ml model uploading:
             - Workflow Initiator: @${github.actor}
             - Model ID: ${github.event.inputs.model_id}
             - Model Version: ${github.event.inputs.model_version}
             - Tracing Format: ${github.event.inputs.tracing_format}
             - Embedding Dimension: ${github.event.inputs.embedding_dimension:-N/A}
-            - Pooling Mode: ${github.event.inputs.pooling_mode:-N/A}"
-          echo "${issue_body}"
-          echo "ISSUE_BODY=${{ issue_body}}" >> $GITHUB_ENV
+            - Pooling Mode: ${github.event.inputs.pooling_mode:-N/A}
+          EOIB
+          echo "$ISSUE_BODY"
+          echo "ISSUE_BODY=${ISSUE_BODY}" >> $GITHUB_ENV
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
