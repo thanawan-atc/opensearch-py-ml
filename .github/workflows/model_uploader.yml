@@ -48,7 +48,7 @@ jobs:
       - name: Create Issue Body
         id: create_issue_body
         run: |
-          issue_body="Please approve or deny opensearch-py-ml model uploading:\n
+          ISSUE_BODY="Please approve or deny opensearch-py-ml model uploading:\n
                       - Workflow Initiator: @${{ github.actor }}\n
                       - Model ID: ${{ github.event.inputs.model_id }}\n
                       - Model Version: ${{ github.event.inputs.model_version }}\n
@@ -56,8 +56,8 @@ jobs:
                       - Embedding Dimension: ${{ github.event.inputs.embedding_dimension }}\n
                       - Pooling Mode: ${{ github.event.inputs.pooling_mode }}\n"
           echo "issue_body<<EOF" >> $GITHUB_OUTPUT
-          echo $issue_body >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo $issue_body >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           echo "${issue_body}"
       - uses: trstringer/manual-approval@v1
         with:
