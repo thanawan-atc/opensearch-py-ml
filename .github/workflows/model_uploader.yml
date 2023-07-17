@@ -83,7 +83,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     permissions:
       id-token: write
-      contents: read
+      contents: read|write
     concurrency: ${{ github.workflow }}-concurrency
     steps:
       - name: Checkout
