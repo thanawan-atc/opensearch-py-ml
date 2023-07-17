@@ -1,4 +1,4 @@
-update_models_upload_history_md.pyimport argparse
+import argparse
 import json
 import os
 from mdutils.mdutils import MdUtils
