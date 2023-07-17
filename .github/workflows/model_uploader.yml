@@ -92,9 +92,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-      - name: Copy Files to the Bucket
-        run: |
-          aws s3 sync ./upload/ s3://opensearch-exp/ml-models/huggingface/sentence-transformers/
       - name: Update MODEL_UPLOAD_HISTORY.md
         run: |
           time=$(TZ='America/Los_Angeles' date "+%Y-%m-%d %T")
