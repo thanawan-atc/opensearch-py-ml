@@ -1,8 +1,16 @@
+update_models_upload_history_md.pyimport argparse
+import json
 import os
 from mdutils.mdutils import MdUtils
+from mdutils.fileutils import MarkDownFile
+from mdutils.tools.Table import Table
+from typing import Optional
 
-MODEL_JSON_FILENAME = "utils/model_uploader/supported_models.json"
-KEYS = ['Model ID', 'Model Version', 'Tracing Format', 'Embedding Dimension', 'Pooling Mode', 'Uploaded by', 'Date']
+MD_FILENAME = "MODEL_UPLOAD_HISTORY"
+DIRNAME = "utils/model_uploader"
+MODEL_JSON_FILENAME = DIRNAME + "/supported_models.json"
+KEYS = ['Upload Time', 'Model Uploader', 'Model ID', 'Model Version', 'Tracing Format', 'Embedding Dimension', 'Pooling Mode']
+HEADER = header = '# Pretrained Model Upload History\n\nThe model-serving framework supports a variety of open-source pretrained models that can assist with a range of machine learning (ML) search and analytics use cases. \n\n\n## Uploaded Pretrained Models\n\n\n### Sentence transformers\n\nSentence transformer models map sentences and paragraphs across a dimensional dense vector space. The number of vectors depends on the model. Use these models for use cases such as clustering and semantic search. \n\nThe following table shows sentence transformer model upload history.\n\n[//]: # (This may be the most platform independent comment)\n'
 
 def modify_model_json_file(
     model_id: str,
@@ -13,43 +21,47 @@ def modify_model_json_file(
     model_uploader: Optional[str] = None,
     uploader_time: Optional[str] = None,
 ) -> list[dict]:
+    
     models = []
     if os.path.exists(MODEL_JSON_FILENAME):
         with open(MODEL_JSON_FILENAME, 'r') as f:
             models = json.load(f)
             
     new_model = {
+        'Model Uploader': '@'+ model_uploader if model_uploader is not None else 'N/A',
+        'Upload Time': uploader_time if uploader_time is not None else 'N/A',
         'Model ID': model_id,
         'Model Version': model_version,
-        'Tracing Format': tracing_format if not 'BOTH' else 'TORCH_SCRIPT & ONNX',
-        'Embedding Dimension': 'N/A' if embedding_dimension is None else embedding_dimension,
-        'Pooling Mode': 'N/A' if pooling_mode is None else pooling_mode,
-        'Model Upload': '@'+ model_uploader,
-        'Upload Time': uploader_time
+        'Tracing Format': tracing_format,
+        'Embedding Dimension': embedding_dimension if embedding_dimension is not None else 'N/A',
+        'Pooling Mode': pooling_mode if pooling_mode is not None else 'N/A', 
     }
     
-    models.append(model)
+    models.append(new_model)
+    models = [dict(t) for t in {tuple(m.items()) for m in models}]
+    models = sorted(models, key=lambda d: d['Upload Time'])
     with open(MODEL_JSON_FILENAME, 'w') as f:
         json.dump(models, f, indent=4)
 
-def create_table():
+def create_md_file():
     models = []
     if os.path.exists(MODEL_JSON_FILENAME):
         with open(MODEL_JSON_FILENAME, 'r') as f:
             models = json.load(f)
-            
-    mdFile = MdUtils(file_name='SUPPORTED_MODELS',title='Supported models')
-    mdFile.new_header(level=1, title='Sentence Transformers')
+    models = sorted(models, key=lambda d: d['Upload Time'])
     table_data = KEYS[:]
     for m in models:
-        for k in key_lst:
-            table_data.append(m[k])
-    mdFile.new_line()
-    mdFile.new_paragraph("The following table provides a list of sentence transformer models available on model hub.")
-    mdFile.new_table(columns=len(key_lst), rows=len(models)+1, text=text_lst, text_align='center')
-    mdFile.create_md_file()
-
- 
+        for k in KEYS:
+            if k == 'Model ID':
+                 table_data.append(f"`{m[k]}`")
+            else:
+                table_data.append(m[k])
+            
+    table = Table().create_table(columns=len(KEYS), rows=len(models)+1, text=table_data, text_align='center')
+    
+    mdFile = MarkDownFile(MD_FILENAME, dirname=DIRNAME)
+    mdFile.rewrite_all_file(data=header+table)
+    print(f'Finished updating {MD_FILENAME}')
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
@@ -98,7 +110,7 @@ if __name__ == "__main__":
     )
     
     parser.add_argument(
-        "-d",
+        "-t",
         "--upload_time",
         type=str,
         nargs="?",
@@ -118,4 +130,4 @@ if __name__ == "__main__":
         args.upload_time
     )
     
-    create_table()
+    create_md_file()
