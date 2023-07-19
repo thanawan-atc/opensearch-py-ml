@@ -163,7 +163,6 @@ def trace(session, pandas_version: str):
     session.install(".")
     session.install("./tests")
     session.run("python", "-m", "pip", "install", f"pandas~={pandas_version}")
-    session.run("python", "-m", "setup_tests") # Note: Import many non-necessary things
     
     session.run(
         "python",
