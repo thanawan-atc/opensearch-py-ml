@@ -21,7 +21,12 @@ import numpy as np
 from numpy.typing import DTypeLike
 from sentence_transformers import SentenceTransformer
 
-LICENSE_PATH = "LICENSE"
+ROOT_DIR = os.path.abspath(os.path.join("../opensearch-py-ml"))
+TEST_DIR = os.path.join(ROOT_DIR, "tests")
+LICENSE_PATH = os.path.join(ROOT_DIR, "LICENSE")
+sys.path.append(ROOT_DIR)
+sys.path.append(TEST_DIR)
+
 from opensearch_py_ml.ml_commons import MLCommonClient
 from opensearch_py_ml.ml_models.sentencetransformermodel import SentenceTransformerModel
 from tests import OPENSEARCH_TEST_CLIENT
