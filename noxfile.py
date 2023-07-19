@@ -167,5 +167,6 @@ def trace(session, pandas_version: str):
     session.run(
         "python",
         "utils/model_uploader/model_autotracing.py",
-        *(session.posargs)
+        *(session.posargs),
+        *SOURCE_FILES
     )
