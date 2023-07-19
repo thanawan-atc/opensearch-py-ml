@@ -149,3 +149,23 @@ def docs(session):
     session.cd("docs")
     session.run("make", "clean", external=True)
     session.run("make", "html", external=True)
+    
+
+@nox.session(python=["3.8", "3.9", "3.10"])
+@nox.parametrize("pandas_version", ["1.5.0"])
+def trace(session, pandas_version: str):
+    session.install(
+        "-r",
+        "requirements-dev.txt",
+        "--timeout",
+        "1500",
+    )
+    session.install(".")
+    session.run("python", "-m", "pip", "install", f"pandas~={pandas_version}")
+    session.run("python", "-m", "setup_tests") # Note: Import many non-necessary things
+    
+    session.run(
+        "python",
+        "utils/model_uploader/model_autotracing.py",
+        *(session.posargs)
+    )
