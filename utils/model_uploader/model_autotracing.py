@@ -21,16 +21,16 @@ import numpy as np
 from numpy.typing import DTypeLike
 from sentence_transformers import SentenceTransformer
 
-# ROOT_DIR = os.path.abspath(os.path.join("../opensearch-py-ml"))
+ROOT_DIR = os.path.abspath(os.path.join("."))
 # TEST_DIR = os.path.join(ROOT_DIR, "tests")
 # LICENSE_PATH = os.path.join(ROOT_DIR, "LICENSE")
-# sys.path.append(ROOT_DIR)
+sys.path.append(ROOT_DIR)
 # sys.path.append(TEST_DIR)
 LICENSE_PATH = "LICENSE"
 
 from opensearch_py_ml.ml_commons import MLCommonClient
 from opensearch_py_ml.ml_models.sentencetransformermodel import SentenceTransformerModel
-from opensearch_tests import OPENSEARCH_TEST_CLIENT
+from tests import OPENSEARCH_TEST_CLIENT
 
 BOTH_FORMAT = "BOTH"
 TORCH_SCRIPT_FORMAT = "TORCH_SCRIPT"
