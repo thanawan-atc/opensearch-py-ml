@@ -7,5 +7,14 @@
         "Tracing Format": "ONNX",
         "Embedding Dimension": "Default",
         "Pooling Mode": "Default"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-07-18 23:33:01",
+        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
+        "Model Version": "1.0.1",
+        "Tracing Format": "TORCH_SCRIPT",
+        "Embedding Dimension": "Default",
+        "Pooling Mode": "Default"
     }
 ]
