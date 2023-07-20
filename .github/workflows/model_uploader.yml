@@ -211,8 +211,6 @@ jobs:
       contents: write
       pull-requests: write
     concurrency: ${{ github.workflow }}-concurrency
-    env:
-      open_pr: ${{ (gh pr list --head model_upload_changes_pr --state open) }}
     steps:
       - name: Check if PR is Open
         id: check_pr
