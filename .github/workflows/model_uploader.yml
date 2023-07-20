@@ -215,7 +215,7 @@ jobs:
       - name: Check if PR is Open
         id: check_pr
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: echo "exist_open_pr=$(gh pr list --head model_upload_changes_pr --state open --json number)" >> $GITHUB_OUTPUT
       - name: Checkout
         if: ${{ !steps.check_pr.outputs.exist_open_pr }}
