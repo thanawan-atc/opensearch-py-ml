@@ -211,9 +211,20 @@ jobs:
       contents: write
       pull-requests: write
     concurrency: ${{ github.workflow }}-concurrency
+    env:
+      open_pr: ${{ (gh pr list --head model_upload_changes_pr --state open) }}
     steps:
+      - name: Check if PR is Open
+        id: check_pr
+        run: echo "exist_open_pr=$(gh pr list --head model_upload_changes_pr --state open)" >> $GITHUB_OUTPUT
       - name: Checkout
+        if: ${{ !steps.check_pr.outputs.exist_open_pr }}
         uses: actions/checkout@v3
+      - name: Checkout
+        if: ${{ steps.check_pr.outputs.exist_open_pr }}
+        uses: actions/checkout@v3
+        with:
+          ref: model_upload_changes
       - name: Set Up Python
         uses: actions/setup-python@v2
         with:
@@ -245,18 +256,6 @@ jobs:
 #           add-paths: |
 #             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
 #             ./utils/model_uploader/upload_history/supported_models.json
-      - name: Commit Updates
-        uses: stefanzweifel/git-auto-commit-action@v4
-        id: commit
-        with:
-          branch: model_upload_changes
-          commit_message: 'GitHub Actions Workflow - Update MODEL_UPLOAD_HISTORY.md (${{ github.event.inputs.model_id }})'
-          commit_options: '--signoff'
-          repository: ./utils/model_uploader/upload_history
-          file_pattern: MODEL_UPLOAD_HISTORY.md supported_models.json
-      - name: Check if PR is Open
-        id: check_pr
-        run: echo "exist_open_pr=$(gh pr list --head model_upload_changes_pr --state open)" >> $GITHUB_OUTPUT
       - name: Create a PR
         if: ${{ !steps.check_pr.outputs.exist_open_pr }}
         uses: peter-evans/create-pull-request@v5
@@ -272,5 +271,15 @@ jobs:
           add-paths: |
             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
             ./utils/model_uploader/upload_history/supported_models.json
+      - name: Commit Updates
+        if: ${{ steps.check_pr.outputs.exist_open_pr }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        id: commit
+        with:
+          branch: model_upload_changes
+          commit_message: 'GitHub Actions Workflow - Update MODEL_UPLOAD_HISTORY.md (${{ github.event.inputs.model_id }})'
+          commit_options: '--signoff'
+          repository: ./utils/model_uploader/upload_history
+          file_pattern: MODEL_UPLOAD_HISTORY.md supported_models.json
             
     
