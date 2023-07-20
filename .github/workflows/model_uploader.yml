@@ -260,7 +260,6 @@ jobs:
       - name: Create a PR
         if: ${{ !steps.check_pr.outputs.exist_open_pr }}
         uses: peter-evans/create-pull-request@v5
-        id: commit
         with:
           committer: model-uploader[bot] <model-uploader[bot]@users.noreply.github.com>
           commit-message: 'GitHub Actions Workflow: Update Model Upload History - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
