@@ -212,14 +212,13 @@ jobs:
       pull-requests: write
     concurrency: ${{ github.workflow }}-concurrency
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Check if PR is Open
         id: check_pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: echo "exist_open_pr=$(gh pr list --head model_upload_changes_pr --state open --json number)" >> $GITHUB_OUTPUT
-      - name: Checkout
-        if: ${{ !steps.check_pr.outputs.exist_open_pr }}
-        uses: actions/checkout@v3
       - name: Checkout
         if: ${{ steps.check_pr.outputs.exist_open_pr }}
         uses: actions/checkout@v3
