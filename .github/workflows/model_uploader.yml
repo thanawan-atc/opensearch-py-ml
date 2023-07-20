@@ -244,7 +244,7 @@ jobs:
 #         uses: peter-evans/create-pull-request@v5
 #         id: commit
 #         with:
-#           committer: model-uploader[bot] <model-uploader[bot]@users.noreply.github.com>
+#           committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
 #           commit-message: 'GitHub Actions Workflow: Update Model Upload History - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
 #           signoff: true
 #           title: 'Update Model Upload History  - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
@@ -259,7 +259,7 @@ jobs:
         if: ${{ !steps.check_pr.outputs.exist_open_pr }}
         uses: peter-evans/create-pull-request@v5
         with:
-          committer: model-uploader[bot] <model-uploader[bot]@users.noreply.github.com>
+          committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
           commit-message: 'GitHub Actions Workflow: Update Model Upload History - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
           signoff: true
           title: 'Update Model Upload History  - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
@@ -276,6 +276,7 @@ jobs:
         id: commit
         with:
           branch: model_upload_changes_pr
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_message: 'GitHub Actions Workflow - Update MODEL_UPLOAD_HISTORY.md (${{ github.event.inputs.model_id }})'
           commit_options: '--signoff'
           repository: ./utils/model_uploader/upload_history
