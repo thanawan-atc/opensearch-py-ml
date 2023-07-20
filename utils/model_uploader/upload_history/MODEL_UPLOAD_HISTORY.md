@@ -18,3 +18,4 @@ The following table shows sentence transformer model upload history.
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 |2023-07-17 15:35:25|@thanawan-atc|`sentence-transformers/msmarco-distilbert-base-tas-b`|1.0.1|ONNX|Default|Default|
 |2023-07-18 23:33:01|@thanawan-atc|`sentence-transformers/all-MiniLM-L12-v2`|1.0.1|TORCH_SCRIPT|Default|Default|
+|2023-07-19 22:08:29|@thanawan-atc|`sentence-transformers/all-MiniLM-L12-v2`|1.0.1|ONNX|Default|Default|
