@@ -235,12 +235,13 @@ jobs:
         id: commit
         with:
           committer: model-uploader[bot] <model-uploader[bot]@users.noreply.github.com>
-          commit-message: 'GitHub Actions: Update model upload history - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
+          commit-message: 'GitHub Actions Workflow: Update model upload history'
           signoff: true
           title: 'Upload Model to OpenSearch Model Hub: ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
           labels: ModelUploading
           base: workflow-nox-cleanup-pr
           branch: model_upload_changes
+          delete-branch: true
           add-paths: |
             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
             ./utils/model_uploader/upload_history/supported_models.json
