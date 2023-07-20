@@ -61,7 +61,7 @@ TYPED_FILES = (
 @nox.session(reuse_venv=True)
 def format(session):
     session.install("black", "isort", "flynt")
-    session.run("python", "utils/license-headers.py", "fix", *SOURCE_FILES)
+    session.run("python", "utils/lint/license-headers.py", "fix", *SOURCE_FILES)
     session.run("flynt", *SOURCE_FILES)
     session.run("black", "--target-version=py38", *SOURCE_FILES)
     session.run("isort", "--profile=black", *SOURCE_FILES)
@@ -73,7 +73,7 @@ def lint(session):
     # Install numpy to use its mypy plugin
     # https://numpy.org/devdocs/reference/typing.html#mypy-plugin
     session.install("black", "flake8", "mypy", "isort", "numpy")
-    session.run("python", "utils/license-headers.py", "check", *SOURCE_FILES)
+    session.run("python", "utils/lint/license-headers.py", "check", *SOURCE_FILES)
     session.run("black", "--check", "--target-version=py38", *SOURCE_FILES)
     session.run("isort", "--check", "--profile=black", *SOURCE_FILES)
     session.run("flake8", "--ignore=E501,W503,E402,E712,E203", *SOURCE_FILES)
@@ -149,3 +149,23 @@ def docs(session):
     session.cd("docs")
     session.run("make", "clean", external=True)
     session.run("make", "html", external=True)
+    
+
+@nox.session(python=["3.8", "3.9", "3.10"])
+@nox.parametrize("pandas_version", ["1.5.0"])
+def trace(session, pandas_version: str):
+    session.install(
+        "-r",
+        "requirements-dev.txt",
+        "--timeout",
+        "1500",
+    )
+    session.install(".")
+    session.run("python", "-c", "import tests")
+    session.run("python", "-m", "pip", "install", f"pandas~={pandas_version}")
+    
+    session.run(
+        "python",
+        "utils/model_uploader/model_autotracing.py",
+        *(session.posargs),
+    )
