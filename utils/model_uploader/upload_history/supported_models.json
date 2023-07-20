@@ -6,12 +6,21 @@
         "Model Version": "1.0.1",
         "Tracing Format": "BOTH",
         "Embedding Dimension": "Default",
-        "Pooling Mode": "CLS"
+        "Pooling Mode": "Default"
     },
     {
         "Model Uploader": "@thanawan-atc",
         "Upload Time": "-",
-        "Model ID": "sentence-transformers/msmarco-distilbert-base-tas-b",
+        "Model ID": "sentence-transformers/dummy",
+        "Model Version": "1.0.1",
+        "Tracing Format": "ONNX",
+        "Embedding Dimension": "Default",
+        "Pooling Mode": "Default"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "-",
+        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
         "Model Version": "1.0.1",
         "Tracing Format": "BOTH",
         "Embedding Dimension": "Default",
@@ -29,11 +38,11 @@
     {
         "Model Uploader": "@thanawan-atc",
         "Upload Time": "-",
-        "Model ID": "sentence-transformers/dummy",
+        "Model ID": "sentence-transformers/msmarco-distilbert-base-tas-b",
         "Model Version": "1.0.1",
-        "Tracing Format": "ONNX",
+        "Tracing Format": "BOTH",
         "Embedding Dimension": "Default",
-        "Pooling Mode": "Default"
+        "Pooling Mode": "CLS"
     },
     {
         "Model Uploader": "@thanawan-atc",
