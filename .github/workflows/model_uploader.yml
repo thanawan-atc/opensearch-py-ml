@@ -241,7 +241,6 @@ jobs:
           labels: ModelUploading
           base: workflow-nox-cleanup-pr
           branch: model_upload_changes
-          delete-branch: true
           add-paths: |
             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
             ./utils/model_uploader/upload_history/supported_models.json
