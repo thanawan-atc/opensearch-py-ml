@@ -21,10 +21,12 @@ import numpy as np
 from numpy.typing import DTypeLike
 from sentence_transformers import SentenceTransformer
 
-## ROOT_DIR = os.path.abspath(os.path.join("."))
+#ROOT_DIR = os.path.abspath(os.path.join("."))
+THIS_DIR = os.path.dirname(__file__)
+ROOT_DIR = os.path.join(THIS_DIR, "../..")
 # TEST_DIR = os.path.join(ROOT_DIR, "tests")
 # LICENSE_PATH = os.path.join(ROOT_DIR, "LICENSE")
-## sys.path.append(ROOT_DIR)
+sys.path.append(ROOT_DIR)
 # sys.path.append(TEST_DIR)
 LICENSE_PATH = "LICENSE"
 
