@@ -234,13 +234,13 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         id: commit
         with:
-          committer: modeul-uploader[bot] <modeul-uploader[bot]@users.noreply.github.com>
-          commit-message: 'GitHub Actions Workflow - Update MODEL_UPLOAD_HISTORY.md (${{ github.event.inputs.model_id }})'
+          committer: model-uploader[bot] <model-uploader[bot]@users.noreply.github.com>
+          commit-message: 'GitHub Actions: Update model upload history - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
           signoff: true
-          title: 'Upload Model to OpenSearch Model Hub: ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})'
+          title: 'Upload Model to OpenSearch Model Hub: ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
           labels: ModelUploading
           base: workflow-nox-cleanup-pr
-          branch: model_upload_history_${{ github.event.inputs.model_id }}_${{ github.event.inputs.model_version }}_${{ github.event.inputs.tracing_format }}
+          branch: model_upload_changes
           delete-branch: true
           add-paths: |
             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
