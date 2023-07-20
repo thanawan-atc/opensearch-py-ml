@@ -2,6 +2,15 @@
     {
         "Model Uploader": "@thanawan-atc",
         "Upload Time": "-",
+        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
+        "Model Version": "1.0.1",
+        "Tracing Format": "TORCH_SCRIPT",
+        "Embedding Dimension": "768",
+        "Pooling Mode": "Default"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "-",
         "Model ID": "sentence-transformers/msmarco-distilbert-base-tas-b",
         "Model Version": "1.0.1",
         "Tracing Format": "BOTH",
