@@ -43,7 +43,7 @@ def update_changelog_file(
         this_subsection += '\n\n' + f'### {SECTION_NAME}\n- ' + changelog_line + '\n\n'
         new_version_section = this_subsection
    
-    new_changelog_data = file_data[:this_version_ptr] + new_version_section + file_data[next_version_ptr:]
+    new_changelog_data = changelog_data[:this_version_ptr] + new_version_section + changelog_data[next_version_ptr:]
     
     mdFile = MarkDownFile(CHANGELOG_FILENAME, dirname=CHANGELOG_DIRNAME)
     mdFile.rewrite_all_file(data=new_changelog_data)
