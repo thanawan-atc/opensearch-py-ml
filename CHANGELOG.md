@@ -6,6 +6,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 
 - Adding documentation for model group id @dhrubo-os ([#176](https://github.com/opensearch-project/opensearch-py-ml/pull/176))
+- Update model upload history -  sentence-transformers/all-MiniLM-L12-v2 (v.1.2.2)(BOTH) by @thanawan-atc ([#84](https://github.com/thanawan-atc/opensearch-py-ml/pull/84))
 
 ### Changed
 -  Update jenkins file to use updated docker image ([#189](https://github.com/opensearch-project/opensearch-py-ml/pull/189)) 
