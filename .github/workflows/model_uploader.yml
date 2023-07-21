@@ -175,32 +175,32 @@ jobs:
 #           issue-body: ${{ steps.create_issue_body.outputs.issue_body }}
 #           exclude-workflow-initiator-as-approver: false
       
-  # Step 5: Download the artifacts & Upload it to the S3 bucket
-  model-uploading:
-    #needs: manual-approval
-    runs-on: 'ubuntu-latest'
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: upload
-          path: ./upload/
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
-          role-to-assume: ${{ secrets.MODEL_UPLOADER_ROLE }}
-          role-session-name: model-uploading
-      - name: Copy Files to the Bucket
-        id: copying_to_bucket
-        run: |
-          aws s3 sync ./upload/ s3://opensearch-exp/ml-models/huggingface/sentence-transformers/
-          echo "upload_time=$(TZ='America/Los_Angeles' date "+%Y-%m-%d %T")" >> $GITHUB_OUTPUT
-    outputs:
-      upload_time: ${{ steps.copying_to_bucket.outputs.upload_time }}
+#   # Step 5: Download the artifacts & Upload it to the S3 bucket
+#   model-uploading:
+#     #needs: manual-approval
+#     runs-on: 'ubuntu-latest'
+#     permissions:
+#       id-token: write
+#       contents: read
+#     steps:
+#       - name: Download Artifact
+#         uses: actions/download-artifact@v2
+#         with:
+#           name: upload
+#           path: ./upload/
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v2
+#         with:
+#           aws-region: ${{ secrets.MODEL_UPLOADER_AWS_REGION }}
+#           role-to-assume: ${{ secrets.MODEL_UPLOADER_ROLE }}
+#           role-session-name: model-uploading
+#       - name: Copy Files to the Bucket
+#         id: copying_to_bucket
+#         run: |
+#           aws s3 sync ./upload/ s3://opensearch-exp/ml-models/huggingface/sentence-transformers/
+#           echo "upload_time=$(TZ='America/Los_Angeles' date "+%Y-%m-%d %T")" >> $GITHUB_OUTPUT
+#     outputs:
+#       upload_time: ${{ steps.copying_to_bucket.outputs.upload_time }}
    
   # Step 6: Update MODEL_UPLOAD_HISTORY.md & supported_models.json
   history-update:
