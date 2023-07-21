@@ -239,6 +239,9 @@ jobs:
           commit-message: 'GitHub Actions Workflow: Update Model Upload History - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
           signoff: true
           title: 'Update Model Upload History  - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
+          body: |
+            [] This PR makes changes to three files: MODEL_UPLOAD_HISTORY.md, supported_models.json, and CHANGELOG.md.
+            [] You have resolved merge conflicts.
           labels: ModelUploading
           branch: model-uploader/${{ github.run_id }}
           delete-branch: true
