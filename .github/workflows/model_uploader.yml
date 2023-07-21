@@ -223,13 +223,14 @@ jobs:
           python -m pip install mdutils
       - name: Update MODEL_UPLOAD_HISTORY.md
         run: |
+          upload_time=$(TZ='America/Los_Angeles' date "+%Y-%m-%d %T")
           python utils/model_uploader/update_models_upload_history_md.py \
             ${{ github.event.inputs.model_id }} \
             ${{ github.event.inputs.model_version }} \
             ${{ github.event.inputs.tracing_format }} \
             -ed ${{ github.event.inputs.embedding_dimension }} \
             -pm ${{ github.event.inputs.pooling_mode }} \
-            -u ${{ github.actor }} #-t "${{ needs.model-uploading.outputs.upload_time }}"
+            -u ${{ github.actor }} -t $upload_time  #-t "${{ needs.model-uploading.outputs.upload_time }}"
       - name: Create PR
         uses: peter-evans/create-pull-request@v5
         id: commit
@@ -239,7 +240,7 @@ jobs:
           signoff: true
           title: 'Update Model Upload History  - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
           labels: ModelUploading
-          base: workflow-nox-cleanup-pr
+          base: workflow-nox-many-branches
           branch: model_upload_changes_to_be_deleted${{ github.run_id }}
           delete-branch: true
           add-paths: |
