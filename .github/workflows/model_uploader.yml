@@ -252,15 +252,19 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: model-uploader/${{ github.run_id }}
-      - name: Update CHANGELOG.md
+      - name: Create a line for updating CHANGELOG.md
+        id: create_changelog_line
         run: |
-          python utils/model_uploader/update_changelog_md.py \
-            ${{ github.event.inputs.model_id }} \
-            ${{ github.event.inputs.model_version }} \
-            ${{ github.event.inputs.tracing_format }} \
-            ${{ steps.cpr.outputs.pull-request-number }} \
-            ${{ steps.cpr.outputs.pull-request-url }}
+          changelog_line="Update model upload history - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }}) 
+          by @${{ github.actor }} ([#${{ steps.cpr.outputs.pull-request-number }}](${{ steps.cpr.outputs.pull-request-url }}))"
+          echo "changelog_line=$changelog_line" >> $GITHUB_OUTPUT
+      - name: Update CHANGELOG.md
+        id: update_changelog
+        continue-on-error: true
+        run: |
+          python utils/model_uploader/update_changelog_md.py ${{ steps.create_changelog_line.outputs.changelog_line }}
       - name: Commit Updates
+        if: steps.update_changelog.outcome == 'success'
         uses: stefanzweifel/git-auto-commit-action@v4
         id: commit
         with:
@@ -269,3 +273,12 @@ jobs:
           commit_message: 'GitHub Actions Workflow: Update CHANGELOG.md - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
           commit_options: '--signoff'
           file_pattern: CHANGELOG.md
+      - name: Warning Comment on PR
+        if: steps.update_changelog.outcome == 'failure'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            :exclamation: The workflow failed to update CHANGELOG.md. Please add the following line manually.
+            ${{ steps.create_changelog_line.outputs.changelog_line }}
+            
+            
