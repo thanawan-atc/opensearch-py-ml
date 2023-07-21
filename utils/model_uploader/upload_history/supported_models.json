@@ -7,5 +7,14 @@
         "Tracing Format": "BOTH",
         "Embedding Dimension": "Default",
         "Pooling Mode": "Default"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-07-21 15:30:45",
+        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
+        "Model Version": "1.2.2",
+        "Tracing Format": "BOTH",
+        "Embedding Dimension": "Default",
+        "Pooling Mode": "Default"
     }
 ]
