@@ -240,8 +240,9 @@ jobs:
           signoff: true
           title: 'Update Model Upload History  - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
           body: |
-            [] This PR makes changes to three files: MODEL_UPLOAD_HISTORY.md, supported_models.json, and CHANGELOG.md.
-            [] You have resolved merge conflicts.
+            - [ ] This PR made commit to only these three files: MODEL_UPLOAD_HISTORY.md, supported_models.json, and CHANGELOG.md.
+            - [ ] CHANGELOG.md has been updated by the workflow or by you if the workflow fails to do so. 
+            - [ ] Merge conflicts have been resolved.   
           labels: ModelUploading
           branch: model-uploader/${{ github.run_id }}
           delete-branch: true
@@ -254,17 +255,26 @@ jobs:
           ref: model-uploader/${{ github.run_id }}
       - name: Create a line for updating CHANGELOG.md
         id: create_changelog_line
+        continue-on-error: true
         run: |
           changelog_line="Update model upload history - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }}) 
-          by @${{ github.actor }} ([#${{ steps.cpr.outputs.pull-request-number }}](${{ steps.cpr.outputs.pull-request-url }}))"
+          by @${{ github.actor }} ([#${{ steps.create_pr.outputs.pull-request-number }}](${{ steps.create_pr.outputs.pull-request-url }}))"
           echo "changelog_line=$changelog_line" >> $GITHUB_OUTPUT
+      - name: Warning Comment on PR if create_changelog_line fails
+        if: steps.create_changelog_line.outcome == 'failure'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          pr_number: ${{ steps.create_pr.outputs.pull-request-number }}
+          message: |
+            :exclamation: The workflow failed to update CHANGELOG.md. Please update CHANGELOG.md manually. 
       - name: Update CHANGELOG.md
+        if: steps.create_changelog_line.outcome == 'success'
         id: update_changelog
         continue-on-error: true
         run: |
           python utils/model_uploader/update_changelog_md.py ${{ steps.create_changelog_line.outputs.changelog_line }}
       - name: Commit Updates
-        if: steps.update_changelog.outcome == 'success'
+        if: steps.create_changelog_line.outcome == 'success' && steps.update_changelog.outcome == 'success'
         uses: stefanzweifel/git-auto-commit-action@v4
         id: commit
         with:
@@ -273,12 +283,13 @@ jobs:
           commit_message: 'GitHub Actions Workflow: Update CHANGELOG.md - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
           commit_options: '--signoff'
           file_pattern: CHANGELOG.md
-      - name: Warning Comment on PR
-        if: steps.update_changelog.outcome == 'failure'
+      - name: Warning Comment on PR if update_changelog fails
+        if: steps.create_changelog_line.outcome == 'success' && steps.update_changelog.outcome == 'failure'
         uses: thollander/actions-comment-pull-request@v2
         with:
+          pr_number: ${{ steps.create_pr.outputs.pull-request-number }}
           message: |
             :exclamation: The workflow failed to update CHANGELOG.md. Please add the following line manually.
             ${{ steps.create_changelog_line.outputs.changelog_line }}
-            
+       
             
