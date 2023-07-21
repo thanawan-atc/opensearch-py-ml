@@ -315,8 +315,6 @@ jobs:
       - name: Commit Updates
         uses: stefanzweifel/git-auto-commit-action@v4
         id: commit
-        env:           
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           branch: model_upload_changes_pr_new
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
@@ -325,6 +323,8 @@ jobs:
           repository: ./utils/model_uploader/upload_history
           file_pattern: MODEL_UPLOAD_HISTORY.md supported_models.json   
       - name: Create/Update a PR
+        env:           
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create --base model_upload_changes_pr --title "Update Model Upload History" --label "ModelUploading"
           
