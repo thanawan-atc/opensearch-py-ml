@@ -30,7 +30,7 @@ KEYS = [
     "Model Uploader",
     "Model ID",
     "Model Version",
-    "Tracing Format",
+    "Model Format",
     "Embedding Dimension",
     "Pooling Mode",
 ]
