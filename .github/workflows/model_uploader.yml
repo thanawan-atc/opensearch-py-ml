@@ -204,7 +204,7 @@ jobs:
    
   # Step 6: Update MODEL_UPLOAD_HISTORY.md & supported_models.json
   history-update:
-    needs: model-uploading
+    #needs: model-uploading
     runs-on: 'ubuntu-latest'
     permissions:
       id-token: write
