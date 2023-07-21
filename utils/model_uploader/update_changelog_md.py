@@ -56,6 +56,5 @@ if __name__ == "__main__":
         type=str,
         help="Line to be added to CHANGELOG.md",
     )
-    parser.add_argument(
     args = parser.parse_args()
     update_changelog_file(args.changelog_line)
