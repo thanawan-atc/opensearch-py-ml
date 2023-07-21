@@ -12,7 +12,7 @@
 import argparse
 import json
 import os
-from typing import Optional
+from typing import Dict, Optional
 
 from mdutils.fileutils import MarkDownFile
 from mdutils.tools.Table import Table
@@ -44,7 +44,21 @@ def create_model_json_obj(
     pooling_mode: Optional[str] = None,
     model_uploader: Optional[str] = None,
     uploader_time: Optional[str] = None,
-):
+) -> Dict:
+    """
+    Create a model dict obj to be added to supported_models.json
+
+    :param model_id: Model ID of the pretrained model
+    :type model_id: string
+    :param model_version: Version of the pretrained model for registration
+    :type model_version: string
+    :param model_format: Model format ("TORCH_SCRIPT" or "ONNX")
+    :type model_format: string
+    :param embedding_dimension: Embedding dimension input
+    :type embedding_dimension: int
+    :param pooling_mode: Pooling mode input ("CLS", "MEAN", "MAX", "MEAN_SQRT_LEN" or None)
+    :type pooling_mode: string
+    """
     model_obj = {
         "Model Uploader": "@" + model_uploader if model_uploader is not None else "-",
         "Upload Time": uploader_time if uploader_time is not None else "-",
@@ -89,7 +103,7 @@ def update_model_json_file(
     else:
         os.makedirs(DIRNAME)
 
-    if tracing_format == TORCH_SCRIPT_FORMAT" or tracing_format == BOTH_FORMAT:
+    if tracing_format == TORCH_SCRIPT_FORMAT or tracing_format == BOTH_FORMAT:
         model_obj = create_model_json_obj(model_id, model_version, TORCH_SCRIPT_FORMAT, embedding_dimension, pooling_mode, model_uploader, uploader_time)
         models.append(model_obj)
 
