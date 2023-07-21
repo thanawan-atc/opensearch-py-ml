@@ -212,36 +212,36 @@ jobs:
       pull-requests: write
     concurrency: ${{ github.workflow }}-concurrency
     steps:
-#       - name: Checkout Main Branch
-#         uses: actions/checkout@v3
-#       - name: Check if PR is Open
-#         id: check_pr
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         run: |
-#           exist_open_pr=$(gh pr list --head model_upload_changes_pr --state open --json number --jq length)
-#           echo "exist_open_pr=$exist_open_pr" >> $GITHUB_OUTPUT
-#           echo "$exist_open_pr"
-#       - name: Checkout PR Branch
-#         if: ${{ steps.check_pr.outputs.exist_open_pr != '0' }}
-#         uses: actions/checkout@v3
-#         with:
-#           ref: model_upload_changes_pr
       - name: Checkout Main Branch
         uses: actions/checkout@v3
-        with:
-          ref: workflow-nox-cleanup-pr 
-          fetch-depth: 0
+      - name: Check if PR is Open
+        id: check_pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          exist_open_pr=$(gh pr list --head model_upload_changes_pr --state open --json number --jq length)
+          echo "exist_open_pr=$exist_open_pr" >> $GITHUB_OUTPUT
+          echo "$exist_open_pr"
       - name: Checkout PR Branch
+        if: ${{ steps.check_pr.outputs.exist_open_pr != '0' }}
         uses: actions/checkout@v3
         with:
-          ref: model_upload_changes_pr_new
-      - name: Rebase
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-          git rebase origin/workflow-nox-cleanup-pr 
-          git push --force
+          ref: model_upload_changes_pr
+#       - name: Checkout Main Branch
+#         uses: actions/checkout@v3
+#         with:
+#           ref: workflow-nox-cleanup-pr 
+#           fetch-depth: 0
+#       - name: Checkout PR Branch
+#         uses: actions/checkout@v3
+#         with:
+#           ref: model_upload_changes_pr_new
+#       - name: Rebase
+#         run: |
+#           git config user.name github-actions[bot]
+#           git config user.email github-actions[bot]@users.noreply.github.com
+#           git rebase origin/workflow-nox-cleanup-pr 
+#           git push --force
       - name: Set Up Python
         uses: actions/setup-python@v2
         with:
@@ -273,32 +273,32 @@ jobs:
 #           add-paths: |
 #             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
 #             ./utils/model_uploader/upload_history/supported_models.json
-#       - name: Create a PR
-#         if: ${{ steps.check_pr.outputs.exist_open_pr == '0' }}
-#         uses: peter-evans/create-pull-request@v5
-#         with:
-#           committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
-#           commit-message: 'GitHub Actions Workflow: Update Model Upload History - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
-#           signoff: true
-#           title: 'Update Model Upload History  - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
-#           labels: ModelUploading
-#           base: workflow-nox-cleanup-pr
-#           branch: model_upload_changes_pr
-#           delete-branch: true
-#           add-paths: |
-#             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
-#             ./utils/model_uploader/upload_history/supported_models.json
-#       - name: Commit Updates
-#         if: ${{ steps.check_pr.outputs.exist_open_pr != '0' }}
-#         uses: stefanzweifel/git-auto-commit-action@v4
-#         id: commit
-#         with:
-#           branch: model_upload_changes_pr
-#           commit_user_email: "github-actions[bot]@users.noreply.github.com"
-#           commit_message: 'GitHub Actions Workflow - Update MODEL_UPLOAD_HISTORY.md (${{ github.event.inputs.model_id }})'
-#           commit_options: '--signoff'
-#           repository: ./utils/model_uploader/upload_history
-#           file_pattern: MODEL_UPLOAD_HISTORY.md supported_models.json
+      - name: Create a PR
+        if: ${{ steps.check_pr.outputs.exist_open_pr == '0' }}
+        uses: peter-evans/create-pull-request@v5
+        with:
+          committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          commit-message: 'GitHub Actions Workflow: Update Model Upload History - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
+          signoff: true
+          title: 'Update Model Upload History  - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
+          labels: ModelUploading
+          base: workflow-nox-cleanup-pr
+          branch: model_upload_changes_pr
+          delete-branch: true
+          add-paths: |
+            ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
+            ./utils/model_uploader/upload_history/supported_models.json
+      - name: Commit Updates
+        if: ${{ steps.check_pr.outputs.exist_open_pr != '0' }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        id: commit
+        with:
+          branch: model_upload_changes_pr
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: 'GitHub Actions Workflow - Update MODEL_UPLOAD_HISTORY.md (${{ github.event.inputs.model_id }})'
+          commit_options: '--signoff'
+          repository: ./utils/model_uploader/upload_history
+          file_pattern: MODEL_UPLOAD_HISTORY.md supported_models.json
 #       - name: Create/Update a PR
 #         uses: peter-evans/create-pull-request@v5
 #         with:
@@ -312,21 +312,21 @@ jobs:
 #           add-paths: |
 #             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
 #             ./utils/model_uploader/upload_history/supported_models.json
-      - name: Commit Updates
-        uses: stefanzweifel/git-auto-commit-action@v4
-        id: commit
-        with:
-          branch: model_upload_changes_pr_new
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_message: 'GitHub Actions Workflow - Update MODEL_UPLOAD_HISTORY.md (${{ github.event.inputs.model_id }})'
-          commit_options: '--signoff'
-          repository: ./utils/model_uploader/upload_history
-          file_pattern: MODEL_UPLOAD_HISTORY.md supported_models.json   
-      - name: Create/Update a PR
-        env:           
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr create --base model_upload_changes_pr --title "Update Model Upload History" --label "ModelUploading"
+#       - name: Commit Updates
+#         uses: stefanzweifel/git-auto-commit-action@v4
+#         id: commit
+#         with:
+#           branch: model_upload_changes_pr_new
+#           commit_user_email: "github-actions[bot]@users.noreply.github.com"
+#           commit_message: 'GitHub Actions Workflow - Update MODEL_UPLOAD_HISTORY.md (${{ github.event.inputs.model_id }})'
+#           commit_options: '--signoff'
+#           repository: ./utils/model_uploader/upload_history
+#           file_pattern: MODEL_UPLOAD_HISTORY.md supported_models.json   
+#       - name: Create/Update a PR
+#         env:           
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         run: |
+#           gh pr create --base model_upload_changes_pr --title "Update Model Upload History" --label "ModelUploading"
           
           
     
