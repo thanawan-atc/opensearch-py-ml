@@ -221,7 +221,7 @@ jobs:
       - name: Install Packages
         run:
           python -m pip install mdutils
-      - name: Update MODEL_UPLOAD_HISTORY.md
+      - name: Update Model Upload History
         run: |
           upload_time=$(TZ='America/Los_Angeles' date "+%Y-%m-%d %T")
           python utils/model_uploader/update_models_upload_history_md.py \
@@ -233,7 +233,7 @@ jobs:
             -u ${{ github.actor }} -t "$upload_time"
       - name: Create a Branch & Raise a PR
         uses: peter-evans/create-pull-request@v5
-        id: commit
+        id: create_pr
         with:
           committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
           commit-message: 'GitHub Actions Workflow: Update Model Upload History - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
@@ -245,3 +245,24 @@ jobs:
           add-paths: |
             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
             ./utils/model_uploader/upload_history/supported_models.json
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: model-uploader/${{ github.run_id }}
+      - name: Update CHANGELOG.md
+        run: |
+          python utils/model_uploader/update_changelog_md.py \
+            ${{ github.event.inputs.model_id }} \
+            ${{ github.event.inputs.model_version }} \
+            ${{ github.event.inputs.tracing_format }} \
+            ${{ steps.cpr.outputs.pull-request-number }} \
+            ${{ steps.cpr.outputs.pull-request-url }}
+      - name: Commit Updates
+        uses: stefanzweifel/git-auto-commit-action@v4
+        id: commit
+        with:
+          branch: model-uploader/${{ github.run_id }}
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: 'GitHub Actions Workflow: Update CHANGELOG.md - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
+          commit_options: '--signoff'
+          file_pattern: CHANGELOG.md
