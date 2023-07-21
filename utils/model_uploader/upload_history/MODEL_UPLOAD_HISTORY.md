@@ -17,3 +17,4 @@ The following table shows sentence transformer model upload history.
 |Upload Time|Model Uploader|Model ID|Model Version|Tracing Format|Embedding Dimension|Pooling Mode|
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 |-|@thanawan-atc|`expected_path_aws`|1.1.1|TORCH_SCRIPT|Default|Default|
+|-|@thanawan-atc|`new`|new|BOTH|Default|Default|
