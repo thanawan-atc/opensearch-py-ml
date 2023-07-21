@@ -296,18 +296,32 @@ jobs:
 #           commit_options: '--signoff'
 #           repository: ./utils/model_uploader/upload_history
 #           file_pattern: MODEL_UPLOAD_HISTORY.md supported_models.json
-      - name: Create/Update a PR
-        uses: peter-evans/create-pull-request@v5
+#       - name: Create/Update a PR
+#         uses: peter-evans/create-pull-request@v5
+#         with:
+#           committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+#           commit-message: 'GitHub Actions Workflow: Update Model Upload History - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
+#           signoff: true
+#           title: 'Update Model Upload History'
+#           labels: ModelUploading
+#           base: model_upload_changes_pr_new
+#           branch: model_upload_changes_pr_new
+#           add-paths: |
+#             ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
+#             ./utils/model_uploader/upload_history/supported_models.json
+      - name: Commit Updates
+        uses: stefanzweifel/git-auto-commit-action@v4
+        id: commit
         with:
-          committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
-          commit-message: 'GitHub Actions Workflow: Update Model Upload History - ${{ github.event.inputs.model_id }} (v.${{ github.event.inputs.model_version }})(${{ github.event.inputs.tracing_format }})'
-          signoff: true
-          title: 'Update Model Upload History'
-          labels: ModelUploading
-          base: model_upload_changes_pr_new
           branch: model_upload_changes_pr_new
-          add-paths: |
-            ./utils/model_uploader/upload_history/MODEL_UPLOAD_HISTORY.md
-            ./utils/model_uploader/upload_history/supported_models.json
-            
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: 'GitHub Actions Workflow - Update MODEL_UPLOAD_HISTORY.md (${{ github.event.inputs.model_id }})'
+          commit_options: '--signoff'
+          repository: ./utils/model_uploader/upload_history
+          file_pattern: MODEL_UPLOAD_HISTORY.md supported_models.json   
+      - name: Create/Update a PR
+        run: |
+          gh pr create --base model_upload_changes_pr --title "Update Model Upload History" --label "ModelUploading"
+          
+    
     
