@@ -8,7 +8,8 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Adding documentation for model group id @dhrubo-os ([#176](https://github.com/opensearch-project/opensearch-py-ml/pull/176))
 
 ### Changed
--  Update jenkins file to use updated docker image ([#189](https://github.com/opensearch-project/opensearch-py-ml/pull/189)) 
+-  Update jenkins file to use updated docker image ([#189](https://github.com/opensearch-project/opensearch-py-ml/pull/189))
+- Update model upload history -  sentence-transformers/multi-qa-MiniLM-L6-cos-v1 (v.1.0.1)(TORCH_SCRIPT) by @thanawan-atc ([#90](https://github.com/thanawan-atc/opensearch-py-ml/pull/90))
 
 ### Fixed
 - Fix ModelUploader bug & Update model tracing demo notebook by @thanawan-atc in ([#185](https://github.com/opensearch-project/opensearch-py-ml/pull/185))
