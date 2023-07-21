@@ -19,3 +19,5 @@ The following table shows sentence transformer model upload history.
 |2023-07-21 12:45:11|@thanawan-atc|`sentence-transformers/all-MiniLM-L12-v2`|1.0.1|ONNX|Default|Default|
 |2023-07-21 12:45:11|@thanawan-atc|`sentence-transformers/all-MiniLM-L12-v2`|1.0.1|TORCH_SCRIPT|Default|Default|
 |2023-07-21 12:45:38|@thanawan-atc|`sentence-transformers/all-MiniLM-L12-v2`|1.2.2|ONNX|Default|Default|
+|2023-07-21 15:28:37|@thanawan-atc|`sentence-transformers/all-MiniLM-L12-v2`|1.0.1|ONNX|Default|Default|
+|2023-07-21 15:28:37|@thanawan-atc|`sentence-transformers/all-MiniLM-L12-v2`|1.0.1|TORCH_SCRIPT|Default|Default|

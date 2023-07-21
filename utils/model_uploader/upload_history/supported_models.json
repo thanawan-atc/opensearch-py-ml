@@ -1,15 +1,6 @@
 [
     {
         "Model Uploader": "@thanawan-atc",
-        "Upload Time": "2023-07-21 12:45:38",
-        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
-        "Model Version": "1.2.2",
-        "Model Format": "ONNX",
-        "Embedding Dimension": "Default",
-        "Pooling Mode": "Default"
-    },
-    {
-        "Model Uploader": "@thanawan-atc",
         "Upload Time": "2023-07-21 12:45:11",
         "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
         "Model Version": "1.0.1",
@@ -20,6 +11,33 @@
     {
         "Model Uploader": "@thanawan-atc",
         "Upload Time": "2023-07-21 12:45:11",
+        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
+        "Model Version": "1.0.1",
+        "Model Format": "TORCH_SCRIPT",
+        "Embedding Dimension": "Default",
+        "Pooling Mode": "Default"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-07-21 12:45:38",
+        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
+        "Model Version": "1.2.2",
+        "Model Format": "ONNX",
+        "Embedding Dimension": "Default",
+        "Pooling Mode": "Default"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-07-21 15:28:37",
+        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
+        "Model Version": "1.0.1",
+        "Model Format": "ONNX",
+        "Embedding Dimension": "Default",
+        "Pooling Mode": "Default"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-07-21 15:28:37",
         "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
         "Model Version": "1.0.1",
         "Model Format": "TORCH_SCRIPT",
