@@ -1,0 +1,11 @@
+[
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-07-21 16:28:12",
+        "Model ID": "sentence-transformers/multi-qa-mpnet-base-dot-v1",
+        "Model Version": "1.0.1",
+        "Model Format": "TORCH_SCRIPT",
+        "Embedding Dimension": "Default",
+        "Pooling Mode": "Default"
+    }
+]
