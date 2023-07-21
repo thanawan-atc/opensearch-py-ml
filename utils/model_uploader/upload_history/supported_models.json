@@ -1,0 +1,11 @@
+[
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "-",
+        "Model ID": "expected_path_aws",
+        "Model Version": "1.1.1",
+        "Tracing Format": "TORCH_SCRIPT",
+        "Embedding Dimension": "Default",
+        "Pooling Mode": "Default"
+    }
+]
