@@ -32,9 +32,9 @@ def update_changelog_file(
     next_version_ptr = changelog_data.find('## [', this_version_ptr + 1)
     this_version_section = changelog_data[this_version_ptr:next_version_ptr]
     
-    this_subsection_ptr = newest_version.find(f'### {SECTION_NAME}')
+    this_subsection_ptr = this_version_section.find(f'### {SECTION_NAME}')
     if this_subsection_ptr != -1:
-        next_subsection_ptr = newest_version.find('### ', this_subsection_ptr + 1)
+        next_subsection_ptr = this_version_section.find('### ', this_subsection_ptr + 1)
         this_subsection = this_version_section[this_subsection_ptr:next_subsection_ptr].strip()
         this_subsection += '\n- ' + changelog_line + '\n\n'
         new_version_section = this_version_section[:this_subsection_ptr] + this_subsection + this_version_section[next_subsection_ptr:]
