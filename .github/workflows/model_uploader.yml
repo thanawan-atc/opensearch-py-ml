@@ -274,7 +274,7 @@ jobs:
         id: update_changelog
         continue-on-error: true
         run: |
-          python utils/model_uploader/update_changelog_md.py ${{ steps.create_changelog_line.outputs.changelog_line }}
+          python utils/model_uploader/update_changelog_md.py "${{ steps.create_changelog_line.outputs.changelog_line }}"
       - name: Commit Updates
         if: steps.create_changelog_line.outcome == 'success' && steps.update_changelog.outcome == 'success'
         uses: stefanzweifel/git-auto-commit-action@v4
