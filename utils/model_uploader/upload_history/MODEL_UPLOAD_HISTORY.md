@@ -16,5 +16,7 @@ The following table shows sentence transformer model upload history.
 
 |Upload Time|Model Uploader|Model ID|Model Version|Model Format|Embedding Dimension|Pooling Mode|
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|-|@thanawan-atc|`sentence-transformers/msmarco-distilbert-base-tas-b`|9.0.0|ONNX|Default|Default|
+|-|@thanawan-atc|`sentence-transformers/msmarco-distilbert-base-tas-b`|9.0.0|TORCH_SCRIPT|Default|Default|
 |2023-07-25 12:16:23|@thanawan-atc|`sentence-transformers/xlm-r-bert-base-nli-mean-tokens`|9.0.0|ONNX|Default|Default|
 |2023-07-25 12:16:23|@thanawan-atc|`sentence-transformers/xlm-r-bert-base-nli-mean-tokens`|9.0.0|TORCH_SCRIPT|Default|Default|
