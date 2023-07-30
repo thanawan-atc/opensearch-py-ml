@@ -81,9 +81,16 @@ jobs:
         echo "${workflow_info@E}" >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
         echo "${workflow_info@E}"
+    - name: Initiate license_line
+      id: init_license_line
+      run: |
+        echo "verified=:white_check_mark: It is verified that this model is licensed under Apache 2.0" >> $GITHUB_OUTPUT
+        echo "unverified=- [ ]  :warning: The license cannot be verified. Please confirm by yourself that the model is licensed under Apache 2.0  :warning:" >> $GITHUB_OUTPUT
     outputs:
       model_folder: ${{ steps.init_model_folder.outputs.model_folder }}
       workflow_info: ${{ steps.init_workflow_info.outputs.workflow_info }}
+      verified_license_line: ${{ steps.init_license_line.outputs.verified }}
+      unverified_license_line: ${{ steps.init_license_line.outputs.unverified }}
 
 #   # Step 3: Check if the model already exists in the model hub
 #   checking-out-model-hub:
@@ -160,14 +167,17 @@ jobs:
         run: "./.ci/run-tests ${{ matrix.cluster }} ${{ matrix.secured }} ${{ matrix.entry.opensearch_version }} trace"
       - name: License verification
         id: license_verification
+        continue-on-error: true
         run: |
-          if [[ ${{ env.APACHE_VERIFIED }} == 'true' ]];
-          then 
-            license_line=":white_check_mark: It is verified that this model is licensed under Apache 2.0"
+          apache_verified=$(<trace_output/apache_verified.txt)
+          if [[ $apache_verified == true ]];
+            echo "license_line=${{ needs.init-workflow-var.outputs.verified_license_line }}" >> $GITHUB_OUTPUT   
           else
-            license_line="- [ ]  :warning: The license cannot be verified. Please confirm by yourself that the model is licensed under Apache 2.0  :warning:"
+            echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT   
           fi
-          echo "license_line=$license_line" >> $GITHUB_OUTPUT    
+      - name: Handle if license_verification fails
+        if: steps.license_verification.outcome == 'failure'
+        run: echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT  
 #       - name: Upload Artifact
 #         uses: actions/upload-artifact@v3
 #         with: 
