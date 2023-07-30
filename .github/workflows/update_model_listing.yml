@@ -1,4 +1,4 @@
-name: Model Auto-tracing & Uploading
+name: Update Model Listing
 on:
   workflow_dispatch:
   
