@@ -47,6 +47,7 @@ TEST_SENTENCES = [
 RTOL_TEST = 1e-03
 ATOL_TEST = 1e-05
 ML_BASE_URI = "/_plugins/_ml"
+OUTPUT_DIR = "trace_output/"
 LICENSE_VAR_FILE = "apache_verified.txt"
 LICENSE_VAR = "APACHE_VERIFIED"
 
@@ -325,7 +326,9 @@ def prepare_files_for_uploading(
 
 def update_github_license_verified_variable(license_verified):
     try:
-        with open(LICENSE_VAR_FILE, "w") as f:
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        license_var_filepath = OUTPUT_DIR + "/" + LICENSE_VAR_FILE
+        with open(license_var_filepath, "w") as f:
             f.write(f"{LICENSE_VAR}={license_verified}")
     except Exception as e:
         print(f"Cannot update {LICENSE_VAR} in {LICENSE_VAR_FILE} to be {license_verified}: {e}")
