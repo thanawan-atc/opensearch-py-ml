@@ -27,7 +27,7 @@ jobs:
         aws s3 cp s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/model_listing/pre_trained_models.json  utils/model_uploader/old_pre_trained_models.json
     - name: Create new pre_trained_models.json
       run: | 
-        python create_new_trained_model_listing.py
+        python create_new_trained_model_listing.py # TODO: Write python file to save file to new_pre_trained_models.json
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with: 
@@ -41,4 +41,4 @@ jobs:
       run: aws s3 cp utils/model_uploader/new_pre_trained_models.json s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/model_listing/pre_trained_models.json
       
         
-# TO-DO: Trigger Jenkins Workflow
+# TODO: Trigger Jenkins Workflow
