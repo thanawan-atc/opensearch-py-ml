@@ -161,7 +161,7 @@ jobs:
       - name: License verification
         id: license_verification
         run: |
-          if [[ ${{ -v env.APACHE_VERIFIED }} && ${{ env.APACHE_VERIFIED }} == 'true' ]];
+          if [[ ${{ env.APACHE_VERIFIED }} == 'true' ]];
           then 
             license_line=":white_check_mark: It is verified that this model is licensed under Apache 2.0"
           else
