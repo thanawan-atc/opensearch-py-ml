@@ -47,7 +47,7 @@ TEST_SENTENCES = [
 RTOL_TEST = 1e-03
 ATOL_TEST = 1e-05
 ML_BASE_URI = "/_plugins/_ml"
-GITHUB_ENV_NAME = "GITHUB_ENV"
+LICENSE_VAR_FILE = "apache_verified.txt"
 LICENSE_VAR = "APACHE_VERIFIED"
 
 def verify_license(model_folder_path):
@@ -323,14 +323,12 @@ def prepare_files_for_uploading(
         assert False, f"Raised Exception while deleting {folder_to_delete}: {e}"
 
 
-def update_github_license_verified_variable(torch_script_license_verified, onnx_license_verified):
-    license_verified = torch_script_license_verified or onnx_license_verified
+def update_github_license_verified_variable(license_verified):
     try:
-        env_file = os.getenv(GITHUB_ENV_NAME)
-        with open(env_file, "a") as f:
+        with open(LICENSE_VAR_FILE, "w") as f:
             f.write(f"{LICENSE_VAR}={license_verified}")
-    except:
-        print(f"Cannot update {LICENSE_VAR} in {GITHUB_ENV_NAME} to be {license_verified}")
+    except Exception as e:
+        print(f"Cannot update {LICENSE_VAR} in {LICENSE_VAR_FILE} to be {license_verified}: {e}")
 
 def main(
     model_id: str,
@@ -369,6 +367,8 @@ def main(
 #     original_embedding_data = list(
 #         pre_trained_model.encode(TEST_SENTENCES, convert_to_numpy=True)
 #     )
+
+    license_verified = False
     
     if tracing_format in [TORCH_SCRIPT_FORMAT, BOTH_FORMAT]:
         print("--- Begin tracing a model in TORCH_SCRIPT ---")
@@ -383,6 +383,9 @@ def main(
             embedding_dimension,
             pooling_mode,
         )
+
+        license_verified = license_verified or torch_script_license_verified
+        
 #         torch_embedding_data = register_and_deploy_sentence_transformer_model(
 #             ml_client,
 #             torchscript_model_path,
@@ -412,6 +415,9 @@ def main(
             embedding_dimension,
             pooling_mode,
         )
+
+        license_verified = license_verified or onnx_license_verified
+        
 #         onnx_embedding_data = register_and_deploy_sentence_transformer_model(
 #             ml_client, onnx_model_path, onnx_model_config_path, ONNX_FORMAT
 #         )
@@ -430,7 +436,7 @@ def main(
 #         )
         print("--- Finished tracing a model in ONNX ---")
     
-    update_github_license_verified_variable(torch_script_license_verified, onnx_license_verified)
+    update_github_license_verified_variable(license_verified)
 
     print("\n=== Finished running model_autotracing.py ===")
 
