@@ -10,11 +10,14 @@ jobs:
       id-token: write
       contents: read
     steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-region: ${{ secrets.PERSONAL_MODEL_UPLOADER_AWS_REGION }}
+        role-to-assume: ${{ secrets.PERSONAL_MODEL_UPLOADER_ROLE }}
+        role-session-name: update-model-listing
     - name: List models
       run: |
-          model_lists=$(aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} > /dev/null 2>&1)
+          model_lists=$(aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --query "Contents[].{Key: Key}" --output text)
           echo $model_lists
-    - name: List models II
-      run: |
-          aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} > /dev/null 2>&1
           
