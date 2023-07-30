@@ -328,9 +328,9 @@ def update_github_license_verified_variable(license_verified):
         os.makedirs(OUTPUT_DIR, exist_ok=True)
         license_var_filepath = OUTPUT_DIR + "/" + LICENSE_VAR_FILE
         with open(license_var_filepath, "w") as f:
-            f.write(license_verified)
+            f.write(str(license_verified))
     except Exception as e:
-        print(f"Cannot update {LICENSE_VAR} in {LICENSE_VAR_FILE} to be {license_verified}: {e}")
+        print(f"Cannot update {LICENSE_VAR_FILE} to store {license_verified}: {e}")
 
 def main(
     model_id: str,
