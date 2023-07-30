@@ -170,7 +170,7 @@ jobs:
         continue-on-error: true
         run: |
           apache_verified=$(<trace_output/apache_verified.txt)
-          if [[ $apache_verified == true ]]
+          if [[ $apache_verified == "true" ]]
           then
             echo "license_line=${{ needs.init-workflow-var.outputs.verified_license_line }}" >> $GITHUB_OUTPUT   
           else
@@ -178,7 +178,9 @@ jobs:
           fi
       - name: Handle if license_verification fails
         if: steps.license_verification.outcome == 'failure'
-        run: echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT  
+        run: |
+          echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT  
+          echo "${{ needs.init-workflow-var.outputs.unverified_license_line }}"
 #       - name: Upload Artifact
 #         uses: actions/upload-artifact@v3
 #         with: 
