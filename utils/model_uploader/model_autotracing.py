@@ -49,7 +49,6 @@ ATOL_TEST = 1e-05
 ML_BASE_URI = "/_plugins/_ml"
 OUTPUT_DIR = "trace_output/"
 LICENSE_VAR_FILE = "apache_verified.txt"
-LICENSE_VAR = "APACHE_VERIFIED"
 
 def verify_license(model_folder_path):
     try:
@@ -329,7 +328,7 @@ def update_github_license_verified_variable(license_verified):
         os.makedirs(OUTPUT_DIR, exist_ok=True)
         license_var_filepath = OUTPUT_DIR + "/" + LICENSE_VAR_FILE
         with open(license_var_filepath, "w") as f:
-            f.write(f"{LICENSE_VAR}={license_verified}")
+            f.write(license_verified)
     except Exception as e:
         print(f"Cannot update {LICENSE_VAR} in {LICENSE_VAR_FILE} to be {license_verified}: {e}")
 
