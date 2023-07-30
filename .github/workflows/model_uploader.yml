@@ -120,7 +120,7 @@ jobs:
 #               ${{ needs.init-workflow-var.outputs.model_folder }} ${{ github.event.inputs.model_id }} \
 #               ${{ github.event.inputs.model_version }} TORCH_SCRIPT)
 #           aws s3api head-object --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --key $TORCH_FILE_PATH > /dev/null 2>&1 || TORCH_MODEL_NOT_EXIST=true
-#           if [[ -z $TORCH_MODEL_NOT_EXIST ]];
+#           if [[ -z $TORCH_MODEL_NOT_EXIST ]]
 #           then
 #             echo "TORCH_SCRIPT Model already exists on model hub."
 #             exit 1
@@ -132,7 +132,7 @@ jobs:
 #             ${{ needs.init-workflow-var.outputs.model_folder }} ${{ github.event.inputs.model_id }} \
 #             ${{ github.event.inputs.model_version }} ONNX)
 #           aws s3api head-object --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --key $ONNX_FILE_PATH > /dev/null 2>&1 || ONNX_MODEL_NOT_EXIST=true
-#           if [[ -z $ONNX_MODEL_NOT_EXIST ]];
+#           if [[ -z $ONNX_MODEL_NOT_EXIST ]]
 #           then
 #             echo "TORCH_SCRIPT Model already exists on model hub."
 #             exit 1;
@@ -170,7 +170,8 @@ jobs:
         continue-on-error: true
         run: |
           apache_verified=$(<trace_output/apache_verified.txt)
-          if [[ $apache_verified == true ]];
+          if [[ $apache_verified == true ]]
+          then
             echo "license_line=${{ needs.init-workflow-var.outputs.verified_license_line }}" >> $GITHUB_OUTPUT   
           else
             echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT   
@@ -224,7 +225,7 @@ jobs:
         run: |    
           issue_body="Please approve or deny opensearch-py-ml model uploading:
           
-          ${{ needs.model-auto-tracing.outputs.license_line }}"
+          ${{ needs.model-auto-tracing.outputs.license_line }}
           
           ${{ needs.init-workflow-var.outputs.workflow_info }}"
           
