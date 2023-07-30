@@ -170,7 +170,7 @@ jobs:
         continue-on-error: true
         run: |
           apache_verified=$(<trace_output/apache_verified.txt)
-          if [[ $apache_verified == "true" ]]
+          if [[ $apache_verified == "True" ]]
           then
             echo "license_line=${{ needs.init-workflow-var.outputs.verified_license_line }}" >> $GITHUB_OUTPUT   
           else
