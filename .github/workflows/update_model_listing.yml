@@ -1,4 +1,4 @@
-name: Model Auto-tracing & Uploading
+name: Update Model Listing
 on:
   workflow_dispatch:
   
@@ -13,4 +13,4 @@ jobs:
     - name: List models
       run: |
           model_lists=$(aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} | jq -r '.Contents[].Key')
-          echo model_lists
+          echo $model_lists
