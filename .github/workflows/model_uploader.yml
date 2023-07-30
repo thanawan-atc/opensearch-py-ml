@@ -180,7 +180,6 @@ jobs:
         if: steps.license_verification.outcome == 'failure'
         run: |
           echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT  
-          echo "${{ needs.init-workflow-var.outputs.unverified_license_line }}"
 #       - name: Upload Artifact
 #         uses: actions/upload-artifact@v3
 #         with: 
