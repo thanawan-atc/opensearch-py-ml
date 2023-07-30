@@ -12,9 +12,9 @@ jobs:
     steps:
     - name: List models
       run: |
-          model_lists=$(aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --query "Contents[].{Key: Key}" --output text)
+          model_lists=$(aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} > /dev/null 2>&1)
           echo $model_lists
     - name: List models II
       run: |
-          aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --query "Contents[].{Key: Key}" --output text
+          aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} > /dev/null 2>&1
           
