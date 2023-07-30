@@ -1,0 +1,16 @@
+name: Model Auto-tracing & Uploading
+on:
+  workflow_dispatch:
+  
+  
+jobs:
+  update-model-listing:
+    runs-on: 'ubuntu-latest'
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - name: List models
+      run: |
+          model_lists=$(aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} | jq -r '.Contents[].Key')
+          echo model_lists
