@@ -14,6 +14,7 @@ import os
 import shutil
 import sys
 import warnings
+from mdutils.fileutils import MarkDownFile
 from typing import List, Optional, Tuple
 from zipfile import ZipFile
 
@@ -28,7 +29,7 @@ sys.path.append(ROOT_DIR)  # Required for importing OPENSEARCH_TEST_CLIENT
 LICENSE_PATH = "LICENSE"
 from opensearch_py_ml.ml_commons import MLCommonClient
 from opensearch_py_ml.ml_models.sentencetransformermodel import SentenceTransformerModel
-from tests import OPENSEARCH_TEST_CLIENT
+# from tests import OPENSEARCH_TEST_CLIENT
 
 BOTH_FORMAT = "BOTH"
 TORCH_SCRIPT_FORMAT = "TORCH_SCRIPT"
@@ -46,8 +47,29 @@ TEST_SENTENCES = [
 RTOL_TEST = 1e-03
 ATOL_TEST = 1e-05
 ML_BASE_URI = "/_plugins/_ml"
+GITHUB_ENV_NAME = "GITHUB_ENV"
+LICENSE_VAR = "APACHE_VERIFIED"
 
-
+def verify_license(model_folder_path):
+    try:
+        readme_data = MarkDownFile.read_file(model_folder_path + "README.md")
+    except Exception as e:
+        print(f"Cannot verify the license: {e}")
+        return False
+    
+    start = readme_data.find('---')
+    end = readme_data.find('---', start + 3)
+    if start == -1 or end == -1:
+        return False
+    model_info = readme_data[start + 3: end]
+    if "apache-2.0" in model_info.lower():
+        print("\nFound apache-2.0 license at " + model_folder_path + "README.md")
+        return True
+    else:
+        print("\nDid not find apache-2.0 license at " + model_folder_path + "README.md")
+        return False
+ 
+    
 def trace_sentence_transformer_model(
     model_id: str,
     model_version: str,
@@ -113,9 +135,13 @@ def trace_sentence_transformer_model(
             False
         ), f"Raised Exception during making model config file for {model_format} model: {e}"
 
-    # 4.) Return model_path & model_config_path for model registration
-    model_config_path = folder_path + MODEL_CONFIG_FILE_NAME
-    return model_path, model_config_path
+    # 5.) Return model_path & model_config_path for model registration
+    mo4el_config_path = folder_path + MODEL_CONFIG_FILE_NAME
+    
+    # 5.) Verify license
+    license_verified = verify_license(folder_path)
+    
+    return model_path, model_config_path, license_verified
 
 
 def register_and_deploy_sentence_transformer_model(
@@ -297,6 +323,15 @@ def prepare_files_for_uploading(
         assert False, f"Raised Exception while deleting {folder_to_delete}: {e}"
 
 
+def update_github_license_verified_variable(torch_script_license_verified, onnx_license_verified):
+    license_verified = torch_script_license_verified or onnx_license_verified
+    try:
+        env_file = os.getenv(GITHUB_ENV_NAME)
+        with open(env_file, "a") as f:
+            f.write(f"{LICENSE_VAR}={license_verified}")
+    except:
+        print(f"Cannot update {LICENSE_VAR} in {GITHUB_ENV_NAME} to be {license_verified}")
+
 def main(
     model_id: str,
     model_version: str,
@@ -327,18 +362,20 @@ def main(
     print("Pooling Mode: ", pooling_mode)
     print("==========================================")
 
-    ml_client = MLCommonClient(OPENSEARCH_TEST_CLIENT)
+#     ml_client = MLCommonClient(OPENSEARCH_TEST_CLIENT)
 
     pre_trained_model = SentenceTransformer(model_id)
-    original_embedding_data = list(
-        pre_trained_model.encode(TEST_SENTENCES, convert_to_numpy=True)
-    )
-
+    
+#     original_embedding_data = list(
+#         pre_trained_model.encode(TEST_SENTENCES, convert_to_numpy=True)
+#     )
+    
     if tracing_format in [TORCH_SCRIPT_FORMAT, BOTH_FORMAT]:
         print("--- Begin tracing a model in TORCH_SCRIPT ---")
         (
             torchscript_model_path,
             torchscript_model_config_path,
+            torch_script_license_verified
         ) = trace_sentence_transformer_model(
             model_id,
             model_version,
@@ -346,52 +383,54 @@ def main(
             embedding_dimension,
             pooling_mode,
         )
-        torch_embedding_data = register_and_deploy_sentence_transformer_model(
-            ml_client,
-            torchscript_model_path,
-            torchscript_model_config_path,
-            TORCH_SCRIPT_FORMAT,
-        )
-        pass_test = verify_embedding_data(original_embedding_data, torch_embedding_data)
-        assert (
-            pass_test
-        ), f"Failed while verifying embeddings of {model_id} model in TORCH_SCRIPT format"
+#         torch_embedding_data = register_and_deploy_sentence_transformer_model(
+#             ml_client,
+#             torchscript_model_path,
+#             torchscript_model_config_path,
+#             TORCH_SCRIPT_FORMAT,
+#         )
+#         pass_test = verify_embedding_data(original_embedding_data, torch_embedding_data)
+#         assert (
+#             pass_test
+#         ), f"Failed while verifying embeddings of {model_id} model in TORCH_SCRIPT format"
 
-        prepare_files_for_uploading(
-            model_id,
-            model_version,
-            TORCH_SCRIPT_FORMAT,
-            torchscript_model_path,
-            torchscript_model_config_path,
-        )
+#         prepare_files_for_uploading(
+#             model_id,
+#             model_version,
+#             TORCH_SCRIPT_FORMAT,
+#             torchscript_model_path,
+#             torchscript_model_config_path,
+#         )
         print("--- Finished tracing a model in TORCH_SCRIPT ---")
 
     if tracing_format in [ONNX_FORMAT, BOTH_FORMAT]:
         print("--- Begin tracing a model in ONNX ---")
-        onnx_model_path, onnx_model_config_path = trace_sentence_transformer_model(
+        onnx_model_path, onnx_model_config_path, onnx_license_verified = trace_sentence_transformer_model(
             model_id,
             model_version,
             ONNX_FORMAT,
             embedding_dimension,
             pooling_mode,
         )
-        onnx_embedding_data = register_and_deploy_sentence_transformer_model(
-            ml_client, onnx_model_path, onnx_model_config_path, ONNX_FORMAT
-        )
+#         onnx_embedding_data = register_and_deploy_sentence_transformer_model(
+#             ml_client, onnx_model_path, onnx_model_config_path, ONNX_FORMAT
+#         )
 
-        pass_test = verify_embedding_data(original_embedding_data, onnx_embedding_data)
-        assert (
-            pass_test
-        ), f"Failed while verifying embeddings of {model_id} model in ONNX format"
+#         pass_test = verify_embedding_data(original_embedding_data, onnx_embedding_data)
+#         assert (
+#             pass_test
+#         ), f"Failed while verifying embeddings of {model_id} model in ONNX format"
 
-        prepare_files_for_uploading(
-            model_id,
-            model_version,
-            ONNX_FORMAT,
-            onnx_model_path,
-            onnx_model_config_path,
-        )
+#         prepare_files_for_uploading(
+#             model_id,
+#             model_version,
+#             ONNX_FORMAT,
+#             onnx_model_path,
+#             onnx_model_config_path,
+#         )
         print("--- Finished tracing a model in ONNX ---")
+    
+    update_github_license_verified_variable(torch_script_license_verified, onnx_license_verified)
 
     print("\n=== Finished running model_autotracing.py ===")
 

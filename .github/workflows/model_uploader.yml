@@ -161,13 +161,13 @@ jobs:
       - name: License verification
         id: license_verification
         run: |
-          if [[ ${{ env.APACHE_VERIFIED }} ]];
+          if [[ ${{ -v env.APACHE_VERIFIED }} && ${{ env.APACHE_VERIFIED }} == 'true' ]];
           then 
             license_line=":white_check_mark: It is verified that this model is licensed under Apache 2.0"
           else
             license_line="- [ ]  :warning: The license cannot be verified. Please confirm by yourself that the model is licensed under Apache 2.0  :warning:"
           fi
-          echo "license_line=$license_line" >> $GITHUB_OUTPUT
+          echo "license_line=$license_line" >> $GITHUB_OUTPUT    
 #       - name: Upload Artifact
 #         uses: actions/upload-artifact@v3
 #         with: 
