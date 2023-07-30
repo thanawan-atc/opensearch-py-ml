@@ -12,5 +12,9 @@ jobs:
     steps:
     - name: List models
       run: |
-          model_lists=$(aws s3 ls s3://${{ secrets.PERSONAL_MODEL_BUCKET }} --recursive | awk '{print $4}')
+          model_lists=$(aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --query "Contents[].{Key: Key}" --output text)
           echo $model_lists
+    - name: List models II
+      run: |
+          aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --query "Contents[].{Key: Key}" --output text
+          
