@@ -136,7 +136,7 @@ def trace_sentence_transformer_model(
         ), f"Raised Exception during making model config file for {model_format} model: {e}"
 
     # 5.) Return model_path & model_config_path for model registration
-    mo4el_config_path = folder_path + MODEL_CONFIG_FILE_NAME
+    model_config_path = folder_path + MODEL_CONFIG_FILE_NAME
     
     # 5.) Verify license
     license_verified = verify_license(folder_path)
