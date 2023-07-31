@@ -47,7 +47,7 @@ def create_new_pretrained_model_listing(
     models_txt_filename, old_json_filename, new_json_filename
 ):
     with open(models_txt_filename, "r") as f:
-        model_lst = f.read().split(" ")
+        model_lst = f.read().split()
         model_lst = list(
             set(
                 [
@@ -56,6 +56,7 @@ def create_new_pretrained_model_listing(
                 ]
             )
         )
+    print(model_lst)
     with open(old_json_filename, "r") as f:
         old_model_listing_lst = json.load(f)
 
