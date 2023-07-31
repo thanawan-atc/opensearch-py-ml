@@ -23,22 +23,22 @@ jobs:
         role-session-name: update-model-listing
     - name: List models
       run: |
-        aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --prefix "ml-models/huggingface/" --query "Contents[].{Key: Key}" --output text) >> utils/model_uploader/current_models.txt
-        aws s3 cp s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/model_listing/pre_trained_models.json  utils/model_uploader/old_pre_trained_models.json
+        aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --prefix "ml-models/huggingface/" --query "Contents[].{Key: Key}" --output text) >> current_models.txt
+        aws s3 cp s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/ml-models/model_listing/pre_trained_models.json old_pre_trained_models.json
     - name: Create new pre_trained_models.json
       run: | 
-        python create_new_trained_model_listing.py # TODO: Write python file to save file to new_pre_trained_models.json
+        python create_new_trained_model_listing.py current_models.txt old_pretrained_models.json new_pre_trained_models.json
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with: 
         name: upload
         path: |
-          utils/model_uploader/old_pre_trained_models.json
-          utils/model_uploader/new_pre_trained_models.json
+          ./old_pre_trained_models.json
+          ./new_pre_trained_models.json
         retention-days: 5
         if-no-files-found: error
     - name: Update new pre_trained_models.json in S3
-      run: aws s3 cp utils/model_uploader/new_pre_trained_models.json s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/model_listing/pre_trained_models.json
+      run: aws s3 cp new_pre_trained_models.json s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/ml-models/model_listing/pre_trained_models.json
       
         
 # TODO: Trigger Jenkins Workflow
