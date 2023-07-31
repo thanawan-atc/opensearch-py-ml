@@ -16,5 +16,14 @@
         "Model Format": "TORCH_SCRIPT",
         "Embedding Dimension": "Default",
         "Pooling Mode": "Default"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-07-31 10:26:53",
+        "Model ID": "sentence-transformers/msmarco-distilbert-base-tas-b",
+        "Model Version": "8.0.0",
+        "Model Format": "ONNX",
+        "Embedding Dimension": "Default",
+        "Pooling Mode": "Default"
     }
 ]
