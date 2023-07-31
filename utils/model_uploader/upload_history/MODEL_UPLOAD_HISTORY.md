@@ -18,3 +18,4 @@ The following table shows sentence transformer model upload history.
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 |2023-07-25 12:16:23|@thanawan-atc|`sentence-transformers/xlm-r-bert-base-nli-mean-tokens`|9.0.0|ONNX|Default|Default|
 |2023-07-25 12:16:23|@thanawan-atc|`sentence-transformers/xlm-r-bert-base-nli-mean-tokens`|9.0.0|TORCH_SCRIPT|Default|Default|
+|2023-07-31 13:48:39|@thanawan-atc|`sentence-transformers/msmarco-distilbert-base-tas-b`|7.0.0|TORCH_SCRIPT|Default|Default|
