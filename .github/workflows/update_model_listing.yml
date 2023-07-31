@@ -28,7 +28,7 @@ jobs:
     - name: Create new pre_trained_models.json
       run: | 
         python -m pip install mdutils sentence_transformers
-        python create_new_trained_model_listing.py "current_models.txt" "old_pretrained_models.json" "new_pre_trained_models.json"
+        python utils/model_uploader/create_new_trained_model_listing.py "current_models.txt" "old_pretrained_models.json" "new_pre_trained_models.json"
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with: 
