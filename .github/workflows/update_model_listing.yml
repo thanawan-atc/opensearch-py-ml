@@ -23,7 +23,7 @@ jobs:
         role-session-name: update-model-listing
     - name: List models
       run: |
-        aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --prefix "ml-models/huggingface/" --query "Contents[].{Key: Key}" --output text) >> current_models.txt
+        aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --prefix "ml-models/huggingface/" --query "Contents[].{Key: Key}" --output text >> current_models.txt
         aws s3 cp s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/ml-models/model_listing/pre_trained_models.json old_pre_trained_models.json
     - name: Create new pre_trained_models.json
       run: | 
