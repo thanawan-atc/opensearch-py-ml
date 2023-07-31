@@ -27,6 +27,7 @@ jobs:
         aws s3 cp s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/ml-models/model_listing/pre_trained_models.json old_pre_trained_models.json
     - name: Create new pre_trained_models.json
       run: | 
+        python -m install mdutils sentence_transformers
         python utils/model_uploader/create_new_trained_model_listing.py current_models.txt old_pretrained_models.json new_pre_trained_models.json
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
