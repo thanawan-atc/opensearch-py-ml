@@ -1,36 +1,5 @@
 [
  {
-  "name": "huggingface/sentence-transformers/xlm-r-bert-base-nli-mean-tokens",
-  "version": [
-   "1.0.1"
-  ],
-  "format": [
-   "onnx",
-   "torch_script"
-  ]
- },
- {
-  "name": "huggingface/sentence-transformers/msmarco-distilbert-base-tas-b",
-  "version": [
-   "8.0.0",
-   "7.0.0",
-   "1.3.3"
-  ],
-  "format": [
-   "onnx",
-   "torch_script"
-  ]
- },
- {
-  "name": "huggingface/sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
-  "version": [
-   "1.0.1"
-  ],
-  "format": [
-   "torch_script"
-  ]
- },
- {
   "name": "huggingface/sentence-transformers/all-MiniLM-L12-v2",
   "version": [
    "2.0.0"
@@ -50,11 +19,42 @@
   ]
  },
  {
+  "name": "huggingface/sentence-transformers/msmarco-distilbert-base-tas-b",
+  "version": [
+   "1.3.3",
+   "7.0.0",
+   "8.0.0"
+  ],
+  "format": [
+   "onnx",
+   "torch_script"
+  ]
+ },
+ {
+  "name": "huggingface/sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
+  "version": [
+   "1.0.1"
+  ],
+  "format": [
+   "torch_script"
+  ]
+ },
+ {
   "name": "huggingface/sentence-transformers/multi-qa-mpnet-base-dot-v1",
   "version": [
    "1.0.1"
   ],
   "format": [
+   "torch_script"
+  ]
+ },
+ {
+  "name": "huggingface/sentence-transformers/xlm-r-bert-base-nli-mean-tokens",
+  "version": [
+   "1.0.1"
+  ],
+  "format": [
+   "onnx",
    "torch_script"
   ]
  }
