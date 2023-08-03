@@ -24,7 +24,7 @@ jobs:
         role-session-name: update-model-listing
     - name: List Models
       run: |
-        aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --prefix "ml-models/huggingface/none" --query "Contents[].{Key: Key}" --output text | grep "/config.json$" >> config_paths.txt
+        aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --prefix "ml-models/huggingface/" --query "Contents[].{Key: Key}" --output text | grep "/config.json$" >> config_paths.txt
         echo $(cat current_models.txt)
     - name: Download config files
       run: |
