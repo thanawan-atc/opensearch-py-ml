@@ -121,7 +121,7 @@ def create_new_pretrained_model_listing(
     new_model_listing_lst = list(new_model_listing_dict.values())
     new_model_listing_lst = sorted(new_model_listing_lst, key=lambda d: d["name"])
     for model_dict in new_model_listing_lst:
-        model_dict["model_versions"] = sorted(model_dict["model_versions"])
+        model_dict["versions"] = sorted(model_dict["versions"])
 
     print(
         f"---  Dumping New Model Listing in {PRETRAINED_MODEL_LISTING_JSON_FILEPATH} --- "
