@@ -78,7 +78,7 @@ jobs:
         - Tracing Format: ${{ github.event.inputs.tracing_format }}
         - Embedding Dimension: ${embedding_dimension:-Default}
         - Pooling Mode: ${pooling_mode:-Default}
-        - Model Description: ${model_description:-Default}
+        - Model Description: \"${model_description:-Default}\"
         
         ========= Test Information ==========
         - Embedding Verification: Passed"
@@ -302,13 +302,14 @@ jobs:
           python -m pip install mdutils
       - name: Update Model Upload History
         run: |
+          model_description="${{ github.event.inputs.model_description }}"
           python utils/model_uploader/update_models_upload_history_md.py \
             ${{ github.event.inputs.model_id }} \
             ${{ github.event.inputs.model_version }} \
             ${{ github.event.inputs.tracing_format }} \
             -ed ${{ github.event.inputs.embedding_dimension }} \
             -pm ${{ github.event.inputs.pooling_mode }} \
-            -md "${{ github.event.inputs.model_description }}" \
+            -md ${model_description:+"$model_description"} \
             -u ${{ github.actor }} -t "${{ needs.model-uploading.outputs.upload_time }}"
       - name: Create PR Body
         id: create_pr_body
