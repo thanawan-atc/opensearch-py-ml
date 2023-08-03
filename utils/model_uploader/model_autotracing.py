@@ -534,9 +534,6 @@ if __name__ == "__main__":
         help="Model description if you want to overwrite the default description",
     )
     args = parser.parse_args()
-
-    if args.model_description == "":
-        args.model_description = None
         
     main(
         args.model_id,
