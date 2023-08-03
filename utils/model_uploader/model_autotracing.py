@@ -535,6 +535,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    if args.model_description == "":
+        args.model_description = None
+        
     main(
         args.model_id,
         args.model_version,
