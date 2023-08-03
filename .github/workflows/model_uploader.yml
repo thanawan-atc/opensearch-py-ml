@@ -57,14 +57,14 @@ jobs:
     - name: Initiate model_folder
       id: init_model_folder
       run: |
-        model_id=${{ github.event.inputs.model_id }}
+        model_id="${{ github.event.inputs.model_id }}"
         echo "model_folder=ml-models/${{github.event.inputs.model_source}}/${model_id%%/*}/" >> $GITHUB_OUTPUT
     - name: Initiate workflow_info
       id: init_workflow_info
       run: |
-        embedding_dimension=${{ github.event.inputs.embedding_dimension }}
-        pooling_mode=${{ github.event.inputs.pooling_mode }}
-        model_description=${{ github.event.inputs.model_description }}
+        embedding_dimension="${{ github.event.inputs.embedding_dimension }}"
+        pooling_mode="${{ github.event.inputs.pooling_mode }}"
+        model_description="${{ github.event.inputs.model_description }}"
         
         workflow_info="
         ========= Workflow Details ==========
