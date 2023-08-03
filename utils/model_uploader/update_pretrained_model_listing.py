@@ -129,7 +129,7 @@ def create_new_pretrained_model_listing(
     if not os.path.isdir(JSON_DIRNAME):
         os.makedirs(JSON_DIRNAME)
     with open(PRETRAINED_MODEL_LISTING_JSON_FILEPATH, "w") as f:
-        json.dump(new_model_listing_lst, f, indent=1)
+        json.dump(new_model_listing_lst, f, indent=2)
     print("\n=== Finished running update_pretrained_model_listing.py ===")
 
 
