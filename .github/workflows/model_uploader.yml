@@ -123,8 +123,8 @@ jobs:
         if: github.event.inputs.tracing_format == 'TORCH_SCRIPT' || github.event.inputs.tracing_format == 'BOTH'
         run: |
           TORCH_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py \
-              ${{ needs.init-workflow-var.outputs.model_folder }} ${{ github.event.inputs.model_id }} \
-              ${{ github.event.inputs.model_version }} TORCH_SCRIPT)
+              "${{ needs.init-workflow-var.outputs.model_folder }}" "${{ github.event.inputs.model_id }}" \
+              "${{ github.event.inputs.model_version }}" TORCH_SCRIPT)
           aws s3api head-object --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --key $TORCH_FILE_PATH > /dev/null 2>&1 || TORCH_MODEL_NOT_EXIST=true
           if [[ -z $TORCH_MODEL_NOT_EXIST ]]
           then
@@ -135,8 +135,8 @@ jobs:
         if: github.event.inputs.tracing_format == 'ONNX' || github.event.inputs.tracing_format == 'BOTH'
         run: |
           ONNX_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py \
-            ${{ needs.init-workflow-var.outputs.model_folder }} ${{ github.event.inputs.model_id }} \
-            ${{ github.event.inputs.model_version }} ONNX)
+            "${{ needs.init-workflow-var.outputs.model_folder }}" "${{ github.event.inputs.model_id }}" \
+            "${{ github.event.inputs.model_version }}" ONNX)
           aws s3api head-object --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --key $ONNX_FILE_PATH > /dev/null 2>&1 || ONNX_MODEL_NOT_EXIST=true
           if [[ -z $ONNX_MODEL_NOT_EXIST ]]
           then
@@ -303,13 +303,13 @@ jobs:
       - name: Update Model Upload History
         run: |
           python utils/model_uploader/update_models_upload_history_md.py \
-            ${{ github.event.inputs.model_id }} \
-            ${{ github.event.inputs.model_version }} \
-            ${{ github.event.inputs.tracing_format }} \
-            -ed ${{ github.event.inputs.embedding_dimension }} \
-            -pm ${{ github.event.inputs.pooling_mode }} \
-            -md ${{ github.event.inputs.model_description }} \
-            -u ${{ github.actor }} -t "${{ needs.model-uploading.outputs.upload_time }}"
+            "${{ github.event.inputs.model_id }}" \
+            "${{ github.event.inputs.model_version }}" \
+            "${{ github.event.inputs.tracing_format }}" \
+            -ed "${{ github.event.inputs.embedding_dimension }}" \
+            -pm "${{ github.event.inputs.pooling_mode }}" \
+            -md "${{ github.event.inputs.model_description }}" \
+            -u "${{ github.actor }}" -t "${{ needs.model-uploading.outputs.upload_time }}"
       - name: Create PR Body
         id: create_pr_body
         run: |
