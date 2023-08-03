@@ -105,8 +105,8 @@ def create_new_pretrained_model_listing(
             versions_content[model_version]["format"].append(model_format)
             if "description" not in versions_content[model_version]:
                 if (
-                    model_name in old_model_listing_dict:
-                    "versions" in old_model_listing_dict[model_name]
+                    model_name in old_model_listing_dict
+                    and "versions" in old_model_listing_dict[model_name]
                     and model_version in old_model_listing_dict[model_name]["versions"]
                     and "description" in old_model_listing_dict[model_name]["versions"][model_version]
                 ):
