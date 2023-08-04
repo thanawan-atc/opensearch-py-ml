@@ -53,13 +53,6 @@ jobs:
 #       run: |
 #          echo "This workflow should only be triggered on a default branch"
 #          exit 1
-    - name: Modify model_description
-      id: modify_model_description
-      run: |
-        echo ${{ github.event.inputs.model_description }}
-        echo -e ${{ github.event.inputs.model_description }}
-    - name: exit
-      run: exit 1
     - name: Initiate folders
       id: init_folders
       run: |
@@ -91,9 +84,9 @@ jobs:
         - Embedding Verification: Passed"
 
         echo "workflow_info<<EOF" >> $GITHUB_OUTPUT
-        echo "${workflow_info@E}" >> $GITHUB_OUTPUT
+        echo $workflow_info >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
-        echo "${workflow_info@E}"
+        echo $workflow_info
     - name: Initiate license_line
       id: init_license_line
       run: |
@@ -106,125 +99,125 @@ jobs:
       verified_license_line: ${{ steps.init_license_line.outputs.verified }}
       unverified_license_line: ${{ steps.init_license_line.outputs.unverified }}
 
-  # Step 3: Check if the model already exists in the model hub
-  checking-out-model-hub:
-    needs: init-workflow-var
-    runs-on: 'ubuntu-latest'
-    permissions:
-      id-token: write
-      contents: read
-    environment: opensearch-py-ml-cicd-env
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Set Up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-region: ${{ secrets.PERSONAL_MODEL_UPLOADER_AWS_REGION }}
-          role-to-assume: ${{ secrets.PERSONAL_MODEL_UPLOADER_ROLE }}
-          role-session-name: checking-out-model-hub
-      - name: Check if TORCH_SCRIPT Model Exists
-        if: github.event.inputs.tracing_format == 'TORCH_SCRIPT' || github.event.inputs.tracing_format == 'BOTH'
-        run: |
-          TORCH_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py \
-              ${{ needs.init-workflow-var.outputs.sentence_transformer_folder }} ${{ github.event.inputs.model_id }} \
-              ${{ github.event.inputs.model_version }} TORCH_SCRIPT)
-          aws s3api head-object --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --key $TORCH_FILE_PATH > /dev/null 2>&1 || TORCH_MODEL_NOT_EXIST=true
-          if [[ -z $TORCH_MODEL_NOT_EXIST ]]
-          then
-            echo "TORCH_SCRIPT Model already exists on model hub."
-            exit 1
-          fi
-      - name: Check if ONNX Model Exists
-        if: github.event.inputs.tracing_format == 'ONNX' || github.event.inputs.tracing_format == 'BOTH'
-        run: |
-          ONNX_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py \
-            ${{ needs.init-workflow-var.outputs.sentence_transformer_folder }} ${{ github.event.inputs.model_id }} \
-            ${{ github.event.inputs.model_version }} ONNX)
-          aws s3api head-object --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --key $ONNX_FILE_PATH > /dev/null 2>&1 || ONNX_MODEL_NOT_EXIST=true
-          if [[ -z $ONNX_MODEL_NOT_EXIST ]]
-          then
-            echo "TORCH_SCRIPT Model already exists on model hub."
-            exit 1
-          fi
+  # # Step 3: Check if the model already exists in the model hub
+  # checking-out-model-hub:
+  #   needs: init-workflow-var
+  #   runs-on: 'ubuntu-latest'
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #   environment: opensearch-py-ml-cicd-env
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v3
+  #     - name: Set Up Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: '3.x'
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-region: ${{ secrets.PERSONAL_MODEL_UPLOADER_AWS_REGION }}
+  #         role-to-assume: ${{ secrets.PERSONAL_MODEL_UPLOADER_ROLE }}
+  #         role-session-name: checking-out-model-hub
+  #     - name: Check if TORCH_SCRIPT Model Exists
+  #       if: github.event.inputs.tracing_format == 'TORCH_SCRIPT' || github.event.inputs.tracing_format == 'BOTH'
+  #       run: |
+  #         TORCH_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py \
+  #             ${{ needs.init-workflow-var.outputs.sentence_transformer_folder }} ${{ github.event.inputs.model_id }} \
+  #             ${{ github.event.inputs.model_version }} TORCH_SCRIPT)
+  #         aws s3api head-object --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --key $TORCH_FILE_PATH > /dev/null 2>&1 || TORCH_MODEL_NOT_EXIST=true
+  #         if [[ -z $TORCH_MODEL_NOT_EXIST ]]
+  #         then
+  #           echo "TORCH_SCRIPT Model already exists on model hub."
+  #           exit 1
+  #         fi
+  #     - name: Check if ONNX Model Exists
+  #       if: github.event.inputs.tracing_format == 'ONNX' || github.event.inputs.tracing_format == 'BOTH'
+  #       run: |
+  #         ONNX_FILE_PATH=$(python utils/model_uploader/save_model_file_path_to_env.py \
+  #           ${{ needs.init-workflow-var.outputs.sentence_transformer_folder }} ${{ github.event.inputs.model_id }} \
+  #           ${{ github.event.inputs.model_version }} ONNX)
+  #         aws s3api head-object --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --key $ONNX_FILE_PATH > /dev/null 2>&1 || ONNX_MODEL_NOT_EXIST=true
+  #         if [[ -z $ONNX_MODEL_NOT_EXIST ]]
+  #         then
+  #           echo "TORCH_SCRIPT Model already exists on model hub."
+  #           exit 1
+  #         fi
   
-  # Step 4: Trace the model, Verify the embeddings & Upload the model files as artifacts
-  model-auto-tracing:
-    needs: [init-workflow-var, checking-out-model-hub]
-    name: model-auto-tracing
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-    environment: opensearch-py-ml-cicd-env
-    strategy:
-      matrix:
-        cluster: ["opensearch"]
-        secured: ["true"]
-        entry:
-          - { opensearch_version: 2.7.0 }
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Export Arguments
-        run: | 
-          echo "MODEL_ID=${{ github.event.inputs.model_id }}" >> $GITHUB_ENV
-          echo "MODEL_VERSION=${{ github.event.inputs.model_version }}" >> $GITHUB_ENV
-          echo "TRACING_FORMAT=${{ github.event.inputs.tracing_format }}" >> $GITHUB_ENV
-          echo "EMBEDDING_DIMENSION=${{ github.event.inputs.embedding_dimension }}" >> $GITHUB_ENV
-          echo "POOLING_MODE=${{ github.event.inputs.pooling_mode }}" >> $GITHUB_ENV     
-          echo "MODEL_DESCRIPTION=${{ github.event.inputs.model_description }}" >> $GITHUB_ENV     
-      - name: Autotracing ${{ matrix.cluster }} secured=${{ matrix.secured }} version=${{matrix.entry.opensearch_version}}
-        run: "./.ci/run-tests ${{ matrix.cluster }} ${{ matrix.secured }} ${{ matrix.entry.opensearch_version }} trace"
-      - name: License verification
-        id: license_verification
-        continue-on-error: true
-        run: |
-          apache_verified=$(<trace_output/apache_verified.txt)
-          if [[ $apache_verified == "True" ]]
-          then
-            echo "license_line=${{ needs.init-workflow-var.outputs.verified_license_line }}" >> $GITHUB_OUTPUT   
-          else
-            echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT   
-          fi
-      - name: Handle if license_verification fails
-        if: steps.license_verification.outcome == 'failure'
-        run: |
-          echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with: 
-          name: upload
-          path: ./upload/
-          retention-days: 5
-          if-no-files-found: error
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-region: ${{ secrets.PERSONAL_MODEL_UPLOADER_AWS_REGION }}
-          role-to-assume: ${{ secrets.PERSONAL_MODEL_UPLOADER_ROLE }}
-          role-session-name: model-auto-tracing
-      - name: Dryrun model uploading
-        id: dryrun_model_uploading
-        run: |
-          dryrun_output=$(aws s3 sync ./upload/ s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/${{ needs.init-workflow-var.outputs.sentence_transformer_folder }} --dryrun \
-            | sed 's|s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/|s3://_MODEL_BUCKET_/|' 
-          )
-          echo "dryrun_output<<EOF" >> $GITHUB_OUTPUT
-          echo "${dryrun_output@E}" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          echo "${dryrun_output@E}"
-    outputs:
-      license_line: ${{ steps.license_verification.outputs.license_line }}
-      dryrun_output: ${{ steps.dryrun_model_uploading.outputs.dryrun_output }}
+  # # Step 4: Trace the model, Verify the embeddings & Upload the model files as artifacts
+  # model-auto-tracing:
+  #   needs: [init-workflow-var, checking-out-model-hub]
+  #   name: model-auto-tracing
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #   environment: opensearch-py-ml-cicd-env
+  #   strategy:
+  #     matrix:
+  #       cluster: ["opensearch"]
+  #       secured: ["true"]
+  #       entry:
+  #         - { opensearch_version: 2.7.0 }
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Export Arguments
+  #       run: | 
+  #         echo "MODEL_ID=${{ github.event.inputs.model_id }}" >> $GITHUB_ENV
+  #         echo "MODEL_VERSION=${{ github.event.inputs.model_version }}" >> $GITHUB_ENV
+  #         echo "TRACING_FORMAT=${{ github.event.inputs.tracing_format }}" >> $GITHUB_ENV
+  #         echo "EMBEDDING_DIMENSION=${{ github.event.inputs.embedding_dimension }}" >> $GITHUB_ENV
+  #         echo "POOLING_MODE=${{ github.event.inputs.pooling_mode }}" >> $GITHUB_ENV     
+  #         echo "MODEL_DESCRIPTION=${{ github.event.inputs.model_description }}" >> $GITHUB_ENV     
+  #     - name: Autotracing ${{ matrix.cluster }} secured=${{ matrix.secured }} version=${{matrix.entry.opensearch_version}}
+  #       run: "./.ci/run-tests ${{ matrix.cluster }} ${{ matrix.secured }} ${{ matrix.entry.opensearch_version }} trace"
+  #     - name: License verification
+  #       id: license_verification
+  #       continue-on-error: true
+  #       run: |
+  #         apache_verified=$(<trace_output/apache_verified.txt)
+  #         if [[ $apache_verified == "True" ]]
+  #         then
+  #           echo "license_line=${{ needs.init-workflow-var.outputs.verified_license_line }}" >> $GITHUB_OUTPUT   
+  #         else
+  #           echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT   
+  #         fi
+  #     - name: Handle if license_verification fails
+  #       if: steps.license_verification.outcome == 'failure'
+  #       run: |
+  #         echo "license_line=${{ needs.init-workflow-var.outputs.unverified_license_line }}" >> $GITHUB_OUTPUT
+  #     - name: Upload Artifact
+  #       uses: actions/upload-artifact@v3
+  #       with: 
+  #         name: upload
+  #         path: ./upload/
+  #         retention-days: 5
+  #         if-no-files-found: error
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-region: ${{ secrets.PERSONAL_MODEL_UPLOADER_AWS_REGION }}
+  #         role-to-assume: ${{ secrets.PERSONAL_MODEL_UPLOADER_ROLE }}
+  #         role-session-name: model-auto-tracing
+  #     - name: Dryrun model uploading
+  #       id: dryrun_model_uploading
+  #       run: |
+  #         dryrun_output=$(aws s3 sync ./upload/ s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/${{ needs.init-workflow-var.outputs.sentence_transformer_folder }} --dryrun \
+  #           | sed 's|s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/|s3://_MODEL_BUCKET_/|' 
+  #         )
+  #         echo "dryrun_output<<EOF" >> $GITHUB_OUTPUT
+  #         echo "${dryrun_output@E}" >> $GITHUB_OUTPUT
+  #         echo "EOF" >> $GITHUB_OUTPUT
+  #         echo "${dryrun_output@E}"
+  #   outputs:
+  #     license_line: ${{ steps.license_verification.outputs.license_line }}
+  #     dryrun_output: ${{ steps.dryrun_model_uploading.outputs.dryrun_output }}
 
   # Step 5: Ask for manual approval from the CODEOWNERS
   manual-approval:
-    needs: [init-workflow-var, model-auto-tracing]
+    needs: init-workflow-var #[init-workflow-var, model-auto-tracing]
     runs-on: 'ubuntu-latest'
     permissions:
       issues: write
