@@ -53,6 +53,13 @@ jobs:
 #       run: |
 #          echo "This workflow should only be triggered on a default branch"
 #          exit 1
+    - name: Modify model_description
+      id: modify_model_description
+      run: |
+        echo ${{ github.event.inputs.model_description }}
+        echo -e ${{ github.event.inputs.model_description }}
+    - name: exit
+      run: exit 1
     - name: Initiate folders
       id: init_folders
       run: |
