@@ -65,6 +65,8 @@ jobs:
         embedding_dimension=${{ github.event.inputs.embedding_dimension }}
         pooling_mode=${{ github.event.inputs.pooling_mode }}
         model_description="${{ github.event.inputs.model_description }}"
+        model_description_escaped=$(echo "$model_description" | sed 's/"/\\"/g')
+        model_description=$model_description_escaped
         
         workflow_info="
         ========= Workflow Details ==========
