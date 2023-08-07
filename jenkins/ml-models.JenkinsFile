@@ -70,10 +70,9 @@ pipeline {
                         withCredentials([
                             string(credentialsId: "team_bucket_role", variable: 'TEAM_BUCEKT_ROLE'),
                             string(credentialsId: "team_bucket_cred", variable: 'TEAM_BUCEKT_CRED'),
-                            string(credentialsId: "team_bucket_region", variable: 'TEAM_BUCKET_REGION'),
                             string(credentialsId: "team_bucket_name", variable: 'TEAM_BUCKET_NAME')
                         ]) {
-                            withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "${TEAM_BUCKET_REGION}") {
+                            withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
                                 s3Download(file: "$download_path", bucket: "${TEAM_BUCKET_NAME}", path: "$local_path", force: true)
                         }    
                     } else {
@@ -82,10 +81,9 @@ pipeline {
                             withCredentials([
                                 string(credentialsId: "team_bucket_role", variable: 'TEAM_BUCEKT_ROLE'),
                                 string(credentialsId: "team_bucket_cred", variable: 'TEAM_BUCEKT_CRED'),
-                                string(credentialsId: "team_bucket_region", variable: 'TEAM_BUCKET_REGION'),
                                 string(credentialsId: "team_bucket_name", variable: 'TEAM_BUCKET_NAME')
                             ]) {
-                                withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "${TEAM_BUCKET_REGION}") {
+                                withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
                                     s3Download(file: "$download_path", bucket: "${TEAM_BUCKET_NAME}", path: "$local_path", force: true)
                             }    
                         }
@@ -114,10 +112,9 @@ pipeline {
                         string(credentialsId: "release_bucket_role", variable: 'RELEASE_BUCEKT_ROLE'),
                         string(credentialsId: "release_bucket_cred", variable: 'RELEASE_BUCEKT_CRED'),
                         string(credentialsId: "release_bucket_session", variable: 'RELEASE_BUCKET_SESSION'),
-                        string(credentialsId: "release_bucket_region", variable: 'RELEASE_BUCKET_REGION'),
                         string(credentialsId: "release_bucket_name", variable: 'RELEASE_BUCKET_NAME')
                     ]) {
-                        withAWS(role: "${RELEASE_BUCEKT_ROLE}", roleAccount: "${RELEASE_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "${RELEASE_BUCKET_REGION}") {
+                        withAWS(role: "${RELEASE_BUCEKT_ROLE}", roleAccount: "${RELEASE_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
                             s3Download(file: "$source", bucket: "${RELEASE_BUCKET_NAME}", path: "$destination")
                     }   
                 }
