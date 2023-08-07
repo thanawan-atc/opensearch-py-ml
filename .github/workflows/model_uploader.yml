@@ -391,7 +391,7 @@ jobs:
     steps:
       - name: Trigger Jenkins Workflow with Generic Webhook
         run: |
-          JENKINS_URL="https://build.ci.opensearch.org"
+          JENKINS_URL=${{ secrets.JENKINS_URL }} # "https://build.ci.opensearch.org"
           JENKINS_TRIGGER_TOKEN=${{ secrets.JENKINS_ML_MODELS_RELEASE_GENERIC_WEBHOOK_TOKEN }}
           
           BASE_DOWNLOAD_PATH=${{ needs.init-workflow-var.outputs.model_folder }}
