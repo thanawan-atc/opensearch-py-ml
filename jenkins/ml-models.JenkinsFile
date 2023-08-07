@@ -1,8 +1,3 @@
-lib = library(identifier: 'jenkins@2.0.0', retriever: modernSCM([
-    $class: 'GitSCMSource',
-    remote: 'https://github.com/opensearch-project/opensearch-build-libraries.git',
-]))
-
 pipeline {
     agent
     {
@@ -26,9 +21,14 @@ pipeline {
             description: 'Version number of the model',
             trim: true
         )
+        choice(
+            name: 'MODEL_FORMAT',
+            description: 'Tracing format of the model',
+            choices: ['BOTH', 'TORCH_SCRIPT', 'ONNX']
+        )
         }
     environment {
-        ARTIFACT_PATH = "${env.BASE_DOWNLOAD_PATH == "ml-models/model_listing" ? "${env.BASE_DOWNLOAD_PATH}/" : "${env.BASE_DOWNLOAD_PATH}/${env.VERSION}/"}"
+        ARTIFACT_PATH = "${env.BASE_DOWNLOAD_PATH == "ml-models/model_listing" ? "${env.BASE_DOWNLOAD_PATH}" : "${env.BASE_DOWNLOAD_PATH}/${env.VERSION}"}"
         UPLOAD_PATH = "models/ml-models"
         BUCKET_NAME = credentials('ml-models-bucket-name')
     }
@@ -36,15 +36,17 @@ pipeline {
         stage('Parameters Check') {
             steps {
                 script {
-                    if(env.BASE_DOWNLOAD_PATH == "ml-models/model_listing" && env.VERSION.isEmpty()) {
+                    if (env.BASE_DOWNLOAD_PATH == "ml-models/model_listing" && env.VERSION.isEmpty() && env.MODEL_FORMAT.isEmpty()) {
                         echo "Proceeding to download the ml-models/model_listing."
-                    }                  
-                    else if (env.BASE_DOWNLOAD_PATH.isEmpty()) {
+                    } else if (env.BASE_DOWNLOAD_PATH.isEmpty()) {
                         currentBuild.result = 'ABORTED'
-                        error('Parameters cannot be empty! Please provide the correct values.')
+                        error('BASE_DOWNLOAD_PATH cannot be empty! Please provide the correct values.')
                     } else if (env.VERSION.isEmpty()) {
                         currentBuild.result = 'ABORTED'
-                        error('Parameters cannot be empty! Please provide the correct values.')
+                        error('VERSION cannot be empty! Please provide the correct values.')
+                    } else if (env.MODEL_FORMAT.isEmpty()) {
+                        currentBuild.result = 'ABORTED'
+                        error('MODEL_FORMAT cannot be empty! Please provide the correct values.')
                     } else {
                         echo "Proceeding to download the ml-models."
                     }
@@ -58,18 +60,31 @@ pipeline {
         stage('Download the artifacts') {
             steps {
                 script {
-#                    downloadFromS3(
-#                        assumedRoleName: 'get_models',
-#                        roleAccountNumberCred: 'ml-models-aws-account-number',
-#                        downloadPath: "${env.ARTIFACT_PATH}",
-#                        bucketName: "${env.BUCKET_NAME}",
-#                        localPath: "${env.WORKSPACE}/artifacts",
-#                        force: true,
-#                        region: 'us-west-2'
-#                    )
-                    withCredentials([string(credentialsId: "${args.roleAccountNumberCred}", variable: 'AWS_ACCOUNT_NUMBER')]) {
-                        withAWS(role: args.assumedRoleName, roleAccount: "${AWS_ACCOUNT_NUMBER}", duration: 900, roleSessionName: 'jenkins-session', region: "${region}") {
-                            s3Download(file: args.localPath, bucket: args.bucketName, path: args.downloadPath, force: "${forceDownload}")
+                    role = "${{ secrets.PERSONAL_MODEL_UPLOADER_ROLE }}"
+                    region = "${{ secrets.PERSONAL_MODEL_UPLOADER_AWS_REGION }}"
+                    session = "model-releasing"
+                    bucket = "${{ secrets.PERSONAL_MODEL_BUCKET }}"
+                    local_path = "${env.WORKSPACE}/artifacts"
+                    if (env.BASE_DOWNLOAD_PATH == "ml-models/model_listing") {
+                        download_path = "${env.ARTIFACT_PATH}/"
+                        withCredentials([string(credentialsId: "${args.roleAccountNumberCred}", variable: 'AWS_ACCOUNT_NUMBER')]) {
+                            withAWS(role: $role, roleAccount: "${AWS_ACCOUNT_NUMBER}", duration: 900, roleSessionName: $session, region: $region) {
+                                s3Download(file: , bucket: $bucket, path: $local_path, force: true)
+                        }    
+                    } else {
+                        if (env.MODEL_FORMAT == "TORCH_SCRIPT" || env.MODEL_FORMAT == "BOTH) {
+                            download_path = "${env.ARTIFACT_PATH}/torch_script/"
+                            withCredentials([string(credentialsId: "${args.roleAccountNumberCred}", variable: 'AWS_ACCOUNT_NUMBER')]) {
+                                withAWS(role: $role, roleAccount: "${AWS_ACCOUNT_NUMBER}", duration: 900, roleSessionName: $session, region: $region) {
+                                    s3Download(file: , bucket: $bucket, path: $local_path, force: true)
+                            } 
+                        }
+                        if (env.MODEL_FORMAT == "ONNX" || env.MODEL_FORMAT == "BOTH) {
+                            download_path = "${env.ARTIFACT_PATH}/onnx/"
+                            withCredentials([string(credentialsId: "${args.roleAccountNumberCred}", variable: 'AWS_ACCOUNT_NUMBER')]) {
+                                withAWS(role: $role, roleAccount: "${AWS_ACCOUNT_NUMBER}", duration: 900, roleSessionName: $session, region: $region) {
+                                    s3Download(file: , bucket: $bucket, path: $local_path, force: true)
+                            } 
                         }
                     }
                 }
@@ -78,14 +93,18 @@ pipeline {
         stage('Sign and Release the artifacts') {
             steps {
                 script {
-                    publishToArtifactsProdBucket(
-                        assumedRoleName: 'ml-models-artifacts-upload-role',
-                        source: "${env.WORKSPACE}/artifacts/ml-models",
-                        destination: "${env.UPLOAD_PATH}",
-                        signingPlatform: 'linux',
-                        sigType: '.sig',
-                        sigOverwrite: true
-                    )
+                    role = "${{ secrets.PERSONAL_MODEL_UPLOADER_ROLE_2 }}"
+                    region = "${{ secrets.PERSONAL_MODEL_UPLOADER_AWS_REGION_2 }}"
+                    session = "model-releasing"
+                    bucket = "${{ secrets.PERSONAL_MODEL_BUCKET_2 }}"
+                    source = "${env.WORKSPACE}/artifacts/ml-models"
+                    destination = "${env.UPLOAD_PATH}"
+                    withCredentials([
+                        string(credentialsId: 'jenkins-aws-production-account', variable: 'AWS_ACCOUNT_ARTIFACT'),
+                        string(credentialsId: 'jenkins-artifact-production-bucket-name', variable: 'ARTIFACT_PRODUCTION_BUCKET_NAME')]) {
+                        withAWS(role: $role, roleAccount: "${AWS_ACCOUNT_ARTIFACT}", duration: 900, roleSessionName: $session) {
+                            s3Upload(file: $source, bucket: $bucket, path: $destination)
+                    }
                 }
             }
         }
