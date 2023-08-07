@@ -20,6 +20,18 @@ pipeline {
             choices: ['BOTH', 'TORCH_SCRIPT', 'ONNX']
         )
         }
+    triggers {
+        GenericTrigger(
+            genericVariables: [
+                [key: 'BASE_DOWNLOAD_PATH', value: '$.BASE_DOWNLOAD_PATH'],
+                [key: 'VERSION', value: '$.VERSION'],
+                [key: 'FORMAT', value: '$.FORMAT']
+            ],
+            tokenCredentialId: 'opensearch-exp-generic-webhook-token',
+            causeString: 'Triggered by GitHub Action Workflow in opensearch-py-ml',
+            printContributedVariables: true,
+        )
+    }
     environment {
         ARTIFACT_PATH = "${env.BASE_DOWNLOAD_PATH == "ml-models/model_listing" ? "${env.BASE_DOWNLOAD_PATH}" : "${env.BASE_DOWNLOAD_PATH}/${env.VERSION}"}"
         UPLOAD_PATH = "models/ml-models"
