@@ -17,7 +17,7 @@ pipeline {
         choice(
             name: 'FORMAT',
             description: 'Tracing format of the model',
-            choices: ['BOTH', 'TORCH_SCRIPT', 'ONNX']
+            choices: ['N/A', 'BOTH', 'TORCH_SCRIPT', 'ONNX']
         )
     }
     environment {
@@ -33,7 +33,7 @@ pipeline {
                     echo "FORMAT: ${env.FORMAT}"
                     echo "ARTIFACT_PATH: ${env.ARTIFACT_PATH}"
                     echo "UPLOAD_PATH: ${env.UPLOAD_PATH}"
-                    if (env.BASE_DOWNLOAD_PATH == "ml-models/model_listing" && env.VERSION.isEmpty() && env.FORMAT.isEmpty()) {
+                    if (env.BASE_DOWNLOAD_PATH == "ml-models/model_listing" && env.VERSION.isEmpty() && env.FORMAT == "N/A") {
                         echo "Proceeding to download the ml-models/model_listing."
                     } else if (env.BASE_DOWNLOAD_PATH.isEmpty()) {
                         currentBuild.result = 'ABORTED'
@@ -41,9 +41,9 @@ pipeline {
                     } else if (env.VERSION.isEmpty()) {
                         currentBuild.result = 'ABORTED'
                         error('VERSION cannot be empty! Please provide the correct values.')
-                    } else if (env.FORMAT.isEmpty()) {
+                    } else if (env.FORMAT == "N/A") {
                         currentBuild.result = 'ABORTED'
-                        error('FORMAT cannot be empty! Please provide the correct values.')
+                        error('FORMAT should not be "N/A"! Please provide the correct values.')
                     } else {
                         echo "Proceeding to download the ml-models."
                     }
