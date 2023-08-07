@@ -396,8 +396,8 @@ jobs:
           
           BASE_DOWNLOAD_PATH=${{ needs.init-workflow-var.outputs.model_folder }}
           VERSION=${{ github.event.inputs.model_version }}
-          TODO: FORMAT=${{ github.event.inputs.tracing_format }}
-          TODO: JENKINS_PARAMS="{\"BASE_DOWNLOAD_PATH\":\"$BASE_DOWNLOAD_PATH\", \"VERSION\":\"$VERSION\", \"FORMAT\":\"$FORMAT\"}"
+          FORMAT=${{ github.event.inputs.tracing_format }}
+          JENKINS_PARAMS="{\"BASE_DOWNLOAD_PATH\":\"$BASE_DOWNLOAD_PATH\", \"VERSION\":\"$VERSION\", \"FORMAT\":\"$FORMAT\"}"
           # JENKINS_PARAMS="{\"BASE_DOWNLOAD_PATH\":\"$BASE_DOWNLOAD_PATH\", \"VERSION\":\"$VERSION\"}"
           
           # TODO: Set up JENKINS_TRIGGER_TOKEN
