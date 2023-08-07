@@ -407,8 +407,7 @@ jobs:
              -H "Authorization: Bearer $JENKINS_TRIGGER_TOKEN" \
              -H "Content-Type: application/json" \
              "$JENKINS_URL/generic-webhook-trigger/invoke" \
-             --data-urlencode json="$(echo $JENKINS_PARAMS)"`
-          # --data "$(echo $JENKINS_PARAMS)"`
+             --data "$(echo $JENKINS_PARAMS)"` # --data-urlencode json="$(echo $JENKINS_PARAMS)"`
 
           echo $JENKINS_REQ
     
