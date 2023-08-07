@@ -93,7 +93,7 @@ jobs:
         echo "verified=:white_check_mark: — It is verified that this model is licensed under Apache 2.0" >> $GITHUB_OUTPUT
         echo "unverified=- [ ]  :warning: The license cannot be verified. Please confirm by yourself that the model is licensed under Apache 2.0  :warning:" >> $GITHUB_OUTPUT
     outputs:
-      model_folder: ${{ steps.init_folders.outputs.sentence_transformer_folder }}
+      model_folder: ${{ steps.init_folders.outputs.model_folder }}
       sentence_transformer_folder: ${{ steps.init_folders.outputs.sentence_transformer_folder }}
       workflow_info: ${{ steps.init_workflow_info.outputs.workflow_info }}
       verified_license_line: ${{ steps.init_license_line.outputs.verified }}
