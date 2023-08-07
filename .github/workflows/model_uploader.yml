@@ -403,11 +403,11 @@ jobs:
           # {\"name\":\"VERSION\", \"value\":\"$VERSION\"}, {\"FORMAT\":\"FORMAT\", \"value\":\"$FORMAT\"}]}"
           
           # TODO: Set up JENKINS_TRIGGER_TOKEN
-          JENKINS_REQ=`curl -s -XPOST \
+          JENKINS_REQ=$(curl -s -XPOST \
              -H "Authorization: Bearer $JENKINS_TRIGGER_TOKEN" \
              -H "Content-Type: application/json" \
              "$JENKINS_URL/generic-webhook-trigger/invoke" \
-             --data "$(echo $JENKINS_PARAMS)"` # --data-urlencode json="$(echo $JENKINS_PARAMS)"`
+             --data "$JENKINS_PARAMS"` # --data-urlencode json="$(echo $JENKINS_PARAMS)")
 
-          echo $JENKINS_REQ
+          echo "$JENKINS_REQ"
     
