@@ -58,15 +58,20 @@ pipeline {
         stage('Download the artifacts') {
             steps {
                 script {
-                    downloadFromS3(
-                        assumedRoleName: 'get_models',
-                        roleAccountNumberCred: 'ml-models-aws-account-number',
-                        downloadPath: "${env.ARTIFACT_PATH}",
-                        bucketName: "${env.BUCKET_NAME}",
-                        localPath: "${env.WORKSPACE}/artifacts",
-                        force: true,
-                        region: 'us-west-2'
-                    )
+#                    downloadFromS3(
+#                        assumedRoleName: 'get_models',
+#                        roleAccountNumberCred: 'ml-models-aws-account-number',
+#                        downloadPath: "${env.ARTIFACT_PATH}",
+#                        bucketName: "${env.BUCKET_NAME}",
+#                        localPath: "${env.WORKSPACE}/artifacts",
+#                        force: true,
+#                        region: 'us-west-2'
+#                    )
+                    withCredentials([string(credentialsId: "${args.roleAccountNumberCred}", variable: 'AWS_ACCOUNT_NUMBER')]) {
+                        withAWS(role: args.assumedRoleName, roleAccount: "${AWS_ACCOUNT_NUMBER}", duration: 900, roleSessionName: 'jenkins-session', region: "${region}") {
+                            s3Download(file: args.localPath, bucket: args.bucketName, path: args.downloadPath, force: "${forceDownload}")
+                        }
+                    }
                 }
             }
         }
