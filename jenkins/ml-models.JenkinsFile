@@ -74,6 +74,7 @@ pipeline {
                         ]) {
                             withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
                                 s3Download(file: "$download_path", bucket: "${TEAM_BUCKET_NAME}", path: "$local_path", force: true)
+                            }
                         }    
                     } else {
                         if (env.FORMAT == "TORCH_SCRIPT" || env.FORMAT == "BOTH) {
@@ -85,6 +86,7 @@ pipeline {
                             ]) {
                                 withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
                                     s3Download(file: "$download_path", bucket: "${TEAM_BUCKET_NAME}", path: "$local_path", force: true)
+                                }
                             }    
                         }
                         if (env.FORMAT == "ONNX" || env.FORMAT == "BOTH) {
@@ -96,6 +98,7 @@ pipeline {
                             ]) {
                                 withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "${TEAM_BUCKET_REGION}") {
                                     s3Download(file: "$download_path", bucket: "${TEAM_BUCKET_NAME}", path: "$local_path", force: true)
+                                }
                             }        
                         }
                     }
@@ -114,6 +117,7 @@ pipeline {
                     ]) {
                         withAWS(role: "${RELEASE_BUCEKT_ROLE}", roleAccount: "${RELEASE_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
                             s3Download(file: "$source", bucket: "${RELEASE_BUCKET_NAME}", path: "$destination")
+                        }
                     }   
                 }
             }
