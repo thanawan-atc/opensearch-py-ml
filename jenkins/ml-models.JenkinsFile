@@ -79,7 +79,7 @@ pipeline {
                             string(credentialsId: "ml_team_bucket_name", variable: "TEAM_BUCKET_NAME")
                         ]) {
                             withAWS(role: "$TEAM_BUCKET_ROLE", roleAccount: "$TEAM_BUCKET_CRED", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
-                                s3Download(file: "$download_path", bucket: "$TEAM_BUCKET_NAME", path: "$local_path", force: true)
+                                s3Download(file: "$local_path", bucket: "$TEAM_BUCKET_NAME", path: "$download_path", force: true)
                             }
                         }    
                     } else {
@@ -91,7 +91,7 @@ pipeline {
                                 string(credentialsId: "ml_team_bucket_name", variable: "TEAM_BUCKET_NAME")
                             ]) {
                                 withAWS(role: "$TEAM_BUCKET_ROLE", roleAccount: "$TEAM_BUCKET_CRED", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
-                                    s3Download(file: "$download_path", bucket: "$TEAM_BUCKET_NAME", path: "$local_path", force: true)
+                                    s3Download(file: "$local_path", bucket: "$TEAM_BUCKET_NAME", path: "$download_path", force: true)
                                 }
                             }    
                         }
@@ -103,7 +103,7 @@ pipeline {
                                 string(credentialsId: "ml_team_bucket_name", variable: "TEAM_BUCKET_NAME")
                             ]) {
                                 withAWS(role: "$TEAM_BUCKET_ROLE", roleAccount: "$TEAM_BUCKET_CRED", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
-                                    s3Download(file: "$download_path", bucket: "$TEAM_BUCKET_NAME", path: "$local_path", force: true)
+                                    s3Download(file: "$local_path", bucket: "$TEAM_BUCKET_NAME", path: "$download_path", force: true)
                                 }
                             }        
                         }
@@ -122,7 +122,7 @@ pipeline {
                         string(credentialsId: "ml_release_bucket_name", variable: "RELEASE_BUCKET_NAME")
                     ]) {
                         withAWS(role: "$RELEASE_BUCKET_ROLE", roleAccount: "$RELEASE_BUCKET_CRED", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
-                            s3Download(file: "$source", bucket: "$RELEASE_BUCKET_NAME", path: "$destination")
+                            s3Upload(file: "$source", bucket: "$RELEASE_BUCKET_NAME", path: "$destination")
                         }
                     }   
                 }
