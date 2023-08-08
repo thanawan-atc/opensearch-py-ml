@@ -23,9 +23,9 @@ pipeline {
     triggers {
         GenericTrigger(
             genericVariables: [
-                [key: 'BASE_DOWNLOAD_PATH', value: $[BASE_DOWNLOAD_PATH]],
-                [key: 'VERSION', value: $[VERSION]],
-                [key: 'FORMAT', value: $[FORMAT]]
+                [key: 'BASE_DOWNLOAD_PATH', value: '$.BASE_DOWNLOAD_PATH',
+                [key: 'VERSION', value: '$.VERSION',
+                [key: 'FORMAT', value: '$.FORMAT'
             ],
             token: 'JENKINS_ML_MODELS_RELEASE_GENERIC_WEBHOOK_TOKEN',
             causeString: 'Triggered by GitHub Actions Workflow',
