@@ -4,6 +4,7 @@ on:
     branches: # TO-BE-CHANGED
      - workflow-for-review 
      - experiment-description
+     - experiment-trigger-jenkins
     paths: 
      - utils/model_uploader/model_listing/pretrained_model_listing.json
   
