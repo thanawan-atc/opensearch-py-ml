@@ -83,7 +83,7 @@ pipeline {
                             }
                         }    
                     } else {
-                        if (env.FORMAT == "TORCH_SCRIPT" || env.FORMAT == "BOTH") {
+                        if (env.FORMAT == "TORCH_SCRIPT") {
                             download_path = "${env.ARTIFACT_PATH}/torch_script/"
                             withCredentials([
                                 string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCKET_ROLE"),
@@ -94,9 +94,20 @@ pipeline {
                                     s3Download(file: "$local_path", bucket: "$TEAM_BUCKET_NAME", path: "$download_path", force: true)
                                 }
                             }    
-                        }
-                        if (env.FORMAT == "ONNX" || env.FORMAT == "BOTH") {
+                        } else if (env.FORMAT == "ONNX") {
                             download_path = "${env.ARTIFACT_PATH}/onnx/"
+                            withCredentials([
+                                string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCKET_ROLE"),
+                                string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCKET_CRED"),
+                                string(credentialsId: "ml_team_bucket_name", variable: "TEAM_BUCKET_NAME")
+                            ]) {
+                                withAWS(role: "$TEAM_BUCKET_ROLE", roleAccount: "$TEAM_BUCKET_CRED", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
+                                    s3Download(file: "$local_path", bucket: "$TEAM_BUCKET_NAME", path: "$download_path", force: true)
+                                }
+                            }        
+                        } else { 
+                            // env.FORMAT == "BOTH"
+                            download_path = "${env.ARTIFACT_PATH}/"
                             withCredentials([
                                 string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCKET_ROLE"),
                                 string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCKET_CRED"),
