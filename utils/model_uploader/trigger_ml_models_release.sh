@@ -22,7 +22,7 @@ JENKINS_REQ=$(curl -s -XPOST \
 echo $JENKINS_PARAMS
 echo $JENKINS_REQ
 
-QUEUE_URL=$(echo $JENKINS_REQ | jq --raw-output '.jobs."ml-models-release".url')
+QUEUE_URL=$(echo $JENKINS_REQ | jq --raw-output '.jobs."opensearch-exp-jenkins-workflow".url') # TODO: Change to "ml-models-release"
 echo "QUEUE_URL: $QUEUE_URL"
 echo "Wait for jenkins to start workflow" && sleep 15
 
