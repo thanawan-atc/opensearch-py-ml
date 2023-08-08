@@ -121,7 +121,7 @@ pipeline {
                         string(credentialsId: "ml_release_bucket_cred", variable: "RELEASE_BUCKET_CRED"),
                         string(credentialsId: "ml_release_bucket_name", variable: "RELEASE_BUCKET_NAME")
                     ]) {
-                        withAWS(role: "$RELEASE_BUCKET_ROLE", roleAccount: "$RELEASE_BUCKET_CRED", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
+                        withAWS(role: "$RELEASE_BUCKET_ROLE", roleAccount: "$RELEASE_BUCKET_CRED", duration: 900, roleSessionName: "model-releasing", region: "us-east-1") {
                             s3Upload(file: "$source", bucket: "$RELEASE_BUCKET_NAME", path: "$destination")
                         }
                     }   
