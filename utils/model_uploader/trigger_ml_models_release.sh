@@ -1,19 +1,25 @@
-# JENKINS_URL="https://build.ci.opensearch.org"
-JENKINS_TRIGGER_TOKEN=$1
-# BASE_DOWNLOAD_PATH=$2
-# VERSION=$3
-# FORMAT=$4
+# SPDX-License-Identifier: Apache-2.0
+# The OpenSearch Contributors require contributions made to
+# this file be licensed under the Apache-2.0 license or a
+# compatible open source license.
+# Any modifications Copyright OpenSearch Contributors. See
+# GitHub history for details.
 
+# This program is run by "Model Auto-tracing & Uploading" 
+# & "Model Listing Uploading" workflow (See model_uploader.yml 
+# & model_listing_uploader.yml) to trigger ml-models-release 
+# Jenkins workflow.
+
+JENKINS_TRIGGER_TOKEN=$1
+JENKINS_PARAMS=$2
+# JENKINS_URL="https://build.ci.opensearch.org"
 JENKINS_URL=$3 # TODO: Remove this
 
 TIMEPASS=0
 TIMEOUT=7200
 RESULT="null"
 
-# JENKINS_PARAMS="{\"BASE_DOWNLOAD_PATH\":\"$BASE_DOWNLOAD_PATH\", \"VERSION\":\"$VERSION\", \"FORMAT\":\"$FORMAT\"}"
-JENKINS_PARAMS=$2
-
-echo "Trigger ml-models Jenkins workflows"
+echo "Trigger ml-models-release Jenkins workflows"
 JENKINS_REQ=$(curl -s -XPOST \
              -H "Authorization: Bearer $JENKINS_TRIGGER_TOKEN" \
              -H "Content-Type: application/json" \

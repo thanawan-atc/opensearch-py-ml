@@ -10,6 +10,7 @@
 # files for uploading to OpenSearch model hub.
 
 import argparse
+import json
 import os
 import shutil
 import sys
@@ -43,6 +44,7 @@ UPLOAD_FOLDER_PATH = "upload/"
 MODEL_CONFIG_FILE_NAME = "ml-commons_model_config.json"
 OUTPUT_DIR = "trace_output/"
 LICENSE_VAR_FILE = "apache_verified.txt"
+DESCRIPTION_VAR_FILE = "description.txt"
 TEST_SENTENCES = [
     "First test sentence",
     "This is a very long sentence used for testing model embedding outputs.",
@@ -361,6 +363,32 @@ def store_license_verified_variable(license_verified: bool) -> None:
         )
 
 
+def store_description_variable(config_path_for_checking_description: str) -> None:
+    """
+    Store model description in OUTPUT_DIR/DESCRIPTION_VAR_FILE
+    to be used to generate issue body for manual approval
+
+    :param config_path_for_checking_description: Path to config json file
+    :type config_path_for_checking_description: str
+    :return: No return value expected
+    :rtype: None
+    """
+    try:
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        description_var_filepath = OUTPUT_DIR + "/" + DESCRIPTION_VAR_FILE
+        with open(config_path_for_checking_description, "r") as f:
+            config_dict = json.load(f)
+            description = (
+                config_dict["description"] if "description" in config_dict else "-"
+            )
+        with open(description_var_filepath, "w") as f:
+            f.write(description)
+    except Exception as e:
+        print(
+            f"Cannot store description ({description}) in {description_var_filepath}: {e}"
+        )
+
+
 def main(
     model_id: str,
     model_version: str,
@@ -449,6 +477,8 @@ def main(
             torchscript_model_path,
             torchscript_model_config_path,
         )
+
+        config_path_for_checking_description = torchscript_model_config_path
         print("--- Finished tracing a model in TORCH_SCRIPT ---")
 
     if tracing_format in [ONNX_FORMAT, BOTH_FORMAT]:
@@ -481,9 +511,12 @@ def main(
             onnx_model_path,
             onnx_model_config_path,
         )
+
+        config_path_for_checking_description = onnx_model_config_path
         print("--- Finished tracing a model in ONNX ---")
 
     store_license_verified_variable(license_verified)
+    store_description_variable(config_path_for_checking_description)
 
     print("\n=== Finished running model_autotracing.py ===")
 
