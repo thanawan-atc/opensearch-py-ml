@@ -87,7 +87,7 @@ pipeline {
                             download_path = "${env.ARTIFACT_PATH}/torch_script/"
                             withCredentials([
                                 string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCEKT_ROLE"),
-                                string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCEKT_CRED'),
+                                string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCEKT_CRED"),
                                 string(credentialsId: "ml_team_bucket_name", variable: "TEAM_BUCKET_NAME")
                             ]) {
                                 withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
