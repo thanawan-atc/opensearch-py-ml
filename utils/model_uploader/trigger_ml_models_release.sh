@@ -58,3 +58,6 @@ fi
 
 echo "Please check jenkins url for logs: $WORKFLOW_URL"
 echo "Result: $RESULT"
+if [ "$RESULT" != "SUCCESS" ]; then
+    exit 1
+fi
