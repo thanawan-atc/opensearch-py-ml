@@ -35,8 +35,11 @@ jobs:
       run: aws s3 cp ${{ env.repo_model_listing_path }} s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/${{ env.bucket_model_listing_file_path }}
 
 # TODO: Trigger Jenkins Workflow
-  trigger-model-release-workflow:
+  trigger-ml-models-release-workflow:
+    needs: upload-model-listing
     runs-on: 'ubuntu-latest'
+    permissions:
+      contents: read
     steps:
       - name: Trigger Jenkins Workflow with Generic Webhook
         run: |
@@ -53,3 +56,17 @@ jobs:
              --data "$(echo $JENKINS_PARAMS)"`
 
           echo $JENKINS_REQ
+
+  trigger-model-release-workflow:
+    needs: init-workflow-var #[init-workflow-var, history-update]
+    runs-on: 'ubuntu-latest'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Trigger Jenkins Workflow with Generic Webhook
+        run: |
+          # TODO: Set up JENKINS_TRIGGER_TOKEN & Remove ${{ secrets.JENKINS_URL }}
+          sh utils/model_uploader/trigger_ml_models_release.sh ${{ secrets.JENKINS_ML_MODELS_RELEASE_GENERIC_WEBHOOK_TOKEN }} \
+            "ml-models/model_listing" N/A N/A ${{ secrets.JENKINS_URL }} 
