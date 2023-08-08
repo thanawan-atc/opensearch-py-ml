@@ -36,7 +36,6 @@ jobs:
     - name: Update pre_trained_models.json in S3
       run: aws s3 cp ${{ env.repo_model_listing_path }} s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/${{ env.bucket_model_listing_file_path }}
 
-# TODO: Trigger Jenkins Workflow
   trigger-ml-models-release-workflow:
     needs: upload-model-listing
     runs-on: 'ubuntu-latest'

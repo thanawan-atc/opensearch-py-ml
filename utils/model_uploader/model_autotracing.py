@@ -298,8 +298,9 @@ def prepare_files_for_uploading(
     :type src_model_path: string
     :param src_model_config_path: Path to model config files for uploading
     :type src_model_config_path: string
-    :return: No return value expected
-    :rtype: None
+    :return: Tuple of dst_model_path (path to model zip file) and dst_model_config_path
+    (path to model config json file) in the UPLOAD_FOLDER_PATH
+    :rtype: Tuple[str, str]
     """
     model_name = str(model_id.split("/")[-1])
     model_format = model_format.lower()
@@ -340,6 +341,8 @@ def prepare_files_for_uploading(
         shutil.rmtree(folder_to_delete)
     except Exception as e:
         assert False, f"Raised Exception while deleting {folder_to_delete}: {e}"
+
+    return dst_model_path, dst_model_config_path
 
 
 def store_license_verified_variable(license_verified: bool) -> None:
@@ -459,18 +462,23 @@ def main(
             model_description,
         )
 
-        torch_embedding_data = register_and_deploy_sentence_transformer_model(
+        torchscript_embedding_data = register_and_deploy_sentence_transformer_model(
             ml_client,
             torchscript_model_path,
             torchscript_model_config_path,
             TORCH_SCRIPT_FORMAT,
         )
-        pass_test = verify_embedding_data(original_embedding_data, torch_embedding_data)
+        pass_test = verify_embedding_data(
+            original_embedding_data, torchscript_embedding_data
+        )
         assert (
             pass_test
         ), f"Failed while verifying embeddings of {model_id} model in TORCH_SCRIPT format"
 
-        prepare_files_for_uploading(
+        (
+            torchscript_dst_model_path,
+            torchscript_dst_model_config_path,
+        ) = prepare_files_for_uploading(
             model_id,
             model_version,
             TORCH_SCRIPT_FORMAT,
@@ -478,7 +486,7 @@ def main(
             torchscript_model_config_path,
         )
 
-        config_path_for_checking_description = torchscript_model_config_path
+        config_path_for_checking_description = torchscript_dst_model_config_path
         print("--- Finished tracing a model in TORCH_SCRIPT ---")
 
     if tracing_format in [ONNX_FORMAT, BOTH_FORMAT]:
@@ -504,7 +512,7 @@ def main(
             pass_test
         ), f"Failed while verifying embeddings of {model_id} model in ONNX format"
 
-        prepare_files_for_uploading(
+        onnx_dst_model_path, onnx_dst_model_config_path = prepare_files_for_uploading(
             model_id,
             model_version,
             ONNX_FORMAT,
@@ -512,7 +520,7 @@ def main(
             onnx_model_config_path,
         )
 
-        config_path_for_checking_description = onnx_model_config_path
+        config_path_for_checking_description = onnx_dst_model_config_path
         print("--- Finished tracing a model in ONNX ---")
 
     store_license_verified_variable(license_verified)

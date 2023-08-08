@@ -391,7 +391,7 @@ jobs:
             
   # Step 8: Trigger Jenkins ml-models workflow
   trigger-ml-models-release-workflow:
-    needs: init-workflow-var #[init-workflow-var, history-update]
+    needs: [init-workflow-var, history-update]
     runs-on: 'ubuntu-latest'
     permissions:
       contents: read
