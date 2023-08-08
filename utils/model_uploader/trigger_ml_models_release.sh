@@ -1,17 +1,17 @@
 # JENKINS_URL="https://build.ci.opensearch.org"
-# JENKINS_TRIGGER_TOKEN=$1
+JENKINS_TRIGGER_TOKEN=$1
 # BASE_DOWNLOAD_PATH=$2
 # VERSION=$3
 # FORMAT=$4
 
-# JENKINS_URL=$5 # TODO: Remove this
+JENKINS_URL=$3 # TODO: Remove this
 
 TIMEPASS=0
 TIMEOUT=7200
 RESULT="null"
 
 # JENKINS_PARAMS="{\"BASE_DOWNLOAD_PATH\":\"$BASE_DOWNLOAD_PATH\", \"VERSION\":\"$VERSION\", \"FORMAT\":\"$FORMAT\"}"
-JENKINS_PARAMS=$1
+JENKINS_PARAMS=$2
 
 echo "Trigger ml-models Jenkins workflows"
 JENKINS_REQ=$(curl -s -XPOST \
