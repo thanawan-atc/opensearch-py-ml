@@ -407,4 +407,4 @@ jobs:
           VERSION=${{ github.event.inputs.model_version }}
           FORMAT=${{ github.event.inputs.tracing_format }}
           JENKINS_PARAMS="{\"BASE_DOWNLOAD_PATH\":\"$BASE_DOWNLOAD_PATH\", \"VERSION\":\"$VERSION\", \"FORMAT\":\"$FORMAT\"}"
-          sh utils/model_uploader/trigger_ml_models_release.sh $JENKINS_PARAMS
+          sh utils/model_uploader/trigger_ml_models_release.sh "$JENKINS_PARAMS"
