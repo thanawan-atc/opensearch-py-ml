@@ -402,12 +402,12 @@ jobs:
           # JENKINS_PARAMS="{\"parameter\": [{\"name\":\"BASE_DOWNLOAD_PATH\", \"value\":\"$BASE_DOWNLOAD_PATH\"}, 
           # {\"name\":\"VERSION\", \"value\":\"$VERSION\"}, {\"FORMAT\":\"FORMAT\", \"value\":\"$FORMAT\"}]}"
           
-          # TODO: Set up JENKINS_TRIGGER_TOKEN
+          # TODO: Set up JENKINS_TRIGGER_TOKEN  # --data-urlencode json="$(echo $JENKINS_PARAMS)")
           JENKINS_REQ=$(curl -s -XPOST \
              -H "Authorization: Bearer $JENKINS_TRIGGER_TOKEN" \
              -H "Content-Type: application/json" \
              "$JENKINS_URL/generic-webhook-trigger/invoke" \
-             --data "$JENKINS_PARAMS") # --data-urlencode json="$(echo $JENKINS_PARAMS)")
+             --data "$JENKINS_PARAMS")
 
           echo "$JENKINS_REQ"
     
