@@ -34,7 +34,7 @@ pipeline {
         )
     }
     environment {
-        ARTIFACT_PATH = "${env.BASE_DOWNLOAD_PATH == "ml-models/model_listing" ? "${env.BASE_DOWNLOAD_PATH}" : "${env.BASE_DOWNLOAD_PATH}/${env.VERSION}"}"
+        ARTIFACT_PATH = "${env.BASE_DOWNLOAD_PATH}" == "ml-models/model_listing" ? "${env.BASE_DOWNLOAD_PATH}" : "${env.BASE_DOWNLOAD_PATH}/${env.VERSION}"}"
         UPLOAD_PATH = "models/ml-models"
     }
     stages{
