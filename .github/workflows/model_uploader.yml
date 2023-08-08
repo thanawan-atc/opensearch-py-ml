@@ -187,7 +187,9 @@ jobs:
           fi
       - name: Model Description Info
         id: model_description_info
-        run: echo "model_description_info=$(<trace_output/description.txt)" >> $GITHUB_OUTPUT
+        run: |
+          model_description_info=$(<trace_output/description.txt)
+          echo "model_description_info=$model_description_info" >> $GITHUB_OUTPUT
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with: 
