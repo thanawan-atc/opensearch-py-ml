@@ -74,11 +74,11 @@ pipeline {
                     if (env.BASE_DOWNLOAD_PATH == "ml-models/model_listing") {
                         download_path = "${env.ARTIFACT_PATH}/"
                         withCredentials([
-                            string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCEKT_ROLE"),
-                            string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCEKT_CRED"),
+                            string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCKET_ROLE"),
+                            string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCKET_CRED"),
                             string(credentialsId: "ml_team_bucket_name", variable: "TEAM_BUCKET_NAME")
                         ]) {
-                            withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
+                            withAWS(role: "${TEAM_BUCKET_ROLE}", roleAccount: "${TEAM_BUCKET_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
                                 s3Download(file: "$download_path", bucket: "${TEAM_BUCKET_NAME}", path: "$local_path", force: true)
                             }
                         }    
@@ -86,11 +86,11 @@ pipeline {
                         if (env.FORMAT == "TORCH_SCRIPT" || env.FORMAT == "BOTH") {
                             download_path = "${env.ARTIFACT_PATH}/torch_script/"
                             withCredentials([
-                                string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCEKT_ROLE"),
-                                string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCEKT_CRED"),
+                                string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCKET_ROLE"),
+                                string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCKET_CRED"),
                                 string(credentialsId: "ml_team_bucket_name", variable: "TEAM_BUCKET_NAME")
                             ]) {
-                                withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
+                                withAWS(role: "${TEAM_BUCKET_ROLE}", roleAccount: "${TEAM_BUCKET_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
                                     s3Download(file: "$download_path", bucket: "${TEAM_BUCKET_NAME}", path: "$local_path", force: true)
                                 }
                             }    
@@ -98,11 +98,11 @@ pipeline {
                         if (env.FORMAT == "ONNX" || env.FORMAT == "BOTH") {
                             download_path = "${env.ARTIFACT_PATH}/onnx/"
                             withCredentials([
-                                string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCEKT_ROLE"),
-                                string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCEKT_CRED"),
+                                string(credentialsId: "ml_team_bucket_role", variable: "TEAM_BUCKET_ROLE"),
+                                string(credentialsId: "ml_team_bucket_cred", variable: "TEAM_BUCKET_CRED"),
                                 string(credentialsId: "ml_team_bucket_name", variable: "TEAM_BUCKET_NAME")
                             ]) {
-                                withAWS(role: "${TEAM_BUCEKT_ROLE}", roleAccount: "${TEAM_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "${TEAM_BUCKET_REGION}") {
+                                withAWS(role: "${TEAM_BUCKET_ROLE}", roleAccount: "${TEAM_BUCKET_CRED}", duration: 900, roleSessionName: "model-releasing", region: "${TEAM_BUCKET_REGION}") {
                                     s3Download(file: "$download_path", bucket: "${TEAM_BUCKET_NAME}", path: "$local_path", force: true)
                                 }
                             }        
@@ -117,11 +117,11 @@ pipeline {
                     source = "${env.WORKSPACE}/artifacts/ml-models"
                     destination = "${env.UPLOAD_PATH}"
                     withCredentials([
-                        string(credentialsId: "ml_release_bucket_role", variable: "RELEASE_BUCEKT_ROLE"),
-                        string(credentialsId: "ml_release_bucket_cred", variable: "RELEASE_BUCEKT_CRED"),
+                        string(credentialsId: "ml_release_bucket_role", variable: "RELEASE_BUCKET_ROLE"),
+                        string(credentialsId: "ml_release_bucket_cred", variable: "RELEASE_BUCKET_CRED"),
                         string(credentialsId: "ml_release_bucket_name", variable: "RELEASE_BUCKET_NAME")
                     ]) {
-                        withAWS(role: "${RELEASE_BUCEKT_ROLE}", roleAccount: "${RELEASE_BUCEKT_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
+                        withAWS(role: "${RELEASE_BUCKET_ROLE}", roleAccount: "${RELEASE_BUCKET_CRED}", duration: 900, roleSessionName: "model-releasing", region: "us-west-2") {
                             s3Download(file: "$source", bucket: "${RELEASE_BUCKET_NAME}", path: "$destination")
                         }
                     }   
