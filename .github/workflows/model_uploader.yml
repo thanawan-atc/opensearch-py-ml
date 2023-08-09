@@ -328,7 +328,7 @@ jobs:
           
           ${{ needs.init-workflow-var.outputs.workflow_info }}
           ${{ needs.model-auto-tracing.outputs.license_info }}
-          ${{ needs.model-auto-tracing.outputs.model_description }}"
+          ${{ needs.model-auto-tracing.outputs.model_description_info }}"
           
           echo "pr_body<<EOF" >> $GITHUB_OUTPUT
           echo "${pr_body@E}" >> $GITHUB_OUTPUT
