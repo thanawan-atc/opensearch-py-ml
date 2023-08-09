@@ -27,6 +27,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Update model upload history -  sentence-transformers/msmarco-distilbert-base-tas-b (v.1.0.6)(BOTH) by @thanawan-atc ([#145](https://github.com/thanawan-atc/opensearch-py-ml/pull/145))
 - Update model upload history -  sentence-transformers/multi-qa-mpnet-base-dot-v1 (v.1.0.1)(TORCH_SCRIPT) by @thanawan-atc ([#146](https://github.com/thanawan-atc/opensearch-py-ml/pull/146))
 - Update model upload history -  sentence-transformers/all-MiniLM-L12-v2 (v.3.0.2)(ONNX) by @thanawan-atc ([#166](https://github.com/thanawan-atc/opensearch-py-ml/pull/166))
+- Update model upload history -  sentence-transformers/msmarco-distilbert-base-tas-b (v.5.0.0)(BOTH) by @thanawan-atc ([#169](https://github.com/thanawan-atc/opensearch-py-ml/pull/169))
 
 ### Fixed
 - Fix ModelUploader bug & Update model tracing demo notebook by @thanawan-atc in ([#185](https://github.com/opensearch-project/opensearch-py-ml/pull/185))
