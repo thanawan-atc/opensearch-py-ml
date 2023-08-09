@@ -58,7 +58,7 @@ jobs:
         update_time=$(TZ='America/Los_Angeles' date "+%Y-%m-%d %T")
         echo "update_time=$update_time" >> $GITHUB_OUTPUT
         pr_body="
-        - [ ] This PR made changes to only one file: pretrained_model_listing.json.
+        - [ ] This PR made commit to only these two files: pretrained_model_listing.json and CHANGELOG.md.
         - [ ] CHANGELOG.md has been updated by the workflow or by you if the workflow fails to do so. 
         - [ ] Merge conflicts have been resolved.
           
