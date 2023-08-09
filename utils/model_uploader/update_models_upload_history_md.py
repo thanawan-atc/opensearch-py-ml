@@ -13,6 +13,7 @@ import argparse
 import json
 import os
 from typing import Dict, List, Optional
+
 from mdutils.fileutils import MarkDownFile
 from mdutils.tools.Table import Table
 
@@ -32,7 +33,7 @@ KEYS = [
     "Model Format",
     "Embedding Dimension",
     "Pooling Mode",
-    "Model Description",
+    "Workflow Run ID",
 ]
 MD_HEADER = "# Pretrained Model Upload History\n\nThe model-serving framework supports a variety of open-source pretrained models that can assist with a range of machine learning (ML) search and analytics use cases. \n\n\n## Uploaded Pretrained Models\n\n\n### Sentence transformers\n\nSentence transformer models map sentences and paragraphs across a dimensional dense vector space. The number of vectors depends on the model. Use these models for use cases such as clustering and semantic search. \n\nThe following table shows sentence transformer model upload history.\n\n[//]: # (This may be the most platform independent comment)\n"
 
@@ -43,7 +44,7 @@ def create_model_json_obj(
     model_format: str,
     embedding_dimension: Optional[int] = None,
     pooling_mode: Optional[str] = None,
-    model_description: Optional[str] = None,
+    workflow_id: Optional[str] = None,
     model_uploader: Optional[str] = None,
     upload_time: Optional[str] = None,
 ) -> Dict:
@@ -60,8 +61,13 @@ def create_model_json_obj(
     :type embedding_dimension: int
     :param pooling_mode: Pooling mode input ("CLS", "MEAN", "MAX", "MEAN_SQRT_LEN" or None)
     :type pooling_mode: string
+<<<<<<< HEAD
     :param model_description: Model description input
     :type model_description: string
+=======
+    :param workflow_id: Workflow run id
+    :type workflow_id: string
+>>>>>>> final-pr-1.0-model
     :param model_uploader: Model uploader input
     :type model_uploader: string
     :param uploader_time: Upload time input
@@ -77,11 +83,9 @@ def create_model_json_obj(
         "Model Format": model_format,
         "Embedding Dimension": str(embedding_dimension)
         if embedding_dimension is not None
-        else "Default",
-        "Pooling Mode": pooling_mode if pooling_mode is not None else "Default",
-        "Model Description": model_description
-        if model_description is not None
-        else "Default",
+        else "N/A",
+        "Pooling Mode": pooling_mode if pooling_mode is not None else "N/A",
+        "Workflow Run ID": workflow_id if workflow_id is not None else "-"
     }
     return model_obj
 
@@ -113,7 +117,7 @@ def update_model_json_file(
     tracing_format: str,
     embedding_dimension: Optional[int] = None,
     pooling_mode: Optional[str] = None,
-    model_description: Optional[str] = None,
+    workflow_id: Optional[str] = None,
     model_uploader: Optional[str] = None,
     upload_time: Optional[str] = None,
 ) -> None:
@@ -130,8 +134,13 @@ def update_model_json_file(
     :type embedding_dimension: int
     :param pooling_mode: Pooling mode input ("CLS", "MEAN", "MAX", "MEAN_SQRT_LEN" or None)
     :type pooling_mode: string
+<<<<<<< HEAD
     :param model_description: Model description input
     :type model_description: string
+=======
+    :param workflow_id: Workflow run id
+    :type workflow_id: string
+>>>>>>> final-pr-1.0-model
     :param model_uploader: Model uploader input
     :type model_uploader: string
     :param uploader_time: Upload time input
@@ -153,7 +162,7 @@ def update_model_json_file(
             TORCH_SCRIPT_FORMAT,
             embedding_dimension,
             pooling_mode,
-            model_description,
+            workflow_id,
             model_uploader,
             upload_time,
         )
@@ -166,7 +175,7 @@ def update_model_json_file(
             ONNX_FORMAT,
             embedding_dimension,
             pooling_mode,
-            model_description,
+            workflow_id,
             model_uploader,
             upload_time,
         )
@@ -242,13 +251,13 @@ if __name__ == "__main__":
         help="Pooling mode if it does not exist in original config.json",
     )
     parser.add_argument(
-        "-md",
-        "--model_description",
+        "-id",
+        "--workflow_id",
         type=str,
         nargs="?",
         default=None,
         const=None,
-        help="Model description if you want to overwrite the default description",
+        help="Workflow Run ID",
     )
     parser.add_argument(
         "-u",
@@ -276,7 +285,7 @@ if __name__ == "__main__":
         args.tracing_format,
         args.embedding_dimension,
         args.pooling_mode,
-        args.model_description,
+        args.workflow_id,
         args.model_uploader,
         args.upload_time,
     )

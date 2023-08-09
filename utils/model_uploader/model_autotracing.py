@@ -11,19 +11,20 @@
 
 import argparse
 import json
-import numpy as np
 import os
 import shutil
 import sys
 import warnings
-from mdutils.fileutils import MarkDownFile
-from numpy.typing import DTypeLike
-from sentence_transformers import SentenceTransformer
 from typing import List, Optional, Tuple
 from zipfile import ZipFile
 
-# We need to append ROOT_DIR path so that we can import 
-# OPENSEARCH_TEST_CLIENT and opensearch_py_ml since this 
+import numpy as np
+from mdutils.fileutils import MarkDownFile
+from numpy.typing import DTypeLike
+from sentence_transformers import SentenceTransformer
+
+# We need to append ROOT_DIR path so that we can import
+# OPENSEARCH_TEST_CLIENT and opensearch_py_ml since this
 # python script is not in the root directory.
 THIS_DIR = os.path.dirname(__file__)
 ROOT_DIR = os.path.join(THIS_DIR, "../..")
@@ -429,12 +430,12 @@ def main(
     print("Tracing Format: ", tracing_format)
     print(
         "Embedding Dimension: ",
-        embedding_dimension if embedding_dimension is not None else "Default",
+        embedding_dimension if embedding_dimension is not None else "N/A",
     )
-    print("Pooling Mode: ", pooling_mode if pooling_mode is not None else "Default")
+    print("Pooling Mode: ", pooling_mode if pooling_mode is not None else "N/A")
     print(
         "Model Description: ",
-        model_description if model_description is not None else "Default",
+        model_description if model_description is not None else "N/A",
     )
     print("==========================================")
 
