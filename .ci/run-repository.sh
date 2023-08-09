@@ -74,6 +74,7 @@ elif [[ "$TASK_TYPE" == "trace" ]]; then
   echo -e "\033[34;1mINFO:\033[0m POOLING_MODE: ${POOLING_MODE:-N/A}\033[0m"
   echo -e "\033[34;1mINFO:\033[0m MODEL_DESCRIPTION: ${MODEL_DESCRIPTION:-N/A}\033[0m"
 
+
   docker run \
   --network=${network_name} \
   --env "STACK_VERSION=${STACK_VERSION}" \

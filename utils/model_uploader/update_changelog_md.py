@@ -11,7 +11,6 @@
 # uploading the model to our model hub.
 
 import argparse
-
 from mdutils.fileutils import MarkDownFile
 
 CHANGELOG_DIRNAME = "."

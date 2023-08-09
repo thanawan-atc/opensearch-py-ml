@@ -61,8 +61,13 @@ def create_model_json_obj(
     :type embedding_dimension: int
     :param pooling_mode: Pooling mode input ("CLS", "MEAN", "MAX", "MEAN_SQRT_LEN" or None)
     :type pooling_mode: string
+<<<<<<< HEAD
+    :param model_description: Model description input
+    :type model_description: string
+=======
     :param workflow_id: Workflow run id
     :type workflow_id: string
+>>>>>>> final-pr-1.0-model
     :param model_uploader: Model uploader input
     :type model_uploader: string
     :param uploader_time: Upload time input
@@ -129,8 +134,13 @@ def update_model_json_file(
     :type embedding_dimension: int
     :param pooling_mode: Pooling mode input ("CLS", "MEAN", "MAX", "MEAN_SQRT_LEN" or None)
     :type pooling_mode: string
+<<<<<<< HEAD
+    :param model_description: Model description input
+    :type model_description: string
+=======
     :param workflow_id: Workflow run id
     :type workflow_id: string
+>>>>>>> final-pr-1.0-model
     :param model_uploader: Model uploader input
     :type model_uploader: string
     :param uploader_time: Upload time input
