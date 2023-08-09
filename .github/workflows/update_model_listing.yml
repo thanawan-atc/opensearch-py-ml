@@ -79,7 +79,7 @@ jobs:
         committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
         commit-message: 'GitHub Actions Workflow: Update Pretrained Model Listing'
         signoff: true
-        title: 'Update Model Upload History'
+        title: 'Update Pretrained Model Listing - ${{ steps.create_pr_body.outputs.update_time }}'
         body: ${{ steps.create_pr_body.outputs.pr_body }}
         labels: ModelListingUploading
         branch: model-listing-uploader/${{ github.run_id }}
