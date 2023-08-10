@@ -1,0 +1,22 @@
+[
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-08-10 13:40:17",
+        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
+        "Model Version": "4.0.1",
+        "Model Format": "ONNX",
+        "Embedding Dimension": "N/A",
+        "Pooling Mode": "N/A",
+        "Workflow Run ID": "5825366288"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-08-10 13:40:17",
+        "Model ID": "sentence-transformers/all-MiniLM-L12-v2",
+        "Model Version": "4.0.1",
+        "Model Format": "TORCH_SCRIPT",
+        "Embedding Dimension": "N/A",
+        "Pooling Mode": "N/A",
+        "Workflow Run ID": "5825366288"
+    }
+]
