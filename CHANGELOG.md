@@ -7,6 +7,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Changed
 - Update model upload history -  sentence-transformers/msmarco-distilbert-base-tas-b (v.1.0.1)(BOTH) by @thanawan-atc ([#179](https://github.com/thanawan-atc/opensearch-py-ml/pull/179))
+- Update model upload history -  sentence-transformers/distiluse-base-multilingual-cased-v1 (v.1.0.1)(BOTH) by @thanawan-atc ([#180](https://github.com/thanawan-atc/opensearch-py-ml/pull/180))
 
 ### Fixed
 - Enable make_model_config_json to add model description to model config file by @thanawan-atc in ([#203](https://github.com/opensearch-project/opensearch-py-ml/pull/203))
