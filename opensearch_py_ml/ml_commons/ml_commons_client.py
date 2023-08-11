@@ -337,7 +337,8 @@ class MLCommonClient:
         task_id = self._client.transport.perform_request(method="POST", url=API_URL)[
             "task_id"
         ]
-
+        
+        print(f"task_id : {task_id}")
         if wait_until_deployed:
             # Wait until deployed
             for i in range(TIMEOUT):
