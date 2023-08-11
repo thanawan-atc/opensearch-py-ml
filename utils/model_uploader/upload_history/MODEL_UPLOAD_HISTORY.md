@@ -20,3 +20,4 @@ The following table shows sentence transformer model upload history.
 |2023-08-10 14:19:51|@thanawan-atc|`sentence-transformers/paraphrase-MiniLM-L6-v2`|9.0.0|TORCH_SCRIPT|N/A|N/A|5826135931|
 |2023-08-10 14:45:18|@thanawan-atc|`sentence-transformers/multi-qa-mpnet-base-cos-v1`|9.0.0|ONNX|N/A|N/A|5826267358|
 |2023-08-10 14:45:18|@thanawan-atc|`sentence-transformers/multi-qa-mpnet-base-cos-v1`|9.0.0|TORCH_SCRIPT|N/A|N/A|5826267358|
+|2023-08-11 13:09:45|@thanawan-atc|`jhgan/ko-sroberta-multitask`|1.0.1|TORCH_SCRIPT|N/A|N/A|5836410415|
