@@ -791,6 +791,9 @@ class SentenceTransformerModel:
             zip_file_name = str(model_id.split("/")[-1] + ".zip")
         zip_file_path = os.path.join(model_output_path, zip_file_name)
 
+        if model.tokenizer.model_max_length == 1000000000000000019884624838656:
+            model.tokenizer.model_max_length = 512
+                      
         # save tokenizer.json in save_json_folder_name
         model.save(save_json_folder_path)
         self._fill_null_truncation_field(
@@ -884,6 +887,9 @@ class SentenceTransformerModel:
             zip_file_name = str(model_id.split("/")[-1] + ".zip")
 
         zip_file_path = os.path.join(model_output_path, zip_file_name)
+        
+        if model.tokenizer.model_max_length == 1000000000000000019884624838656:
+            model.tokenizer.model_max_length = 512
 
         # save tokenizer.json in output_path
         model.save(save_json_folder_path)
