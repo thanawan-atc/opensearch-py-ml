@@ -1,6 +1,26 @@
 [
     {
         "Model Uploader": "@thanawan-atc",
+        "Upload Time": "",
+        "Model ID": "sentence-transformers/distiluse-base-multilingual-cased-v1",
+        "Model Version": "1.0.1",
+        "Model Format": "ONNX",
+        "Embedding Dimension": "N/A",
+        "Pooling Mode": "N/A",
+        "Workflow Run ID": "5824848773"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "",
+        "Model ID": "sentence-transformers/distiluse-base-multilingual-cased-v1",
+        "Model Version": "1.0.1",
+        "Model Format": "TORCH_SCRIPT",
+        "Embedding Dimension": "N/A",
+        "Pooling Mode": "N/A",
+        "Workflow Run ID": "5824848773"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
         "Upload Time": "upload_time",
         "Model ID": "sentence-transformers/msmarco-distilbert-base-tas-b",
         "Model Version": "1.0.1",

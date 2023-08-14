@@ -16,5 +16,7 @@ The following table shows sentence transformer model upload history.
 
 |Upload Time|Model Uploader|Model ID|Model Version|Model Format|Embedding Dimension|Pooling Mode|Workflow Run ID|
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+||@thanawan-atc|`sentence-transformers/distiluse-base-multilingual-cased-v1`|1.0.1|ONNX|N/A|N/A|5824848773|
+||@thanawan-atc|`sentence-transformers/distiluse-base-multilingual-cased-v1`|1.0.1|TORCH_SCRIPT|N/A|N/A|5824848773|
 |upload_time|@thanawan-atc|`sentence-transformers/msmarco-distilbert-base-tas-b`|1.0.1|ONNX|N/A|N/A|5814833237|
 |upload_time|@thanawan-atc|`sentence-transformers/msmarco-distilbert-base-tas-b`|1.0.1|TORCH_SCRIPT|N/A|N/A|5814833237|
