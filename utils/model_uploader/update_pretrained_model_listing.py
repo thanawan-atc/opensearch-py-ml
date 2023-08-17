@@ -128,12 +128,10 @@ if __name__ == "__main__":
         type=str,
         help="Name of the local folder that stores copies of config files from S3",
     )
-    
+
     args = parser.parse_args()
 
-    if not args.config_paths_txt_filename.endswith(
-        ".txt"
-    ):
+    if not args.config_paths_txt_filename.endswith(".txt"):
         assert False, "Invalid arguments"
 
     create_new_pretrained_model_listing(
