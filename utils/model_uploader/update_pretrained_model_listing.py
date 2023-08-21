@@ -82,7 +82,6 @@ def create_new_pretrained_model_listing(
         model_name = "/".join(model_parts[1:4])
         model_version = model_parts[4]
         model_format = model_parts[5]
-        local_config_filepath = "/".join(model_parts[2:])
         if model_name not in new_model_listing_dict:
             new_model_listing_dict[model_name] = {
                 "name": model_name,
@@ -96,7 +95,7 @@ def create_new_pretrained_model_listing(
         versions_content[model_version]["format"].append(model_format)
         if "description" not in versions_content[model_version]:
             description = get_sentence_transformer_model_description(
-                config_folderpath, local_config_filepath
+                config_folderpath, config_filepath
             )
             if description is not None:
                 versions_content[model_version]["description"] = description
