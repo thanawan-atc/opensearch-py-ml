@@ -16,7 +16,7 @@ from typing import Optional
 JSON_FILENAME = "pretrained_model_listing.json"
 JSON_DIRNAME = "utils/model_uploader/model_listing"
 PRETRAINED_MODEL_LISTING_JSON_FILEPATH = os.path.join(JSON_DIRNAME, JSON_FILENAME)
-PREFIX_HUGGINGFACE_MODEL_FILEPATH = "ml-models/huggingface/"
+PREFIX_ML_MODELS_FILEPATH = "ml-models/"
 TORCH_SCRIPT_FORMAT = "TORCH_SCRIPT"
 ONNX_FORMAT = "ONNX"
 TEMP_MODEL_PATH = "temp_model_path"
@@ -62,7 +62,7 @@ def create_new_pretrained_model_listing(
     based on current models in config_paths_txt_filepath and their config files in config_folderpath
 
     :param config_paths_txt_filepath: Path to the txt file that stores a list of config paths from S3
-    in the ml-models/huggingface/ folder of the S3 bucket
+    in the ml-models/_some_sub_folder_/ folder of the S3 bucket
     :type config_paths_txt_filepath: string
     :param config_folderpath: Path to the folder that stores copies of config files from S3
     :type config_folderpath: string
@@ -78,7 +78,7 @@ def create_new_pretrained_model_listing(
     print("\n---  Creating New Model Listing --- ")
     new_model_listing_dict = {}
     for config_filepath in config_paths_lst:
-        if config_filepath.startswith(PREFIX_HUGGINGFACE_MODEL_FILEPATH):
+        if config_filepath.startswith(PREFIX_ML_MODELS_FILEPATH):
             # (e.g. 'ml-models/huggingface/sentence-transformers/all-MiniLM-L12-v2/2.0.0/onnx/config.json')
             model_parts = config_filepath.split("/")
             model_name = "/".join(model_parts[1:4])
