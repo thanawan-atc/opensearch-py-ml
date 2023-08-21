@@ -13,6 +13,7 @@ jobs:
     env:
       bucket_model_listing_file_path: ml-models/model_listing/pre_trained_models.json
       repo_model_listing_path: ./utils/model_uploader/model_listing/pretrained_model_listing.json
+      path_prefixes: "ml-models/huggingface/ ml-models/abc/"
     steps:
 # DEMO
 #     - name: Fail if branch is not main
@@ -28,14 +29,9 @@ jobs:
         aws-region: ${{ secrets.PERSONAL_MODEL_UPLOADER_AWS_REGION }}
         role-to-assume: ${{ secrets.PERSONAL_MODEL_UPLOADER_ROLE }}
         role-session-name: update-model-listing
-    - name: Initiate Path Prefixes
-      id: init_path_prefixes
-      run: |
-        echo "path_prefixes=ml-models/huggingface/ ml-models/abc/" >> $GITHUB_OUTPUT
     - name: List Models
       run: |
-        path_prefixes="${{ steps.init_path_prefixes.outputs.path_prefixes }}"
-        echo $path_prefixes
+        path_prefixes="${{ env.path_prefixes }}"
         for prefix in $path_prefixes
         do
           aws s3api list-objects --bucket ${{ secrets.PERSONAL_MODEL_BUCKET }} --prefix $prefix --query "Contents[].{Key: Key}" --output text | grep "/config.json$" >> config_paths.txt
@@ -44,8 +40,10 @@ jobs:
     - name: Download config files
       run: |
         mkdir config_folder
-        for prefix in "${{ steps.init_path_prefixes.outputs.path_prefixes }}"
+        path_prefixes="${{ env.path_prefixes }}"
+        for prefix in $path_prefixes
         do
+          echo $prefix
           aws s3 cp s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/$prefix config_folder --recursive --exclude "*" --include "*/config.json"
         done
         echo $(ls config_folder)
