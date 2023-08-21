@@ -34,7 +34,7 @@ jobs:
         echo "path_prefixes=ml-models/huggingface/ ml-models/abc/" >> $GITHUB_OUTPUT
     - name: List Models
       run: |
-        path_prefixes="${{ steps.init_path_prefixes.output.path_prefixes }}"
+        path_prefixes="${{ steps.init_path_prefixes.outputs.path_prefixes }}"
         echo $path_prefixes
         for prefix in $path_prefixes
         do
@@ -44,9 +44,7 @@ jobs:
     - name: Download config files
       run: |
         mkdir config_folder
-        path_prefixes="${{ steps.init_path_prefixes.output.path_prefixes }}"
-        echo $path_prefixes
-        for prefix in $path_prefixes
+        for prefix in "${{ steps.init_path_prefixes.outputs.path_prefixes }}"
         do
           aws s3 cp s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/$prefix config_folder --recursive --exclude "*" --include "*/config.json"
         done
