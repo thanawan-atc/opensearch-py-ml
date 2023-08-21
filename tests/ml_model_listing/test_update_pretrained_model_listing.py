@@ -27,7 +27,7 @@ SAMPLE_PRETRAINED_MODEL_LISTING = os.path.join(
     SAMPLE_FOLDER, "pretrained_model_listing.json"
 )
 SAMPLE_FOLDER_COPY = os.path.join(THIS_DIR, "samples_copy")
-SAMPLE_MISSING_CONFIG_SUBFOLDERNAME = "sentence-transformers"
+SAMPLE_MISSING_CONFIG_SUBFOLDERNAME = "ml-models/huggingface/sentence-transformers"
 TEST_FILE = os.path.join(THIS_DIR, "test_pretrained_model_listing.json")
 
 from update_pretrained_model_listing import create_new_pretrained_model_listing
