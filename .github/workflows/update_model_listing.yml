@@ -43,8 +43,7 @@ jobs:
         path_prefixes="${{ env.path_prefixes }}"
         for prefix in $path_prefixes
         do
-          echo $prefix
-          aws s3 cp s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/$prefix config_folder --recursive --exclude "*" --include "*/config.json"
+          aws s3 cp s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/$prefix config_folder/$prefix --recursive --exclude "*" --include "*/config.json"
         done
         echo $(ls config_folder)
     - name: Set Up Python
