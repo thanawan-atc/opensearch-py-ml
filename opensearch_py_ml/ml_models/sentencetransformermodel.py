@@ -29,7 +29,11 @@ from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Normalize, Pooling, Transformer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import TrainingArguments, get_linear_schedule_with_warmup
+from transformers import (
+    PreTrainedTokenizer,
+    TrainingArguments,
+    get_linear_schedule_with_warmup,
+)
 from transformers.convert_graph_to_onnx import convert
 
 
@@ -703,21 +707,21 @@ class SentenceTransformerModel:
             )
         print("zip file is saved to " + zip_file_path + "\n")
 
-    def _fill_null_truncation_field(
+    def _fill_null_truncation_padding_field_in_tokenizer(
         self,
+        tokenizer: PreTrainedTokenizer,
         save_json_folder_path: str,
-        max_length: int,
     ) -> None:
         """
         Description:
-        Fill truncation field in tokenizer.json when it is null
+        Fill truncation/padding field in tokenizer.json when it is null
 
+        :param tokenizer:
+            model tokenizer
+        :type tokenizer: PreTrainedTokenizer
         :param save_json_folder_path:
              path to save model json file, e.g, "home/save_pre_trained_model_json/")
         :type save_json_folder_path: string
-        :param max_length:
-             maximum sequence length for model
-        :type max_length: int
         :return: no return value expected
         :rtype: None
         """
@@ -726,10 +730,19 @@ class SentenceTransformerModel:
             parsed_json = json.load(user_file)
         if "truncation" not in parsed_json or parsed_json["truncation"] is None:
             parsed_json["truncation"] = {
-                "direction": "Right",
-                "max_length": max_length,
+                "direction": tokenizer.truncation_side.capitalize(),
+                "max_length": tokenizer.model_max_length,
                 "strategy": "LongestFirst",
                 "stride": 0,
+            }
+        if "padding" not in parsed_json or parsed_json["padding"] is None:
+            parsed_json["padding"] = {
+                "strategy": {"Fixed": tokenizer.model_max_length},
+                "direction": tokenizer.padding_side.capitalize(),
+                "pad_to_multiple_of": None,
+                "pad_id": tokenizer.pad_token_id,
+                "pad_type_id": tokenizer.pad_token_type_id,
+                "pad_token": tokenizer.pad_token,
             }
             with open(tokenizer_file_path, "w") as file:
                 json.dump(parsed_json, file, indent=2)
@@ -801,8 +814,8 @@ class SentenceTransformerModel:
 
         # save tokenizer.json in save_json_folder_name
         model.save(save_json_folder_path)
-        self._fill_null_truncation_field(
-            save_json_folder_path, model.tokenizer.model_max_length
+        self._fill_null_truncation_padding_field_in_tokenizer(
+            model.tokenizer, save_json_folder_path
         )
 
         # convert to pt format will need to be in cpu,
@@ -903,8 +916,8 @@ class SentenceTransformerModel:
 
         # save tokenizer.json in output_path
         model.save(save_json_folder_path)
-        self._fill_null_truncation_field(
-            save_json_folder_path, model.tokenizer.model_max_length
+        self._fill_null_truncation_padding_field_in_tokenizer(
+            model.tokenizer, save_json_folder_path
         )
 
         convert(

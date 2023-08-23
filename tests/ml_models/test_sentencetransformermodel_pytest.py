@@ -508,9 +508,24 @@ def test_long_description():
     clean_test_folder(TEST_FOLDER)
 
 
-def test_truncation_parameter():
+def test_null_truncation_padding_field_in_tokenizer():
     model_id = "sentence-transformers/msmarco-distilbert-base-tas-b"
-    MAX_LENGTH_TASB = 512
+    expected_tokenizer_data = {
+        "truncation": {
+            "direction": "Right",
+            "max_length": 512,
+            "strategy": "LongestFirst",
+            "stride": 0,
+        },
+        "padding": {
+            "strategy": {"Fixed": 512},
+            "direction": "Right",
+            "pad_to_multiple_of": None,
+            "pad_id": 0,
+            "pad_type_id": 0,
+            "pad_token": "[PAD]",
+        },
+    }
 
     clean_test_folder(TEST_FOLDER)
     test_model13 = SentenceTransformerModel(
@@ -529,13 +544,12 @@ def test_truncation_parameter():
             False
         ), f"Creating tokenizer.json file for tracing raised an exception {exec}"
 
-    assert tokenizer_json[
-        "truncation"
-    ], "truncation parameter in tokenizer.json is null"
-
-    assert (
-        tokenizer_json["truncation"]["max_length"] == MAX_LENGTH_TASB
-    ), "max_length is not properly set"
+    for param, param_dict in expected_tokenizer_data.items():
+        assert param in tokenizer_json, f"{param} parameter in tokenizer.json is null"
+        for k, v in param_dict.items():
+            assert (
+                k in tokenizer_json[param] and tokenizer_json[param][k] == v
+            ), f"{k} in {param} is not properly set"
 
     clean_test_folder(TEST_FOLDER)
 
@@ -575,12 +589,12 @@ def test_undefined_model_max_length_in_tokenizer_for_onnx():
     expected_max_length = 512
 
     clean_test_folder(TEST_FOLDER)
-    test_model14 = SentenceTransformerModel(
+    test_model15 = SentenceTransformerModel(
         folder_path=TEST_FOLDER,
         model_id=model_id,
     )
 
-    test_model14.save_as_onnx(model_id=model_id)
+    test_model15.save_as_onnx(model_id=model_id)
 
     tokenizer_json_file_path = os.path.join(TEST_FOLDER, "tokenizer.json")
     try:
