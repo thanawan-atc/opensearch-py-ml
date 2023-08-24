@@ -8,6 +8,12 @@
           "torch_script"
         ],
         "description": "This is a sentence-transformers model: It maps sentences & paragraphs to a 384 dimensional dense vector space."
+      },
+      "1.0.3": {
+        "format": [
+          "torch_script"
+        ],
+        "description": "This is a sentence-transformers model: It maps sentences & paragraphs to a 384 dimensional dense vector space."
       }
     }
   },
@@ -41,6 +47,18 @@
           "torch_script"
         ],
         "description": "This is a sentence-transformers model: It maps sentences & paragraphs to a 512 dimensional dense vector space and can be used for tasks like clustering or semantic search."
+      }
+    }
+  },
+  {
+    "name": "huggingface/sentence-transformers/msmarco-distilbert-base-tas-b",
+    "versions": {
+      "1.0.2": {
+        "format": [
+          "onnx",
+          "torch_script"
+        ],
+        "description": "This is a port of the DistilBert TAS-B Model to sentence-transformers model: It maps sentences & paragraphs to a 768 dimensional dense vector space and is optimized for the task of semantic search."
       }
     }
   },
