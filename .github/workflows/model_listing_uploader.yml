@@ -33,7 +33,7 @@ jobs:
         aws-region: ${{ secrets.PERSONAL_MODEL_UPLOADER_AWS_REGION }}
         role-to-assume: ${{ secrets.PERSONAL_MODEL_UPLOADER_ROLE }}
         role-session-name: upload-model-listing
-    - name: Update pre_trained_models.json in S3
+    - name: Update ppretrained_model_listing.json in S3
       run: aws s3 cp ${{ env.repo_model_listing_path }} s3://${{ secrets.PERSONAL_MODEL_BUCKET }}/${{ env.bucket_model_listing_file_path }}
 
   trigger-ml-models-release-workflow:
