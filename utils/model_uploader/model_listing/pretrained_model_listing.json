@@ -13,7 +13,7 @@
         "format": [
           "torch_script"
         ],
-        "description": "This is a sentence-transformers model: It maps sentences & paragraphs to a 384 dimensional dense vector space. (new)"
+        "description": "This is a sentence-transformers model: It maps sentences & paragraphs to a 384 dimensional dense vector space. (new2)"
       }
     }
   },
