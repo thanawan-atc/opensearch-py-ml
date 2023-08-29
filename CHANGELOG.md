@@ -19,6 +19,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Update pretrained_model_listing.json (2023-08-23 19:04:57) by @thanawan-atc ([#221](https://github.com/thanawan-atc/opensearch-py-ml/pull/221))
 - Update pretrained_models_all_versions.json (2023-08-28 10:03:40) by @thanawan-atc ([#222](https://github.com/thanawan-atc/opensearch-py-ml/pull/222))
 - Update model upload history -  sentence-transformers/paraphrase-MiniLM-L6-v2 (v.1.0.1)(BOTH) by @thanawan-atc ([#226](https://github.com/thanawan-atc/opensearch-py-ml/pull/226))
+- Update pretrained_models_all_versions.json (2023-08-28 20:53:37) by @thanawan-atc ([#227](https://github.com/thanawan-atc/opensearch-py-ml/pull/227))
 
 ### Fixed
 - Enable make_model_config_json to add model description to model config file by @thanawan-atc in ([#203](https://github.com/opensearch-project/opensearch-py-ml/pull/203))
