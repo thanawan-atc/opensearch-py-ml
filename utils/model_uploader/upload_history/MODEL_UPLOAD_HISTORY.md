@@ -22,3 +22,4 @@ The following table shows sentence transformer model upload history.
 |2023-08-10 14:45:18|@thanawan-atc|`sentence-transformers/multi-qa-mpnet-base-cos-v1`|9.0.0|TORCH_SCRIPT|N/A|N/A|5826267358|
 |2023-08-28 20:48:48|@thanawan-atc|`sentence-transformers/paraphrase-MiniLM-L6-v2`|1.0.1|ONNX|N/A|N/A|6007642294|
 |2023-08-28 20:48:48|@thanawan-atc|`sentence-transformers/paraphrase-MiniLM-L6-v2`|1.0.1|TORCH_SCRIPT|N/A|N/A|6007642294|
+|2023-08-29 10:01:28|@thanawan-atc|`sentence-transformers/xlm-r-bert-base-nli-mean-tokens`|2.0.1|TORCH_SCRIPT|N/A|N/A|6015136866|
