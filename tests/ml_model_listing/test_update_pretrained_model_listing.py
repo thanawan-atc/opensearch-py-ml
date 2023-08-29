@@ -69,13 +69,14 @@ clean_test_file()
 def test_create_new_pretrained_model_listing():
     clean_test_file()
     try:
-          update_pretrained_model_listing_main(
-              [os.path.join(SAMPLE_FOLDER, CONFIG_PATHS_TXT_FILENAME),
-               os.path.join(SAMPLE_FOLDER, CONFIG_FOLDERNAME),
-               '--pretrained_model_listing_json_filepath',
-               TEST_FILE
-              ]
-          )
+        update_pretrained_model_listing_main(
+            [
+                os.path.join(SAMPLE_FOLDER, CONFIG_PATHS_TXT_FILENAME),
+                os.path.join(SAMPLE_FOLDER, CONFIG_FOLDERNAME),
+                "--pretrained_model_listing_json_filepath",
+                TEST_FILE,
+            ]
+        )
     except Exception as e:
         assert False, print(f"Failed while creating new pretrained model listing: {e}")
 
@@ -113,11 +114,12 @@ def test_missing_config_file():
 
     with pytest.raises(Exception) as exc_info:
         update_pretrained_model_listing_main(
-           [os.path.join(SAMPLE_FOLDER_COPY, CONFIG_PATHS_TXT_FILENAME),
-               os.path.join(SAMPLE_FOLDER_COPY, CONFIG_FOLDERNAME),
-               '--pretrained_model_listing_json_filepath',
-               TEST_FILE
-           ]
+            [
+                os.path.join(SAMPLE_FOLDER_COPY, CONFIG_PATHS_TXT_FILENAME),
+                os.path.join(SAMPLE_FOLDER_COPY, CONFIG_FOLDERNAME),
+                "--pretrained_model_listing_json_filepath",
+                TEST_FILE,
+            ]
         )
     assert exc_info.type is Exception
     assert "Cannot open" in str(exc_info.value)
