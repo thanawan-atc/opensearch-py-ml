@@ -178,7 +178,8 @@ jobs:
         run: |
           upload_size=$(ls -l ./upload/ | awk '{ SUM += $5} END {print SUM}')
           limit="2147483648" 
-          if [[ "$upload_size" -ge "$limit" ]]
+          echo $upload_size
+          if [ "$upload_size" -ge "$limit" ]
           then
             echo "The workflow cannot upload the model that is larger than 2GB: $upload_size"
             exit 1
