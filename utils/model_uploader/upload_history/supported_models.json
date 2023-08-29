@@ -58,5 +58,15 @@
         "Embedding Dimension": "N/A",
         "Pooling Mode": "N/A",
         "Workflow Run ID": "6007642294"
+    },
+    {
+        "Model Uploader": "@thanawan-atc",
+        "Upload Time": "2023-08-29 10:01:28",
+        "Model ID": "sentence-transformers/xlm-r-bert-base-nli-mean-tokens",
+        "Model Version": "2.0.1",
+        "Model Format": "TORCH_SCRIPT",
+        "Embedding Dimension": "N/A",
+        "Pooling Mode": "N/A",
+        "Workflow Run ID": "6015136866"
     }
 ]
