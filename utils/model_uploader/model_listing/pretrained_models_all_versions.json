@@ -87,6 +87,18 @@
     }
   },
   {
+    "name": "huggingface/sentence-transformers/paraphrase-MiniLM-L6-v2",
+    "versions": {
+      "1.0.1": {
+        "format": [
+          "onnx",
+          "torch_script"
+        ],
+        "description": "This is a sentence-transformers model: It maps sentences & paragraphs to a 384 dimensional dense vector space and can be used for tasks like clustering or semantic search."
+      }
+    }
+  },
+  {
     "name": "huggingface/sentence-transformers/paraphrase-mpnet-base-v2",
     "versions": {
       "9.0.0": {
@@ -102,6 +114,18 @@
     "name": "huggingface/sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     "versions": {
       "9.0.0": {
+        "format": [
+          "onnx",
+          "torch_script"
+        ],
+        "description": "This is a sentence-transformers model: It maps sentences & paragraphs to a 768 dimensional dense vector space and can be used for tasks like clustering or semantic search."
+      }
+    }
+  },
+  {
+    "name": "huggingface/sentence-transformers/xlm-r-bert-base-nli-mean-tokens",
+    "versions": {
+      "1.0.1": {
         "format": [
           "onnx",
           "torch_script"
