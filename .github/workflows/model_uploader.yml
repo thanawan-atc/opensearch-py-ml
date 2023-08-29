@@ -176,12 +176,12 @@ jobs:
         run: "./.ci/run-tests ${{ matrix.cluster }} ${{ matrix.secured }} ${{ matrix.entry.opensearch_version }} trace"
       - name: Limit Model Size to 2GB
         run: |
-          upload_size=$(ls -l ./upload/ | awk '{ SUM += $5} END {print SUM}')
+          upload_size=$(ls -lR ./upload/ | awk '{ SUM += $5} END {print SUM}')
           limit="2147483648" 
-          echo $upload_size
+          echo "Upload Size: $upload_size"
           if [ "$upload_size" -ge "$limit" ]
           then
-            echo "The workflow cannot upload the model that is larger than 2GB: $upload_size"
+            echo "The workflow cannot upload the model that is larger than 2GB."
             exit 1
           fi
       - name: License Verification
