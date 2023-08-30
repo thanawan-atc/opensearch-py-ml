@@ -17,8 +17,12 @@ from typing import Optional
 MODEL_LISTING_DIRNAME = "utils/model_uploader/model_listing"
 PRETRAINED_MODEL_LISTING_JSON_FILENAME = "pretrained_models_all_versions.json"
 EXCLUDED_MODEL_TXT_FILENAME = "excluded_models.txt"
-PRETRAINED_MODEL_LISTING_JSON_FILEPATH = os.path.join(MODEL_LISTING_DIRNAME, PRETRAINED_MODEL_LISTING_JSON_FILENAME)
-EXCLUDED_MODELS_TXT_FILEPATH = os.path.join(MODEL_LISTING_DIRNAME, EXCLUDED_MODEL_TXT_FILENAME)
+PRETRAINED_MODEL_LISTING_JSON_FILEPATH = os.path.join(
+    MODEL_LISTING_DIRNAME, PRETRAINED_MODEL_LISTING_JSON_FILENAME
+)
+EXCLUDED_MODELS_TXT_FILEPATH = os.path.join(
+    MODEL_LISTING_DIRNAME, EXCLUDED_MODEL_TXT_FILENAME
+)
 TORCH_SCRIPT_FORMAT = "TORCH_SCRIPT"
 ONNX_FORMAT = "ONNX"
 TEMP_MODEL_PATH = "temp_model_path"
@@ -80,7 +84,7 @@ def create_new_pretrained_model_listing(
     print(f"--- Reading {config_paths_txt_filepath} ---")
     with open(config_paths_txt_filepath, "r") as f:
         config_paths_lst = f.read().split()
-        
+
     print(f"--- Reading {excluded_models_txt_filepath} ---")
     with open(excluded_models_txt_filepath, "r") as f:
         excluded_models_lst = f.read().split()
@@ -89,7 +93,7 @@ def create_new_pretrained_model_listing(
     new_model_listing_dict = {}
     for config_filepath in config_paths_lst:
         # (e.g. 'ml-models/huggingface/sentence-transformers/all-MiniLM-L12-v2/2.0.0/onnx/config.json')
-        if config_filepath[:-len("/config.json")] in excluded_models_lst:
+        if config_filepath[: -len("/config.json")] in excluded_models_lst:
             continue
         model_parts = config_filepath.split("/")
         model_name = "/".join(model_parts[1:4])
@@ -154,18 +158,15 @@ def main(args):
         default=EXCLUDED_MODELS_TXT_FILEPATH,
         help="Path to the txt file that stores a list of models to be excluded from model listing",
     )
-    
 
     parsed_args = parser.parse_args(args)
 
     if (
-        not parsed_args.config_paths_txt_filepath.endswith(".txt") or
-        not parsed_args.pretrained_model_listing_json_filepath.endswith(".json") or
-        not parsed_args.excluded_models_txt_filepath.endswith(".txt")
+        not parsed_args.config_paths_txt_filepath.endswith(".txt")
+        or not parsed_args.pretrained_model_listing_json_filepath.endswith(".json")
+        or not parsed_args.excluded_models_txt_filepath.endswith(".txt")
     ):
-        raise Exception(
-            "Invalid filepath argument"
-        )
+        raise Exception("Invalid filepath argument")
 
     create_new_pretrained_model_listing(
         parsed_args.config_paths_txt_filepath,
