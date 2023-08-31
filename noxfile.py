@@ -144,6 +144,7 @@ def docs(session):
     # Run this so users get an error if they don't have Pandoc installed.
     session.install("-r", "docs/requirements-docs.txt")
     session.install(".")
+    session.run("python", "-m", "pip", "install", f"pandas~=1.5.0")
 
     session.cd("docs")
     session.run("make", "clean", external=True)
@@ -162,6 +163,7 @@ def trace(session):
         "1500",
     )
     session.install(".")
+    session.run("python", "-m", "pip", "install", f"pandas~=1.5.0")
 
     session.run(
         "python",
