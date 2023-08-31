@@ -112,7 +112,7 @@ def test(session, pandas_version: str):
         "1500",
     )
     session.install(".")
-    session.run("python", "-m", "pip", "install", f"pandas~={pandas_version}")
+    session.run("python", "-m", "pip", "install", f"pandas~=2.0.1")
     session.run("python", "-m", "setup_tests")
 
     junit_xml = join(abspath(dirname(__file__)), "junit", "opensearch-py-ml-junit.xml")
@@ -145,7 +145,7 @@ def docs(session, pandas_version: str):
     # Run this so users get an error if they don't have Pandoc installed.
     session.install("-r", "docs/requirements-docs.txt")
     session.install(".")
-    session.run("python", "-m", "pip", "install", f"pandas~={pandas_version}")
+    session.run("python", "-m", "pip", "install", f"pandas~=2.0.1")
 
     session.cd("docs")
     session.run("make", "clean", external=True)
@@ -165,7 +165,7 @@ def trace(session, pandas_version: str):
         "1500",
     )
     session.install(".")
-    session.run("python", "-m", "pip", "install", f"pandas~={pandas_version}")
+    session.run("python", "-m", "pip", "install", f"pandas~=2.0.1")
 
     session.run(
         "python",
