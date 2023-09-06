@@ -26,4 +26,5 @@ EXCLUDED_MODELS = [
     "ml-models/huggingface/sentence-transformers/paraphrase-MiniLM-L3-v2/1.0.0/torch_script",
     "ml-models/huggingface/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/1.0.0/onnx",
     "ml-models/huggingface/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/1.0.0/torch_script",
+    "ml-models/huggingface/intfloat/e5-small-v2/1.0.1/torch_script"
 ]
