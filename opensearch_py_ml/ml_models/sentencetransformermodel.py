@@ -43,6 +43,7 @@ class SentenceTransformerModel:
 
     def __init__(
         self,
+        model=None,
         model_id: str = DEFAULT_MODEL_ID,
         folder_path: str = None,
         overwrite: bool = False,
@@ -66,6 +67,7 @@ class SentenceTransformerModel:
         :return: no return value expected
         :rtype: None
         """
+        self.model = model
         default_folder_path = os.path.join(
             os.getcwd(), "sentence_transformer_model_files"
         )
@@ -774,7 +776,7 @@ class SentenceTransformerModel:
         :rtype: string
         """
 
-        model = SentenceTransformer(model_id)
+        model = SentenceTransformer(model_id) if self.model is None else self.model
 
         if model_name is None:
             model_name = str(model_id.split("/")[-1] + ".pt")
@@ -1152,7 +1154,7 @@ class SentenceTransformerModel:
             model_name = self.model_id
 
         # if user input model_type/embedding_dimension/pooling_mode, it will skip this step.
-        model = SentenceTransformer(self.model_id)
+        model = SentenceTransformer(model_id) if self.model is None else self.model
         if (
             model_type is None
             or embedding_dimension is None
